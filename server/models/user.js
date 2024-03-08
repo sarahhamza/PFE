@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['controlleur', 'femme de menage'], required: true },
-    accept: { type: Number, default: 0 } // Ajout de l'attribut accept avec une valeur par défaut de 0
+    accept: { type: Number, default: 0 },
+    image: { type: String }
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -28,7 +29,9 @@ const validate = (data) => {
         email: Joi.string().email().required().label("Email"),
         password: passwordComplexity().required().label("Password"),
         role: Joi.string().valid('controlleur', 'femme de menage').required().label("Role"),
-        accept: Joi.number().default(0).label("Accept") // Ajout de la validation pour l'attribut accept
+        accept: Joi.number().default(0).label("Accept"),
+        image: Joi.string().label("Image").allow(null, ''),
+
     });
     return schema.validate(data);
 };

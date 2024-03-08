@@ -16,10 +16,8 @@ const New = () => {
   });
 
   const [error, setError] = useState("");
-  //const navigate = useNavigate();
-  const [successMessage, setSuccessMessage] = useState(""); // New state for success message
-
-  const [file] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [image, setFile] = useState(null); // Change to null to avoid issues
 
   const handleChange = ({ target: { name, value } }) => {
     setData((prevData) => ({
@@ -28,13 +26,33 @@ const New = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const url = "http://localhost:8080/api/users";
-      const { data: res } = await axios.post(url, data);
+      const formData = new FormData();
+
+      // Append all form data
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      // Append the image file
+    if (image) {
+      formData.append("image", image, image.name); // Add the third parameter with the file name
+    }
+
+      const { data: res } = await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       setSuccessMessage("User added successfully");
-      //navigate("/login");
       console.log(res.message);
     } catch (error) {
       if (
@@ -46,7 +64,6 @@ const New = () => {
       }
     }
   };
-
 
   return (
     <div className="new">
@@ -60,8 +77,8 @@ const New = () => {
           <div className="left">
             <img
               src={
-                file
-                  ? URL.createObjectURL(file)
+                image
+                  ? URL.createObjectURL(image)
                   : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
               }
               alt=""
@@ -69,15 +86,14 @@ const New = () => {
           </div>
           <div className="right">
             <form onSubmit={handleSubmit}>
-              <div className="formInput">
+            <div className="formInput">
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
                 </label>
                 <input
                   type="file"
                   id="file"
-                  //onChange={handleFileChange}
-                  style={{ display: "none" }}
+                  onChange={handleFileChange}
                 />
               </div>
 
@@ -150,6 +166,8 @@ const New = () => {
               {successMessage && (
                 <div className="success_msg">{successMessage}</div>
               )}
+              {error && <div className="error_msg">{error}</div>}
+
 
               <button type="submit">Send</button>
             </form>
