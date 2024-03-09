@@ -9,7 +9,7 @@
 
 .signup_form_container {
 	width: 900px;
-	height: 500px;
+	height: 600px;
 	display: flex;
 	border-radius: 10px;
 	box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
@@ -77,6 +77,22 @@
 	border-radius: 5px;
 	text-align: center;
 }
+.success_msg {
+	width: 370px;
+	padding: 15px;
+	margin: 5px 0;
+	font-size: 14px;
+	background-color: #17a755;
+	color: white;
+	border-radius: 5px;
+	text-align: center;
+}
+img {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	object-fit: cover;
+  }
 
 .white_btn,
 .green_btn {
