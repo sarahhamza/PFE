@@ -47,4 +47,34 @@ router.post("/", upload.single('image'), async (req, res) => {
   }
 });
 
+
+router.get("/", async (req, res) => {
+  try {
+    // Fetch all users from the database
+    const users = await User.find({}, '-password'); // Exclude the password field from the response
+    res.status(200).send(users);
+  } catch (error) {
+    console.error('Error fetching users from the database:', error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+router.put("/:userId/accept", async (req, res) => {
+  try {
+    // Vérifiez si l'utilisateur existe
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    // Mettez à jour l'attribut accept de l'utilisateur
+    user.accept = 1; // Mettez la valeur appropriée ici (1 pour accepter, 0 pour refuser)
+    await user.save();
+
+    res.status(200).send({ message: "User accept status updated successfully" });
+  } catch (error) {
+    console.error('Error updating user accept status:', error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
 module.exports = router;
