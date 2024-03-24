@@ -6,4 +6,3 @@ export const userColumns = [
   { field: "email", headerName: "Email", width: 200 },
 ]
 
-// Il n'est pas nécessaire de définir les données des utilisateurs ici, car nous allons les charger à partir du backend.

@@ -17,6 +17,9 @@ app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
+// Serve static files from the 'uploads' folder
+app.use('/uploads', express.static('uploads')); 
+
 // route for the root path
 app.get("/", (req, res) => {
   res.send("Welcome to the home page!");

@@ -14,6 +14,7 @@ const storage = multer.diskStorage({
     cb(null, filename);
   }
 });
+//app.use('/uploads', express.static('uploads'));
 
 const upload = multer({ storage: storage });
 

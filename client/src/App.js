@@ -9,7 +9,7 @@ import { productInputs, userInputs } from "./formSource";
 import "./style/dark.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
-
+import BasicDemo from "./components/datatable/UsersList";
 function App() {
   const { darkMode } = useContext(DarkModeContext);
  // const user = localStorage.getItem("token");
@@ -23,7 +23,7 @@ function App() {
           <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path="/home" element={<Home />} />
           <Route path="/users" element={<List />} />
-          <Route path="/products" element={<List />} />
+          <Route path="/products" element={<BasicDemo/>} />
           <Route path="/users/new" element={<New inputs={userInputs} title="Add New User" />} />
           <Route path="/new/product" element={<New inputs={productInputs} title="Add New Product" />} />
           <Route path="/user/:userId" element={<Single />} />
