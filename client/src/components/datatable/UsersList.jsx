@@ -8,7 +8,9 @@ import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primeicons/primeicons.css';
-
+import { BiSolidUserCheck } from "react-icons/bi";
+import { FaUserXmark } from "react-icons/fa6";
+import { HiUserAdd } from "react-icons/hi";
 import "./userList.scss";
 import "./flags.scss";
 
@@ -129,8 +131,8 @@ export default function UserList() {
     const renderActions = (rowData) => {
         return (
             <div>
-                <button onClick={() => handleAccept(rowData._id)} className="p-button p-button-success p-button-rounded p-mr-2">Accept</button>
-                <button onClick={() => handleDelete(rowData._id)} className="p-button p-button-danger p-button-rounded">Delete</button>
+                <button onClick={() => handleAccept(rowData._id)} className="p-button p-button-success p-button-rounded p-mr-2"><BiSolidUserCheck /></button>
+                <button onClick={() => handleDelete(rowData._id)} className="p-button p-button-danger p-button-rounded actionButton"><FaUserXmark /></button>
             </div>
         );
     };
@@ -140,9 +142,9 @@ export default function UserList() {
     return (
         <div>
         <div className="top">
-        Add New User
+        <h1>Add New User</h1>
         <Link to="/users/new" className="link">
-         add new user
+         add new user <HiUserAdd />
         </Link>
       </div>
         <div className="card">
