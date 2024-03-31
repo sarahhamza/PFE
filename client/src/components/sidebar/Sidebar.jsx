@@ -14,12 +14,18 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import { Link} from "react-router-dom"; // Importer useHistory depuis react-router-dom
 import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+
 
 const Sidebar = () => {
+    const navigate = useNavigate();
     const { dispatch } = useContext(DarkModeContext);
+    const [ setIsAuthenticated] = useState(false);
     const handleLogout = () => {
         localStorage.removeItem("token");
-        window.location="/login";
+        setIsAuthenticated(false); 
+        navigate('/login');
         
       };
 
@@ -34,10 +40,14 @@ const Sidebar = () => {
             <div className="center">
                 <ul>
                     <p className="title">MAIN</p>
-                    <li>
-                        <DashboardIcon className="icon" />
+                    
+                    <Link to="/home" style={{ textDecoration: "none" }}>
+                        <li>
+                        <DashboardIcon  className="icon" />
                         <span>Dashboard</span>
-                    </li>
+                        </li>
+                        </Link>
+                    
                     <p className="title">LISTS</p>
                     <Link to="/users" style={{ textDecoration: "none" }}>
                         <li>
@@ -45,10 +55,10 @@ const Sidebar = () => {
                             <span>Users</span>
                         </li>
                     </Link>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
+                    <Link to="/rooms" style={{ textDecoration: "none" }}>
                         <li>
                             <StoreIcon className="icon" />
-                            <span>Products</span>
+                            <span>Rooms</span>
                         </li>
                     </Link>
                     <li>

@@ -10,13 +10,15 @@ body {
     padding: 1rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    
 }
 
 .card {
     background: var(--surface-card);
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 10px;
     margin-bottom: 1rem;
+    margin-left: 10px;
 }
 .top {
   -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
@@ -24,6 +26,8 @@ body {
   padding: 20px;
   margin: 20px;
   display: flex;
+  background-color: white;
+
   h1 {
     color: lightgray;
     font-size: 20px;

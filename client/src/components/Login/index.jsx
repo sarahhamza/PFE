@@ -2,10 +2,15 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
 	const [data, setData] = useState({ email: "", password: "" });
 	const [error, setError] = useState("");
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const navigate = useNavigate();
+  
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value });
@@ -17,8 +22,9 @@ const Login = () => {
 			const url = "http://localhost:8080/api/auth";
 			const { data: res } = await axios.post(url, data);
 			localStorage.setItem("token", res.data);
-			window.location = "/home";
-		} catch (error) {
+			setIsAuthenticated(true);
+			navigate('/home');
+				} catch (error) {
 			if (
 				error.response &&
 				error.response.status >= 400 &&

@@ -22,8 +22,8 @@ const upload = multer({ storage: storage });
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'sarahhm31@gmail.com', // replace with your email
-    pass: 'sjqr puky jshy uxvz'  // replace with your email password
+    user: 'sarahhm31@gmail.com',
+    pass: 'sjqr puky jshy uxvz'
   }
 });
 
@@ -114,7 +114,7 @@ router.put("/:userId/accept", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-//delete user 
+//delete user
 router.delete("/:userId/delete", async (req, res) => {
   try {
     const user = await User.findByIdAndRemove(req.params.userId);

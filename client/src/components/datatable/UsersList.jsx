@@ -25,7 +25,6 @@ export default function UserList() {
         lastName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
         email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
         role: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] }
-        
     });
 
     const [selectedUser, setSelectedUser] = useState(null);
@@ -152,7 +151,7 @@ export default function UserList() {
                 {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
             <DataTable value={users} paginator rows={5} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
                 selection={selectedUser} onSelectionChange={(e) => setSelectedUser(e.value)} selectionMode="single" dataKey="_id"
-                stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '50rem' }}>
+                stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '40rem' }}>
                 <Column header="Image" body={imageBodyTemplate} style={{ width: '10%' }} ></Column>
                 <Column field="firstName" header="First Name" sortable filter filterPlaceholder="Search" style={{ width: '15%' }}></Column>
                 <Column field="lastName" header="Last Name" sortable filter filterPlaceholder="Search" style={{ width: '15%' }}></Column>

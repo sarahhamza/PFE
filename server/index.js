@@ -5,6 +5,8 @@ const cors = require("cors");
 const connection = require("./db");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
+const roomRoutes = require("./routes/rooms");
+
 
 // database connection
 connection();
@@ -16,6 +18,7 @@ app.use(cors());
 // routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/rooms", roomRoutes)
 
 // Serve static files from the 'uploads' folder
 app.use('/uploads', express.static('uploads')); 
