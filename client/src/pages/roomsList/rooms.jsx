@@ -15,7 +15,7 @@ import "./Rooms.scss"
 export default function RowEditingDemo() {
     const [rooms, setRooms] = useState([]);
     const [editMessage, seteditMessage] = useState(""); // Ajout de la variable d'état pour le message d'acceptation
-    const [deleteMessage, setdeletetMessage] = useState(""); 
+    const [deleteMessage, setdeletetMessage] = useState("");
     const [statuses] = useState(['Clean', 'In Progress', 'Messy']); // Assuming these are the possible states
     const [users, setUsers] = useState([]); // State to store users
 
@@ -36,6 +36,8 @@ export default function RowEditingDemo() {
             console.error("Error fetching room data:", error);
         }
     };
+    
+
     const fetchUsers = async () => {
         try {
             const response = await fetch("http://localhost:8080/api/users");
@@ -48,25 +50,7 @@ export default function RowEditingDemo() {
             console.error("Error fetching user data:", error);
         }
     };
-    const deleteRoom = async (rowData) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/rooms/${rowData._id}`, {
-                method: 'DELETE',
-            });
 
-            if (!response.ok) {
-                throw new Error(`Failed to delete room with ID ${rowData._id}`);
-            }
-
-            const updatedRooms = rooms.filter(room => room._id !== rowData._id);
-            setRooms(updatedRooms);
-            setdeletetMessage("Room deleted successfully");
-            setTimeout(() => setdeletetMessage(''), 2000);
-
-        } catch (error) {
-            console.error("Error deleting room:", error);
-        }
-    };
     const userEditor = (options) => {
         return (
             <Dropdown
@@ -77,19 +61,19 @@ export default function RowEditingDemo() {
             />
         );
     };
-    
+
     const onRowEditComplete = async (rowData) => {
         console.log("rowData:", rowData); // Log the rowData to inspect its structure
         const { _id, nbrRoom, Surface, Categorie, State, User, Property } = rowData.newData; // Access _id from newData
-    
+
         // Ensure that _id is valid
         if (!_id) {
             console.error("Error updating room: Room ID is undefined");
             return;
         }
-    
+
         const updatedData = { nbrRoom, Surface, Categorie, State, User, Property }; // Create a new object without circular references
-    
+
         try {
             const response = await fetch(`http://localhost:8080/api/rooms/${_id}/edit`, {
                 method: 'PUT',
@@ -98,11 +82,11 @@ export default function RowEditingDemo() {
                 },
                 body: JSON.stringify(updatedData) // Pass the new object for stringification
             });
-    
+
             if (!response.ok) {
                 throw new Error("Failed to update room");
             }
-    
+
             const updatedRooms = rooms.map(room => (room._id === _id ? rowData : room));
             setRooms(updatedRooms);
             fetchRooms();
@@ -114,8 +98,35 @@ export default function RowEditingDemo() {
             // Handle error or show error message
         }
     };
+    const archiveRoom = async (rowData) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/rooms/${rowData._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ archived: true }) // Send data to update the room's status
+            });
     
+            if (!response.ok) {
+                throw new Error(`Failed to archive room with ID ${rowData._id}`);
+            }
     
+            // Update the room's status in the local state
+            setRooms(prevRooms => prevRooms.map(room => {
+                if (room._id === rowData._id) {
+                    return { ...room, archived: true }; // Set archived to true
+                }
+                return room;
+            }));
+            setdeletetMessage("Room archived successfully");
+            setTimeout(() => setdeletetMessage(''), 2000);
+    
+        } catch (error) {
+            console.error("Error archiving room:", error);
+        }
+    };
+
     const getSeverity = (value) => {
         switch (value) {
             case 'Clean':
@@ -167,29 +178,73 @@ export default function RowEditingDemo() {
         // Add your condition here based on rowData if editing is allowed
         return true; // Example: always allow editing
     };
+    const handleImport = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Send file to the server for processing
+            const response = await fetch('http://localhost:8080/api/rooms/import', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to import data');
+            }
+
+            // Refresh room data after importing
+            fetchRooms();
+            seteditMessage("Data imported successfully");
+            setTimeout(() => seteditMessage(''), 2000);
+        } catch (error) {
+            console.error("Error importing data:", error);
+            // Handle error
+        }
+    };
+
     return (
         <div>
-        <div className="top">
-        <h1>List Of Rooms</h1>
-        <Link to="/rooms/new" className="link">
-         add new room <BsHouseAdd />
-        </Link>
-      </div>
-                {editMessage && <div className="editMessage">{editMessage}</div>}
-                {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
-        <div className="card p-fluid">
-                
-            <DataTable value={rooms} editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} tableStyle={{ minWidth: '50rem' }}>
-                <Column field="nbrRoom" header="Number of Rooms" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
-                <Column field="Surface" header="Surface" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
-                <Column field="Categorie" header="Category" editor={(options) => categoryEditor(options)} style={{ width: '20%' }}></Column>
-                <Column field="State" header="State" body={statusBodyTemplate}  editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
-                <Column field="User" header="User"  editor={(options) => userEditor(options)} style={{ width: '20%' }}></Column>
-                <Column field="Property" header="Property" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-                <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-                <Column body={(rowData) => <Button onClick={() => deleteRoom(rowData)}  ><BsXLg /> </Button>} style={{ width: '10%' }} />
-            </DataTable>
-        </div>
+            <div className="top1">
+                <h1>List Of Rooms</h1>
+                <Link to="/rooms/new" className="link1">
+                    add new room <BsHouseAdd />
+                </Link>
+                <input
+                    type="file"
+                    id="fileInput"
+                    style={{ display: 'none' }} // Hide the input visually
+                    onChange={handleImport}
+                />
+                <Button
+                    type="button"
+                    icon="pi pi-upload"
+                    label="Export"
+                    className="p-button-help"
+                    onClick={() => document.getElementById('fileInput').click()}
+                    data-pr-tooltip="Export Excel Data"
+
+                />          </div>
+            {editMessage && <div className="editMessage">{editMessage}</div>}
+            {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
+            <div className="card1 p-fluid">
+
+                <DataTable value={rooms} paginator rows={4} editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} tableStyle={{ maxWidth: '85rem' }}>
+                    <Column field="nbrRoom" header="Number of Rooms" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
+                    <Column field="Surface" header="Surface" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
+                    <Column field="Categorie" header="Category" editor={(options) => categoryEditor(options)} style={{ width: '20%' }}></Column>
+                    <Column field="State" header="State" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
+                    <Column field="User" header="User" body={(rowData) => {
+                        const user = users.find(user => user._id === rowData.User);
+                        return user ? user.email : '';
+                    }} editor={(options) => userEditor(options)} style={{ width: '20%' }}></Column>                    <Column field="Property" header="Property" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+                    <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+                    <Column body={(rowData) => <Button onClick={() => archiveRoom(rowData)}  ><BsXLg /> </Button>} style={{ width: '10%' }} />
+                </DataTable>
+            </div>
         </div>
     );
 }

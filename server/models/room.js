@@ -6,9 +6,10 @@ const roomSchema = new mongoose.Schema({
     Surface: { type: Number, required: true },
     Categorie: { type: String, required: true },
     State: { type: String, required: true },
-    User: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Change the type to ObjectId
+    User: { type: mongoose.Schema.Types.ObjectId, ref: 'User' ,default: null  }, // Change the type to ObjectId
     Property: { type: String, required: true },
-    image: { type: String }
+    image: { type: String },
+    archived: { type: Boolean, default: false } 
   });
 
 const Room = mongoose.model("room", roomSchema);

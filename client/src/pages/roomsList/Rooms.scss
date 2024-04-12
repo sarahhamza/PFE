@@ -10,13 +10,16 @@ body {
     padding: 1rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    width: auto;
 }
 
-.card {
+.card1 {
     background: var(--surface-card);
     padding: 2rem;
     border-radius: 10px;
     margin-bottom: 1rem;
+    margin-right: 20px;
+    margin-left: 20px;
 }
 .status-tag {
     font-weight: bold;
@@ -38,14 +41,14 @@ body {
 .btn{
     background-color: white;
 }
-.top {
+.top1 {
     -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
     box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
     padding: 20px;
     margin: 20px;
     display: flex;
     background-color: white;
-  
+  width: 1270px;
     h1 {
       color: lightgray;
       font-size: 20px;
@@ -58,19 +61,22 @@ body {
   
     }
   }
-  .link{
+.link1{
       text-decoration: none;
-      color: rgb(98, 0, 255);
+      color: white;
       font-size: 16px;
-      font-weight: 400;
+      background-color:  rgb(98, 0, 255) ;
+      width: 180px;
+      height: 50px;
+      font-weight: 600;
       border: 1px solid rgb(98, 0, 255);
       padding: 5px;
       border-radius: 5px;
       margin-left: 900px;
-      margin-top: 12px;
+      margin-top: 25px;
       cursor: pointer;
     }
-    .editMessage {
+.editMessage {
         background-color: #4caf50; /* Couleur de fond verte */
         color: #fff; /* Couleur du texte blanche */
         padding: 10px; /* Rembourrage */
@@ -79,7 +85,7 @@ body {
         margin-right: 30px;
         margin-left: 50px;
       }
-      .deleteMessage {
+.deleteMessage {
         background-color: #af874c; /* Couleur de fond verte */
         color: #fff; /* Couleur du texte blanche */
         padding: 10px; /* Rembourrage */
@@ -87,4 +93,12 @@ body {
         border-radius: 5px; /* Bord arrondi */
         margin-right: 30px;
         margin-left: 50px;
+      }
+.p-button-help{
+        background-color:  rgb(98, 0, 255) ;
+        margin-left: 10px;
+        margin-right: 20px;
+        margin-top: 25px;
+        height: 50px;
+        width: 180px;
       }
