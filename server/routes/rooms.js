@@ -3,6 +3,7 @@ const { Room, validate } = require("../models/room");
 const bcrypt = require("bcrypt");
 const multer = require('multer');
 const path = require('path');
+const xlsx = require("xlsx");
 
 // Set storage engine
 const storage = multer.diskStorage({
@@ -44,13 +45,14 @@ router.post("/", upload.single('image'), async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const rooms = await Room.find({});
+    const rooms = await Room.find({ archived: { $ne: true } }); // Filter out archived rooms
     res.status(200).send(rooms);
   } catch (error) {
     console.error('Error fetching rooms from the database:', error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
 
 router.put("/:roomId/edit", async (req, res) => {
   try {
@@ -77,5 +79,62 @@ router.delete("/:roomId", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+router.post("/import", upload.single('file'), async (req, res) => {
+  try {
+      const file = req.file;
+      if (!file) {
+          return res.status(400).send({ message: "No file uploaded" });
+      }
+
+      // Read the uploaded Excel file
+      const workbook = xlsx.readFile(file.path);
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      // Convert worksheet data to JSON format
+      const jsonData = xlsx.utils.sheet_to_json(worksheet);
+
+      // Process each row of data
+      const processedData = jsonData.map(row => {
+          // If User field is empty or "null", set it to null
+          if (!row.User || row.User === "null") {
+              row.User = null;
+          }
+          return row;
+      });
+
+      // Save processed data to the database
+      await Room.insertMany(processedData);
+
+      res.status(200).send({ message: "Data imported successfully" });
+  } catch (error) {
+      console.error("Error importing data:", error);
+      res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+router.put('/:roomId', async (req, res) => {
+  const { roomId } = req.params;
+
+  try {
+      // Find the room by ID
+      const room = await Room.findById(roomId);
+
+      if (!room) {
+          return res.status(404).json({ error: 'Room not found' });
+      }
+
+      // Update the room's status to "Archived"
+      room.archived = true;
+
+      // Save the updated room
+      await room.save();
+
+      res.json({ message: 'Room archived successfully' });
+  } catch (error) {
+      console.error('Error archiving room:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;

@@ -149,7 +149,7 @@ export default function UserList() {
         <div>
         <div className="top">
         <h1>Add New User</h1>
-        <Link to="/users/new" className="link">
+        <Link to="/users/new" className="link2">
          add new user <HiUserAdd />
         </Link>
       </div>
