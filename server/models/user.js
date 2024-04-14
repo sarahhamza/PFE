@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: { type: String, enum: ['controlleur', 'femme de menage'], required: true },
     accept: { type: Number, default: 0 },
-    image: { type: String }
+    image: { type: String },
+    archived: { type: Boolean, default: false }
+
 });
 
 userSchema.methods.generateAuthToken = function () {

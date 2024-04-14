@@ -41,7 +41,7 @@ export default function UserList() {
             }
             const userData = await response.json();
             // Filtrer les utilisateurs avec accept === 1
-            const acceptedUsers = userData.filter(user => user.accept === 0);
+            const acceptedUsers = userData.filter(user => user.accept === 0 );
             setUsers(acceptedUsers);
             //setUsers(userData);
         } catch (error) {
@@ -88,28 +88,57 @@ export default function UserList() {
         }
       };
       
-      const handleDelete = async (id) => {
-        try {
-          const response = await fetch(`http://localhost:8080/api/users/${id}/delete`, {
-            method: 'DELETE',
-          });
+      // const handleDelete = async (id) => {
+      //   try {
+      //     const response = await fetch(`http://localhost:8080/api/users/${id}/delete`, {
+      //       method: 'DELETE',
+      //     });
       
-          if (!response.ok) {
-            throw new Error(`Failed to delete user with ID ${id}`);
-          }
+      //     if (!response.ok) {
+      //       throw new Error(`Failed to delete user with ID ${id}`);
+      //     }
       
-          // Filtrer les utilisateurs après la suppression de l'utilisateur
-          const updatedUsers = users.filter(user => user._id !== id);
-          setUsers(updatedUsers);
-          setdeletetMessage("User deleted successfully");
-          setTimeout(() => setdeletetMessage(''), 2000);
+      //     // Filtrer les utilisateurs après la suppression de l'utilisateur
+      //     const updatedUsers = users.filter(user => user._id !== id);
+      //     setUsers(updatedUsers);
+      //     setdeletetMessage("User deleted successfully");
+      //     setTimeout(() => setdeletetMessage(''), 2000);
     
+    
+      //   } catch (error) {
+      //     console.error("Error deleting user:", error);
+      //   }
+      // };
+      const handleArchiveUser = async (rowData) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/users/${rowData._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ archived: true }) // Send data to update the room's status
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to archive user with ID ${rowData._id}`);
+            }
+    
+            // Update the room's status in the local state
+            setUsers(prevUsers => prevUsers.map(user => {
+                if (user._id === rowData._id) {
+                    return { ...user, archived: true }; // Set archived to true
+                }
+                return user;
+            }));
+            const updatedUsers = users.filter(user => user._id !==rowData._id);
+            setUsers(updatedUsers);
+            setdeletetMessage("User archived successfully");
+            setTimeout(() => setdeletetMessage(''), 2000);
     
         } catch (error) {
-          console.error("Error deleting user:", error);
+            console.error("Error archiving User:", error);
         }
-      };
-      
+    };
 
     const onGlobalFilterChange = (event) => {
         const value = event.target.value;
@@ -131,7 +160,7 @@ export default function UserList() {
         return (
             <div>
                 <button onClick={() => handleAccept(rowData._id)} className="p-button p-button-success p-button-rounded p-mr-2"><BiSolidUserCheck /></button>
-                <button onClick={() => handleDelete(rowData._id)} className="p-button p-button-danger p-button-rounded actionButton"><FaUserXmark /></button>
+                <button onClick={() => handleArchiveUser(rowData)} className="p-button p-button-danger p-button-rounded actionButton"><FaUserXmark /></button>
             </div>
         );
     };

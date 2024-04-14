@@ -64,7 +64,7 @@ router.post("/", upload.single('image'), async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     // Fetch all users from the database
-    const users = await User.find({}, '-password'); // Exclude the password field from the response
+    const users = await User.find({ archived: { $ne: true } }, '-password'); // Exclude the password field from the response
     res.status(200).send(users);
   } catch (error) {
     console.error('Error fetching users from the database:', error);
@@ -127,6 +127,30 @@ router.delete("/:userId/delete", async (req, res) => {
   } catch (error) {
     console.error('Error deleting user:', error);
     res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+//archived user
+router.put('/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+      // Find the user by ID
+      const user = await User.findById(userId);
+
+      if (!user) {
+          return res.status(404).json({ error: 'user not found' });
+      }
+
+      // Update the user's status to "Archived"
+      user.archived = true;
+
+      // Save the updated room
+      await user.save();
+
+      res.json({ message: 'user archived successfully' });
+  } catch (error) {
+      console.error('Error archiving user:', error);
+      res.status(500).json({ error: 'Internal server error' });
   }
 });
 

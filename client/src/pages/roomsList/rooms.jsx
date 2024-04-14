@@ -14,10 +14,10 @@ import "./Rooms.scss"
 
 export default function RowEditingDemo() {
     const [rooms, setRooms] = useState([]);
-    const [editMessage, seteditMessage] = useState(""); // Ajout de la variable d'état pour le message d'acceptation
+    const [editMessage, seteditMessage] = useState("");
     const [deleteMessage, setdeletetMessage] = useState("");
-    const [statuses] = useState(['Clean', 'In Progress', 'Messy']); // Assuming these are the possible states
-    const [users, setUsers] = useState([]); // State to store users
+    const [statuses] = useState(['Clean', 'In Progress', 'Messy']);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         fetchRooms();
@@ -119,6 +119,7 @@ export default function RowEditingDemo() {
                 }
                 return room;
             }));
+            fetchRooms();
             setdeletetMessage("Room archived successfully");
             setTimeout(() => setdeletetMessage(''), 2000);
     
