@@ -61,10 +61,12 @@ const Sidebar = () => {
                             <span>Rooms</span>
                         </li>
                     </Link>
-                    <li>
-                        <CreditCardIcon className="icon" />
-                        <span>Orders</span>
-                    </li>
+                    <Link to="/ListHousemaid" style={{ textDecoration: "none" }}>
+                        <li>
+                            <StoreIcon className="icon" />
+                            <span>Housemaid</span>
+                        </li>
+                    </Link>
                     <li>
                         <LocalShippingIcon className="icon" />
                         <span>Delivery</span>

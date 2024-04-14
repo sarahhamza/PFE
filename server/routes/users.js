@@ -131,14 +131,14 @@ router.delete("/:userId/delete", async (req, res) => {
 });
 router.get("/:userId", async (req, res) => {
   try {
-      const user = await User.findById(req.params.userId);
-      if (!user) {
-          return res.status(404).send({ message: "User not found" });
-      }
-      res.status(200).send(user);
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).send({ message: "Utilisateur non trouvé" });
+    }
+    res.status(200).send(user);
   } catch (error) {
-      console.error('Error fetching user data:', error);
-      res.status(500).send({ message: "Internal Server Error" });
+    console.error('Erreur lors de la récupération des données utilisateur :', error);
+    res.status(500).send({ message: "Erreur interne du serveur" });
   }
 });
 router.put("/:userId", upload.single('image'), async (req, res) => {

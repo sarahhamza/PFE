@@ -11,10 +11,10 @@ import 'primeicons/primeicons.css';
 import { BiSolidUserCheck } from "react-icons/bi";
 import { FaUserXmark } from "react-icons/fa6";
 import { HiUserAdd } from "react-icons/hi";
-import "./userList.scss";
+import "./housemaidList.scss";
 import "./flags.scss";
 
-export default function UserList() {
+export default function HousemaidList() {
     const [users, setUsers] = useState([]);
     //const [data, setData] = useState([]);
     const [acceptMessage, setAcceptMessage] = useState(""); // Ajout de la variable d'état pour le message d'acceptation
@@ -41,7 +41,7 @@ export default function UserList() {
             }
             const userData = await response.json();
             // Filtrer les utilisateurs avec accept === 1
-            const acceptedUsers = userData.filter(user => user.accept === 0);
+            const acceptedUsers = userData.filter(user => user.accept === 1 && user.role === "femme de menage");
             setUsers(acceptedUsers);
             //setUsers(userData);
         } catch (error) {
@@ -130,9 +130,15 @@ export default function UserList() {
     const renderActions = (rowData) => {
         return (
             <div>
-                <button onClick={() => handleAccept(rowData._id)} className="p-button p-button-success p-button-rounded p-mr-2"><BiSolidUserCheck /></button>
-                <button onClick={() => handleDelete(rowData._id)} className="p-button p-button-danger p-button-rounded actionButton"><FaUserXmark /></button>
-                
+                <Link to={{
+  pathname: `/users/update/${rowData._id}`,
+  state: { imageUrl: `http://localhost:8080/uploads/${rowData.image}` }
+}} className="p-button p-button-info p-button-rounded p-ml-2">
+  Update
+</Link>
+<Link to={`/user/${rowData._id}`} className="p-button p-button-success p-button-rounded p-ml-2">
+                View
+            </Link>
 
             </div>
         );
@@ -143,14 +149,10 @@ export default function UserList() {
     return (
         <div>
         <div className="top">
-        <h1>Add New User</h1>
-        <Link to="/users/new" className="link2">
-         add new user <HiUserAdd />
-        </Link>
+        <h1>Housemaid List</h1>
+        
       </div>
         <div className="card">
-                {acceptMessage && <div className="acceptMessage">{acceptMessage}</div>}
-                {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
             <DataTable value={users} paginator rows={5} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
                 selection={selectedUser} onSelectionChange={(e) => setSelectedUser(e.value)} selectionMode="single" dataKey="_id"
                 stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '40rem' }}>
