@@ -129,5 +129,35 @@ router.delete("/:userId/delete", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+router.get("/:userId", async (req, res) => {
+  try {
+      const user = await User.findById(req.params.userId);
+      if (!user) {
+          return res.status(404).send({ message: "User not found" });
+      }
+      res.status(200).send(user);
+  } catch (error) {
+      console.error('Error fetching user data:', error);
+      res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+router.put("/:userId", upload.single('image'), async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userData = req.body;
+
+    if (req.file) {
+      userData.image = req.file.filename;
+    }
+
+    // Mettez à jour les données de l'utilisateur dans la base de données
+    await User.findByIdAndUpdate(userId, userData);
+
+    res.status(200).send({ message: "User updated successfully" });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
 
 module.exports = router;

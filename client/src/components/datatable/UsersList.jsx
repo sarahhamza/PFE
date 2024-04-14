@@ -132,6 +132,13 @@ export default function UserList() {
             <div>
                 <button onClick={() => handleAccept(rowData._id)} className="p-button p-button-success p-button-rounded p-mr-2"><BiSolidUserCheck /></button>
                 <button onClick={() => handleDelete(rowData._id)} className="p-button p-button-danger p-button-rounded actionButton"><FaUserXmark /></button>
+                <Link to={{
+  pathname: `/users/update/${rowData._id}`,
+  state: { imageUrl: `http://localhost:8080/uploads/${rowData.image}` }
+}} className="p-button p-button-info p-button-rounded p-ml-2">
+  Update
+</Link>
+
             </div>
         );
     };

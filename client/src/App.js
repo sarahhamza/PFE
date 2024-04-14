@@ -13,6 +13,7 @@ import { userInputs } from './formSource';
 import './style/dark.scss';
 import BasicDemo from './components/datatable/UsersList';
 import ListRoom from './pages/list/ListRoom';
+import Update from './pages/updateUser/Update';
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/rooms/new" element={isAuthenticated ? <NewRoom title="Add New Room" />: <Navigate to="/login" replace />} />
           <Route path="/user/:userId" element={<Single />} />
           <Route path="/product/:productId" element={<Single />} />
+          <Route path="/users/update/:userId" element={isAuthenticated ? <Update inputs={userInputs} title="Update User" /> : <Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </div>
