@@ -166,7 +166,6 @@ export default function UserList() {
     };
 
     const header = renderHeader();
-
     return (
         <div>
         <div className="top">

@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const xlsx = require("xlsx");
+
 
 // Set storage engine
 const storage = multer.diskStorage({
@@ -183,5 +185,69 @@ router.put("/:userId", upload.single('image'), async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+router.post("/import", upload.single('file'), async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send({ message: "No file uploaded" });
+    }
+
+    // Read the uploaded Excel file
+    const workbook = xlsx.readFile(file.path);
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+
+    // Convert worksheet data to JSON format
+    const jsonData = xlsx.utils.sheet_to_json(worksheet);
+
+    // Process and validate each row of data
+    const processedData = [];
+    for (const item of jsonData) {
+      console.log("Processing item:", item);
+
+      // Validate each item
+      const { error } = validate(item);
+      if (error) {
+        console.error("Validation error:", error.details[0].message);
+        // Skip invalid data
+        continue;
+      }
+
+      // Log extracted values for debugging
+      console.log("Extracted values:", {
+        firstName: item.firstName,
+        lastName: item.lastName,
+        email: item.email,
+        role: item.role,
+        // Add more fields as needed
+      });
+
+      // Create a new user object
+      const newUser = new User({
+        firstName: item.firstName,
+        lastName: item.lastName,
+        email: item.email,
+        password: item.password,
+        role: item.role,
+        accept: item.accept,
+        image: item.image,
+      });
+
+      // Save the user to the database
+      await newUser.save();
+      processedData.push(newUser);
+    }
+
+    // Log processed data for debugging
+    console.log("Processed data:", processedData);
+
+    res.status(200).send({ message: "Data imported successfully", processedData });
+  } catch (error) {
+    console.error("Error importing data:", error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+
 
 module.exports = router;

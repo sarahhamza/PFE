@@ -135,6 +135,15 @@ router.put('/:roomId', async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
   }
 });
+router.get("/available", async (req, res) => {
+  try {
+    const availableRooms = await Room.find({ User: null });
+    res.status(200).send(availableRooms);
+  } catch (error) {
+    console.error('Error fetching available rooms:', error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
 
 
 module.exports = router;

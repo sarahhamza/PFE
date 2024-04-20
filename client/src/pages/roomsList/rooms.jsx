@@ -119,7 +119,7 @@ export default function RowEditingDemo() {
                 }
                 return room;
             }));
-            fetchRooms();
+            fetchRooms()
             setdeletetMessage("Room archived successfully");
             setTimeout(() => setdeletetMessage(''), 2000);
     

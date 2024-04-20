@@ -6,6 +6,8 @@ const connection = require("./db");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const roomRoutes = require("./routes/rooms");
+const notifRoutes = require("./routes/notifications");
+
 
 
 // database connection
@@ -19,6 +21,8 @@ app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/rooms", roomRoutes);
+app.use("/api/notifications", notifRoutes);
+
 
 
 // Serve static files from the 'uploads' folder
