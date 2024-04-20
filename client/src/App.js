@@ -13,6 +13,8 @@ import { userInputs } from './formSource';
 import './style/dark.scss';
 import BasicDemo from './components/datatable/UsersList';
 import ListRoom from './pages/list/ListRoom';
+import Update from './pages/updateUser/Update';
+import ListHousemaid from './pages/list/ListHousemaid';
 
 
 function App() {
@@ -33,6 +35,7 @@ function App() {
           <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/users" element={isAuthenticated ? <List /> : <Navigate to="/login" replace />} />
+          <Route path="/ListHousemaid" element={isAuthenticated ? <ListHousemaid /> : <Navigate to="/login" replace />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path="/rooms" element={isAuthenticated ? <ListRoom /> : <Navigate to="/login" replace />} />
@@ -41,6 +44,7 @@ function App() {
           <Route path="/rooms/new" element={isAuthenticated ? <NewRoom title="Add New Room" />: <Navigate to="/login" replace />} />
           <Route path="/user/:userId" element={<Single />} />
           <Route path="/product/:productId" element={<Single />} />
+          <Route path="/users/update/:userId" element={isAuthenticated ? <Update inputs={userInputs} title="Update User" /> : <Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </div>
