@@ -10,8 +10,10 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: { type: String, enum: ['controlleur', 'femme de menage'], required: true },
     accept: { type: Number, default: 0 },
-    image: { type: String }
+    image: { type: String },
+    rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }] // Tableau des ID des chambres
 });
+
 
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {

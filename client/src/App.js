@@ -43,7 +43,6 @@ function App() {
           <Route path="/users/new" element={isAuthenticated ?<New inputs={userInputs} title="Add New User" />: <Navigate to="/login" replace />} />
           <Route path="/rooms/new" element={isAuthenticated ? <NewRoom title="Add New Room" />: <Navigate to="/login" replace />} />
           <Route path="/user/:userId" element={<Single />} />
-          <Route path="/product/:productId" element={<Single />} />
           <Route path="/users/update/:userId" element={isAuthenticated ? <Update inputs={userInputs} title="Update User" /> : <Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
