@@ -16,7 +16,6 @@ const storage = multer.diskStorage({
     cb(null, filename);
   }
 });
-//app.use('/uploads', express.static('uploads'));
 
 const upload = multer({ storage: storage });
 
@@ -31,8 +30,6 @@ const transporter = nodemailer.createTransport({
 
 router.post("/", upload.single('image'), async (req, res) => {
   try {
-    console.log('Request received:', req.body);  // Add this line for debugging
-
     const { error } = validate(req.body);
     if (error)
       return res.status(400).send({ message: error.details[0].message });
@@ -52,6 +49,7 @@ router.post("/", upload.single('image'), async (req, res) => {
       role: req.body.role,
       accept: req.body.accept,
       image: req.file ? req.file.filename : null,
+      rooms: req.body.rooms // Add the rooms field
     });
 
     await newUser.save();
@@ -77,21 +75,18 @@ router.get("/", async (req, res) => {
 //put user
 router.put("/:userId/accept", async (req, res) => {
   try {
-    // Vérifiez si l'utilisateur existe
     const user = await User.findById(req.params.userId);
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
 
-    // Mettez à jour l'attribut accept de l'utilisateur
-    user.accept = 1; // Mettez la valeur appropriée ici (1 pour accepter, 0 pour refuser)
+    user.accept = 1;
     const mailOptions = {
-      from: 'sarahhm31@gmail.com',  // replace with your email
+      from: 'sarahhm31@gmail.com',
       to: user.email,
       subject: 'Account Accepted',
-      text: 'Félicitations ! Votre compte a été accepté.'
+      text: 'Congratulations! Your account has been accepted.'
     };
-    console.log('Before sending email');  // Add this line for debugging
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
@@ -100,7 +95,6 @@ router.put("/:userId/accept", async (req, res) => {
       } else {
         console.log('Email sent: ' + info.response);
 
-        // Move these lines outside of the sendMail callback
         user.save()
           .then(() => {
             res.status(200).json({ message: "User accept status updated successfully" });
@@ -116,6 +110,7 @@ router.put("/:userId/accept", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 //delete user
 router.delete("/:userId/delete", async (req, res) => {
   try {
@@ -131,42 +126,20 @@ router.delete("/:userId/delete", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
-//archived user
-router.put('/:userId', async (req, res) => {
-  const { userId } = req.params;
 
-  try {
-      // Find the user by ID
-      const user = await User.findById(userId);
-
-      if (!user) {
-          return res.status(404).json({ error: 'user not found' });
-      }
-
-      // Update the user's status to "Archived"
-      user.archived = true;
-
-      // Save the updated room
-      await user.save();
-
-      res.json({ message: 'user archived successfully' });
-  } catch (error) {
-      console.error('Error archiving user:', error);
-      res.status(500).json({ error: 'Internal server error' });
-  }
-});
 router.get("/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {
-      return res.status(404).send({ message: "Utilisateur non trouvé" });
+      return res.status(404).send({ message: "User not found" });
     }
     res.status(200).send(user);
   } catch (error) {
-    console.error('Erreur lors de la récupération des données utilisateur :', error);
-    res.status(500).send({ message: "Erreur interne du serveur" });
+    console.error('Error fetching user data:', error);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
 router.put("/:userId", upload.single('image'), async (req, res) => {
   try {
     const { userId } = req.params;
@@ -176,7 +149,7 @@ router.put("/:userId", upload.single('image'), async (req, res) => {
       userData.image = req.file.filename;
     }
 
-    // Mettez à jour les données de l'utilisateur dans la base de données
+    // Update user data in the database
     await User.findByIdAndUpdate(userId, userData);
 
     res.status(200).send({ message: "User updated successfully" });
@@ -247,7 +220,6 @@ router.post("/import", upload.single('file'), async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
-
 
 
 module.exports = router;
