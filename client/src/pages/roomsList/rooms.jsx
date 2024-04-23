@@ -212,7 +212,7 @@ export default function RowEditingDemo() {
             <div className="top1">
                 <h1>List Of Rooms</h1>
                 <Link to="/rooms/new" className="link1">
-                    add new room <BsHouseAdd />
+                    New <BsHouseAdd />
                 </Link>
                 <input
                     type="file"

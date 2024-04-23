@@ -7,8 +7,6 @@ import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Button } from 'primereact/button';
 import { BsXLg } from "react-icons/bs";
-import { Link } from "react-router-dom";
-import { BsHouseAdd } from "react-icons/bs";
 import { useParams } from 'react-router-dom';
 import "./table.scss"
 
@@ -37,6 +35,7 @@ export default function RowEditingDemo() {
           const userRooms = roomData.filter(room => room.User === userId);
   
           setRooms(userRooms);
+          fetchRooms();
       } catch (error) {
           console.error("Error fetching room data:", error);
       }
@@ -185,37 +184,10 @@ export default function RowEditingDemo() {
         // Add your condition here based on rowData if editing is allowed
         return true; // Example: always allow editing
     };
-    const handleImport = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            // Send file to the server for processing
-            const response = await fetch('http://localhost:8080/api/rooms/import', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to import data');
-            }
-
-            // Refresh room data after importing
-            fetchRooms();
-            seteditMessage("Data imported successfully");
-            setTimeout(() => seteditMessage(''), 2000);
-        } catch (error) {
-            console.error("Error importing data:", error);
-            // Handle error
-        }
-    };
 
     return (
         <div>
-            
+
             {editMessage && <div className="editMessage">{editMessage}</div>}
             {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
             <div className="card1 p-fluid">

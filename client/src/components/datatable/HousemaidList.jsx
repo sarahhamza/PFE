@@ -5,11 +5,11 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
+import { HiUserAdd } from "react-icons/hi";
 import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primeicons/primeicons.css';
-
 import "./housemaidList.scss";
 import "./flags.scss";
 
@@ -126,6 +126,10 @@ export default function HousemaidList() {
           style={{ display: 'none' }} // Hide the input visually
           onChange={handleImport}
         />
+         <h1>Add New User</h1>
+        <Link to="/users/new" className="link2">
+         add new user <HiUserAdd />
+        </Link>
         <Button
           type="button"
           icon="pi pi-upload"

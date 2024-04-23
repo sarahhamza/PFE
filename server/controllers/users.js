@@ -5,6 +5,8 @@ const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const xlsx = require("xlsx");
+const { Room } = require("../models/room");
+
 
 
 // Set storage engine
@@ -82,7 +84,7 @@ router.put("/:userId/accept", async (req, res) => {
 
     user.accept = 1;
     const mailOptions = {
-      from: 'sarahhm31@gmail.com',
+      from: '@gmail.com',
       to: user.email,
       subject: 'Account Accepted',
       text: 'Congratulations! Your account has been accepted.'
@@ -217,6 +219,32 @@ router.post("/import", upload.single('file'), async (req, res) => {
     res.status(200).send({ message: "Data imported successfully", processedData });
   } catch (error) {
     console.error("Error importing data:", error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+// Update user and assign room
+router.put("/:userId/assign-room/:roomId", async (req, res) => {
+  try {
+    const { userId, roomId } = req.params;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    // Assign the room to the user
+    user.rooms.push(roomId); // Assuming rooms is an array field in the user model
+    await user.save();
+
+   
+    const room = await Room.findById(roomId);
+    room.User = userId;
+    await room.save();
+
+    res.status(200).send({ message: "Room assigned to user successfully" });
+  } catch (error) {
+    console.error('Error assigning room to user:', error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 });

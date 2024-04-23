@@ -47,7 +47,7 @@ router.post("/push/:userId", async (req, res) => {
 });
 
 // Route to get notifications for a specific user
-router.get("/user/:userId", async (req, res) => {
+router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
 
   const result = await getNotifications(userId);

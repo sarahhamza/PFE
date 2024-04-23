@@ -10,7 +10,6 @@ const Login = () => {
 	const [error, setError] = useState("");
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const navigate = useNavigate();
-  
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value });

@@ -3,10 +3,10 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const connection = require("./db");
-const userRoutes = require("./routes/users");
-const authRoutes = require("./routes/auth");
-const roomRoutes = require("./routes/rooms");
-const notifRoutes = require("./routes/notifications");
+const userRoutes = require("./controllers/users");
+const authRoutes = require("./controllers/auth");
+const roomRoutes = require("./controllers/rooms");
+const notifRoutes = require("./controllers/notifications");
 
 
 

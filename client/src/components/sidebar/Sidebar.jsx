@@ -24,7 +24,7 @@ const Sidebar = () => {
     const [ setIsAuthenticated] = useState(false);
     const handleLogout = () => {
         localStorage.removeItem("token");
-        setIsAuthenticated(false); 
+        setIsAuthenticated(false);
         navigate('/login');
         
       };
@@ -33,7 +33,7 @@ const Sidebar = () => {
         <div className="sidebar">
             <div className="top">
                 <Link to="/" style={{ textDecoration: "none" }}>
-                    <span className="logo">lamadmin</span>
+                    <span className="logo">CleanCare</span>
                 </Link>
             </div>
             <hr />

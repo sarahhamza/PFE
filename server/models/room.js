@@ -20,7 +20,7 @@ const validate = (data) => {
         Surface: Joi.number().required().label("Surface"),
         Categorie: Joi.string().required().label("Category"),
         State: Joi.string().required().label("State"),
-        User: Joi.string().required().label("User"), // Assuming User represents the cleaning staff
+        User: Joi.string().label("User"), // Assuming User represents the cleaning staff
         Property: Joi.string().required().label("Property"),
         image: Joi.string().label("Image").allow(null, ''),
     });
