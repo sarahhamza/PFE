@@ -62,7 +62,7 @@ export default function RowEditingDemo() {
         );
     };
 
-    const onRowEditComplete = async (rowData) => {
+    const EditRoom = async (rowData) => {
         console.log("rowData:", rowData); // Log the rowData to inspect its structure
         const { _id, nbrRoom, Surface, Categorie, State, User, Property } = rowData.newData; // Access _id from newData
 
@@ -233,7 +233,7 @@ export default function RowEditingDemo() {
             {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
             <div className="card1 p-fluid">
 
-                <DataTable value={rooms} paginator rows={4} editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete} tableStyle={{ maxWidth: '85rem' }}>
+                <DataTable value={rooms} paginator rows={4} editMode="row" dataKey="id" onRowEditComplete={EditRoom} tableStyle={{ maxWidth: '85rem' }}>
                     <Column field="nbrRoom" header="Number of Rooms" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
                     <Column field="Surface" header="Surface" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
                     <Column field="Categorie" header="Category" editor={(options) => categoryEditor(options)} style={{ width: '20%' }}></Column>

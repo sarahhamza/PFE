@@ -186,7 +186,6 @@ export default function UserList() {
                 <Column field="email" header="Email" sortable filter filterPlaceholder="Search" style={{ width: '15%' }}></Column>
                 <Column field="role" header="Role" sortable filter filterPlaceholder="Search" style={{ width: '20%' }}></Column>
                 <Column header="Actions" body={renderActions} style={{ width: '20%' }}></Column>
-
             </DataTable>
         </div>
         </div>

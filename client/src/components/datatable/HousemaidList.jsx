@@ -5,7 +5,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { HiUserAdd } from "react-icons/hi";
+//import { HiUserAdd } from "react-icons/hi";
 import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -30,10 +30,10 @@ export default function HousemaidList() {
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
-    fetchUsers();
+    fetchHousemaids();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchHousemaids = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/users");
       if (!response.ok) {
@@ -73,7 +73,7 @@ export default function HousemaidList() {
       }
 
       // Refresh room data after importing
-      fetchUsers();
+      fetchHousemaids();
       seteditMessage("Data imported successfully");
       setTimeout(() => seteditMessage(''), 2000);
     } catch (error) {
@@ -126,10 +126,6 @@ export default function HousemaidList() {
           style={{ display: 'none' }} // Hide the input visually
           onChange={handleImport}
         />
-         <h1>Add New User</h1>
-        <Link to="/users/new" className="link2">
-         add new user <HiUserAdd />
-        </Link>
         <Button
           type="button"
           icon="pi pi-upload"

@@ -17,7 +17,7 @@ const New = () => {
 
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [image, setFile] = useState(null); 
+  const [image, setFile] = useState(null);
 
   const handleChange = ({ target: { name, value } }) => {
     setData((prevData) => ({

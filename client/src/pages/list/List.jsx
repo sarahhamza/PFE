@@ -6,11 +6,14 @@ import UserList from "../../components/datatable/UsersList"
 import { PrimeReactProvider } from "primereact/api"
 
 const List = () => {
+
   return (
     <div className="list">
       <Sidebar/>
       <div className="listContainer">
-        <Navbar/>
+      <div>
+        <Navbar />
+        </div>
         <PrimeReactProvider>
         <UserList/>
         </PrimeReactProvider>

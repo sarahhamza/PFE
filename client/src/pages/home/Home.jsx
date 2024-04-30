@@ -7,11 +7,13 @@ import Chart from "../../components/chart/Chart";
 import Table from "../../components/table/Table";
 
 const Home = () => {
+  //const [user, setUser] = useState(null); // State to hold user data
+
   return (
     <div className="home">
       <Sidebar />
       <div className="homeContainer">
-        <Navbar />
+      <Navbar />
         <div className="widgets">
           <Widget type="user" />
           <Widget type="order" />

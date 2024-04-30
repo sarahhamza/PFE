@@ -20,7 +20,7 @@ const Single = () => {
 
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchHousemaidData = async () => {
       try {
         const response = await fetch(`http://localhost:8080/api/users/${userId}`);
         if (!response.ok) {
@@ -34,7 +34,7 @@ const Single = () => {
       }
     };
     fetchAvailableRooms();
-    fetchUserData();
+    fetchHousemaidData();
   }, [userId]);
 
   const fetchAvailableRooms = async () => {

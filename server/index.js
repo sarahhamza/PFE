@@ -16,6 +16,10 @@ connection();
 // middlewares
 app.use(express.json());
 app.use(cors());
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(400).send({ error: err.message });
+ });
 
 // routes
 app.use("/api/users", userRoutes);

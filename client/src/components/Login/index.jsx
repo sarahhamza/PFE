@@ -8,8 +8,9 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
 	const [data, setData] = useState({ email: "", password: "" });
 	const [error, setError] = useState("");
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const navigate = useNavigate();
+	const [ setUser] = useState(null);
+
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value });
@@ -21,18 +22,27 @@ const Login = () => {
 			const url = "http://localhost:8080/api/auth";
 			const { data: res } = await axios.post(url, data);
 			localStorage.setItem("token", res.data);
-			setIsAuthenticated(true);
+	
+			// Fetch user data and set it in the state
+			const userData = await axios.get("http://localhost:8080/api/auth/user", {
+				headers: {
+					Authorization: `Bearer ${res.data}`
+				}
+			});
+			setUser(userData.data); // Assuming setUser is a function to set user data in state
 			navigate('/home');
-				} catch (error) {
+		} catch (error) {
 			if (
 				error.response &&
 				error.response.status >= 400 &&
 				error.response.status <= 500
 			) {
 				setError(error.response.data.message);
+				console.error(error.response.data);
 			}
 		}
 	};
+
 
 	return (
 		<div className={styles.login_container}>

@@ -8,10 +8,33 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 
 const Navbar = () => {
-  const { dispatch } = useContext(DarkModeContext);
+  const [user, setUser] = useState(null);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (token) {
+                    const response = await axios.get("http://localhost:8080/api/auth/user", {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    setUser(response.data);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+  const { dispatch } = useContext(DarkModeContext);
   return (
     <div className="navbar">
       <div className="wrapper">
@@ -44,16 +67,15 @@ const Navbar = () => {
           <div className="item">
             <ListOutlinedIcon className="icon" />
           </div>
-          <div className="item">
-            <img
-              src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-              alt=""
-              className="avatar"
-            />
-          </div>
+          {user && (
+                <div className="user-info">
+                 <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} style={{ width: '30px', height:'30px' }} />
+                </div>
+            )}
+
+        </div>
         </div>
       </div>
-    </div>
   );
 };
 

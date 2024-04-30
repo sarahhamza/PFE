@@ -6,6 +6,7 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const xlsx = require("xlsx");
 const { Room } = require("../models/room");
+const jwt = require('jsonwebtoken');
 
 
 
@@ -18,7 +19,18 @@ const storage = multer.diskStorage({
     cb(null, filename);
   }
 });
+// Middleware to validate and decode the JWT token
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) return res.sendStatus(401);
 
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      next();
+  });
+};
 const upload = multer({ storage: storage });
 
 // Configure nodemailer
@@ -84,7 +96,7 @@ router.put("/:userId/accept", async (req, res) => {
 
     user.accept = 1;
     const mailOptions = {
-      from: '@gmail.com',
+      from: 'sarahhm31@gmail.com',
       to: user.email,
       subject: 'Account Accepted',
       text: 'Congratulations! Your account has been accepted.'
@@ -248,6 +260,8 @@ router.put("/:userId/assign-room/:roomId", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
+
 
 
 module.exports = router;
