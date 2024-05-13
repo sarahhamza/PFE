@@ -1,16 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-import { DarkModeContextProvider } from "./context/darkModeContext";
-import { PrimeReactProvider } from "primereact/api";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { DarkModeContextProvider } from './context/darkModeContext';
+import { PrimeReactProvider } from 'primereact/api';
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
   <React.StrictMode>
     <DarkModeContextProvider>
       <PrimeReactProvider>
-      <App />
+        <App />
       </PrimeReactProvider>
     </DarkModeContextProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

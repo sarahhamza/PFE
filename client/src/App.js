@@ -25,6 +25,7 @@ function App() {
     // Check if user is authenticated (e.g., by checking token in local storage)
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
+
   }, []);
 
 
