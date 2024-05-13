@@ -144,6 +144,30 @@ router.get("/available", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+router.post('/:id/images/upload', upload.single('image'), async (req, res) => {
+  try {
+      // Check if a file was uploaded
+      if (!req.file) {
+          throw new Error('No file uploaded');
+      }
 
+      // Retrieve the room ID from the URL parameters
+      const roomId = req.params.id;
+
+      // Attempt to find and update the room document
+      const result = await Room.findByIdAndUpdate(roomId, { image: req.file.filename }, { new: true });
+
+      // Check if the update was successful
+      if (!result) {
+          throw new Error('Room not found');
+      }
+
+      // Send the updated room document back to the client
+      res.send(result);
+  } catch (error) {
+      console.error('Error updating room:', error);
+      res.status(500).send({ message: 'Error updating room' });
+  }
+});
 
 module.exports = router;

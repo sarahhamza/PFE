@@ -1,5 +1,6 @@
 {
   "name": "lamadmin",
+  "homepage":"http://cleancare.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

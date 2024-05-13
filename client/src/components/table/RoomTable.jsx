@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,6 +8,8 @@ import { Button } from "primereact/button";
 import Paper from "@mui/material/Paper";
 
 const RoomTable = ({ availableRooms, setSelectedRoom }) => {
+
+
   return (
     <div className="roomTable">
       <Table component={Paper} className="table">
@@ -21,7 +24,7 @@ const RoomTable = ({ availableRooms, setSelectedRoom }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {availableRooms.map(room => (
+          {availableRooms.map((room) => (
             <TableRow key={room._id}>
               <TableCell>{room.nbrRoom}</TableCell>
               <TableCell>{room.Surface}</TableCell>

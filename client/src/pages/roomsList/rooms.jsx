@@ -9,8 +9,8 @@ import { Button } from 'primereact/button';
 import { BsXLg } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { BsHouseAdd } from "react-icons/bs";
-
-import "./Rooms.scss"
+import { AiOutlineCamera } from "react-icons/ai";
+import "./Rooms.scss";
 
 export default function RowEditingDemo() {
     const [rooms, setRooms] = useState([]);
@@ -37,7 +37,52 @@ export default function RowEditingDemo() {
         }
     };
     
-
+    const handleImageImport = async (rowData) => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+    
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+    
+                // Envoyer l'image au serveur pour traitement
+                const response = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/images/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Échec de limportation de limage');
+                }
+                console.log('Response status:', response.status);
+                // Récupérer le nom du fichier de l'image
+                const imageName = await response.text();
+    
+                // Mettre à jour les données de la chambre avec le nom de l'image
+                const updatedRooms = rooms.map(room => {
+                    if (room._id === rowData._id) {
+                        return { ...room, image: imageName };
+                    }
+                    return room;
+                });
+                setRooms(updatedRooms);
+                console.log('Updated rooms:', updatedRooms);
+                seteditMessage("Image importée avec succès");
+                setTimeout(() => seteditMessage(''), 2000);
+            } catch (error) {
+                console.error("Erreur lors de l'importation de l'image:", error);
+                // Gérer l'erreur
+            }
+        };
+        fileInput.click();
+    };
+    
+    
+    
     const fetchUsers = async () => {
         try {
             const response = await fetch("http://localhost:8080/api/users");
@@ -209,30 +254,29 @@ export default function RowEditingDemo() {
 
     return (
         <div>
-            <div className="top1">
-                <h1>List Of Rooms</h1>
-                <Link to="/rooms/new" className="link1">
-                    New <BsHouseAdd />
-                </Link>
-                <input
-                    type="file"
-                    id="fileInput"
-                    style={{ display: 'none' }} // Hide the input visually
-                    onChange={handleImport}
-                />
-                <Button
-                    type="button"
-                    icon="pi pi-upload"
-                    label="Export"
-                    className="p-button-help"
-                    onClick={() => document.getElementById('fileInput').click()}
-                    data-pr-tooltip="Export Excel Data"
+        <div className="top1">
+            <h1>List Of Rooms</h1>
+            <Link to="/rooms/new" className="link1">
+                New <BsHouseAdd />
+            </Link>
+            <input
+                type="file"
+                id="fileInput"
+                style={{ display: 'none' }} // Hide the input visually
+                onChange={handleImport}
+            />
+            <Button
+                type="button"
+                icon="pi pi-upload"
+                label="Export"
+                className="p-button-help"
+                onClick={() => document.getElementById('fileInput').click()}
+                data-pr-tooltip="Export Excel Data"
 
-                />          </div>
+            />          </div>
             {editMessage && <div className="editMessage">{editMessage}</div>}
             {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
             <div className="card1 p-fluid">
-
                 <DataTable value={rooms} paginator rows={4} editMode="row" dataKey="id" onRowEditComplete={EditRoom} tableStyle={{ maxWidth: '85rem' }}>
                     <Column field="nbrRoom" header="Number of Rooms" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
                     <Column field="Surface" header="Surface" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
@@ -241,9 +285,15 @@ export default function RowEditingDemo() {
                     <Column field="User" header="User" body={(rowData) => {
                         const user = users.find(user => user._id === rowData.User);
                         return user ? user.email : '';
-                    }} editor={(options) => userEditor(options)} style={{ width: '20%' }}></Column>                    <Column field="Property" header="Property" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+                    }} editor={(options) => userEditor(options)} style={{ width: '20%' }}></Column>
+                    <Column field="Property" header="Property" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
                     <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-                    <Column body={(rowData) => <Button onClick={() => archiveRoom(rowData)}  ><BsXLg /> </Button>} style={{ width: '10%' }} />
+                    <Column style={{ width: '10%' }} body={(rowData) => (
+                        <Button icon={<AiOutlineCamera />} onClick={() => handleImageImport(rowData)} />
+                    )} />
+                    <Column style={{ width: '10%' }} body={(rowData) => (
+                        <Button icon={<BsXLg />} onClick={() => archiveRoom(rowData)} />
+                    )} />
                 </DataTable>
             </div>
         </div>
