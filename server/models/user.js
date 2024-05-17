@@ -11,11 +11,12 @@ const userSchema = new mongoose.Schema({
     role: { type: String, enum: ['controlleur', 'femme de menage'], required: true },
     accept: { type: Number, default: 0 },
     image: { type: String },
-    rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }] ,// Tableau des ID des chambres
-    archived: { type: Boolean, default: false }
-
+    rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }],
+    archived: { type: Boolean, default: false },
+    phone: { type: String }, // New attribute
+    address: { type: String }, // New attribute
+    country: { type: String } // New attribute
 });
-
 
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
@@ -35,10 +36,11 @@ const validate = (data) => {
         role: Joi.string().valid('controlleur', 'femme de menage').required().label("Role"),
         accept: Joi.number().default(0).label("Accept"),
         image: Joi.string().label("Image").allow(null, ''),
-
+        phone: Joi.string().label("Phone").allow(null, ''), // New validation
+        address: Joi.string().label("Address").allow(null, ''), // New validation
+        country: Joi.string().label("Country").allow(null, '') // New validation
     });
     return schema.validate(data);
 };
 
 module.exports = { User, validate };
-

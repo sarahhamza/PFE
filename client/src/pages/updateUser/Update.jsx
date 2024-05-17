@@ -1,11 +1,12 @@
+import React, { useState, useEffect } from "react";
+import { useParams, useLocation } from 'react-router-dom';
+import axios from "axios";
+import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import "./Update.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import { useState, useEffect } from "react";
-import { useParams, useLocation} from 'react-router-dom';
-import axios from "axios";
-
 
 const Update = () => {
   const { userId } = useParams();
@@ -16,12 +17,16 @@ const Update = () => {
     lastName: "",
     email: "",
     password: "",
-    role: ""
+    role: "",
+    phone: "", // New field
+    address: "", // New field
+    country: "" // New field
   });
 
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [image, setFile] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,7 +36,10 @@ const Update = () => {
           throw new Error('Failed to fetch user data');
         }
         const userData = await response.json();
-        setData(userData);
+        setData({
+          ...userData,
+          password: "" // Keep password empty
+        });
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -43,7 +51,7 @@ const Update = () => {
   const handleChange = ({ target: { name, value } }) => {
     setData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === 'rooms' ? value.split(',').map(id => id.trim()) : value,
     }));
   };
 
@@ -53,36 +61,43 @@ const Update = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
       const url = `http://localhost:8080/api/users/${userId}`;
       const formData = new FormData();
-
+  
       Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value);
+        if (
+          (key !== 'password' || value) && // Only append password if it's not empty
+          (key !== 'rooms' || (Array.isArray(value) && value.length > 0)) // Only append rooms if it's a non-empty array
+        ) {
+          formData.append(key, value);
+        }
       });
-
+      
+  
       if (image) {
         formData.append("image", image, image.name);
       }
-
+  
       const { data: res } = await axios.put(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
+  
       setSuccessMessage("User updated successfully");
       console.log(res.message);
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
+      console.error("Error updating user:", error);
+      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
         setError(error.response.data.message);
+      } else {
+        setError("An unexpected error occurred");
       }
     }
   };
+  
 
   return (
     <div className="new">
@@ -90,15 +105,15 @@ const Update = () => {
       <div className="newContainer">
         <Navbar />
         <div className="top">
-          <h1>Update User </h1>
+          <h1>Update User</h1>
         </div>
         <div className="bottom">
-        <div className="left">
-  <img
-    src={imageUrl || "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
-    alt=""
-  />
-</div>
+          <div className="left">
+            <img
+              src={imageUrl || "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
+              alt=""
+            />
+          </div>
           <div className="right">
             <form onSubmit={handleSubmit}>
               <div className="formInput">
@@ -153,14 +168,19 @@ const Update = () => {
 
               <div className="formInput">
                 <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  onChange={handleChange}
-                  value={data.password}
-                  required
-                />
+                <div className="passwordContainer">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    placeholder="Enter new password"
+                    onChange={handleChange}
+                    value={data.password}
+                  />
+                  <span className="passwordToggle" onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </span>
+                </div>
               </div>
 
               <div className="formInput">
@@ -176,6 +196,42 @@ const Update = () => {
                   <option value="controlleur">Controlleur</option>
                   <option value="femme de menage">Femme de menage</option>
                 </select>
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="phone">Phone</label>
+                <input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  placeholder="123-456-7890"
+                  onChange={handleChange}
+                  value={data.phone}
+                />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="address">Address</label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  placeholder="123 Main St"
+                  onChange={handleChange}
+                  value={data.address}
+                />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="country">Country</label>
+                <input
+                  type="text"
+                  id="country"
+                  name="country"
+                  placeholder="USA"
+                  onChange={handleChange}
+                  value={data.country}
+                />
               </div>
               {successMessage && (
                 <div className="success_msg">{successMessage}</div>

@@ -10,6 +10,7 @@ const notifRoutes = require("./controllers/notifications");
 
 
 
+
 // database connection
 connection();
 
@@ -26,6 +27,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/notifications", notifRoutes);
+
+
 
 
 

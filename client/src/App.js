@@ -15,7 +15,7 @@ import BasicDemo from './components/datatable/UsersList';
 import ListRoom from './pages/list/ListRoom';
 import Update from './pages/updateUser/Update';
 import ListHousemaid from './pages/list/ListHousemaid';
-
+import ListController from './pages/list/ListController';
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -37,6 +37,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/users" element={isAuthenticated ? <List /> : <Navigate to="/login" replace />} />
           <Route path="/ListHousemaid" element={isAuthenticated ? <ListHousemaid /> : <Navigate to="/login" replace />} />
+          <Route path="/ListController" element={isAuthenticated ? <ListController /> : <Navigate to="/login" replace />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path="/rooms" element={isAuthenticated ? <ListRoom /> : <Navigate to="/login" replace />} />

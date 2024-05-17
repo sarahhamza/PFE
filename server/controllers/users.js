@@ -7,6 +7,9 @@ const nodemailer = require('nodemailer');
 const xlsx = require("xlsx");
 const { Room } = require("../models/room");
 const jwt = require('jsonwebtoken');
+const express = require('express');
+const app = express();
+app.use('/uploads', express.static('uploads'));
 
 
 
@@ -63,7 +66,10 @@ router.post("/", upload.single('image'), async (req, res) => {
       role: req.body.role,
       accept: req.body.accept,
       image: req.file ? req.file.filename : null,
-      rooms: req.body.rooms // Add the rooms field
+      rooms: req.body.rooms, // Add the rooms field
+      phone: req.body.phone, // New field
+      address: req.body.address, // New field
+      country: req.body.country // New field
     });
 
     await newUser.save();
@@ -163,15 +169,21 @@ router.put("/:userId", upload.single('image'), async (req, res) => {
       userData.image = req.file.filename;
     }
 
-    // Update user data in the database
-    await User.findByIdAndUpdate(userId, userData);
+    console.log("Updating user with data:", userData);
 
-    res.status(200).send({ message: "User updated successfully" });
+    const updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    res.status(200).send({ message: "User updated successfully", user: updatedUser });
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
 router.post("/import", upload.single('file'), async (req, res) => {
   try {
     const file = req.file;
@@ -206,6 +218,9 @@ router.post("/import", upload.single('file'), async (req, res) => {
         lastName: item.lastName,
         email: item.email,
         role: item.role,
+        phone: item.phone, // Add phone field
+        address: item.address, // Add address field
+        country: item.country, // Add country field
         // Add more fields as needed
       });
 
@@ -218,6 +233,9 @@ router.post("/import", upload.single('file'), async (req, res) => {
         role: item.role,
         accept: item.accept,
         image: item.image,
+        phone: item.phone, // Add phone field
+        address: item.address, // Add address field
+        country: item.country, // Add country field
       });
 
       // Save the user to the database

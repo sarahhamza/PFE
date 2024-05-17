@@ -97,3 +97,18 @@
     }
   }
 }
+.passwordContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordContainer input {
+  flex: 1;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
