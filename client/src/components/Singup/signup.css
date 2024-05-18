@@ -1,0 +1,99 @@
+.custom-select {
+    width: 50%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    color: #495057;
+    margin-bottom: 1rem;
+    justify-content: center;
+  }
+  
+  .custom-input {
+    flex: 1;
+    min-width: calc(50% - 1rem);
+  }
+  .card{
+     margin-top: -230px;
+     background: hsla(0, 0%, 100%, 0.8);
+    backdrop-filter: blur(30px);
+    width:80% ;
+    height: 620px;
+    justify-items: center;
+    justify-content: center  !important;
+    margin-left: 10% !important;
+  
+   
+   }
+   .MDBContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+   }
+   .select-role-centered {
+    display: flex;
+    justify-content: center;
+  }
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  .error_msgE {
+    width: 370px;
+    padding: 15px;
+    margin: auto; /* Marge automatique pour centrer horizontalement */
+    margin-top: calc(50vh - 37.5px); /* Calcule la moitié de la hauteur de la vue et soustrait la moitié de la hauteur du message d'erreur */
+    font-size: 14px;
+    background-color: #f34646;
+    color: white;
+    border-radius: 5px;
+    text-align: center; /* Centrer horizontalement */
+    height: 50px; /* Hauteur fixe */
+    margin-top: 10px;
+}
+.success_msg {
+  width: 370px;
+  padding: 15px;
+  margin: auto; /* Marge automatique pour centrer horizontalement */
+  margin-top: calc(50vh - 37.5px); /* Calcule la moitié de la hauteur de la vue et soustrait la moitié de la hauteur du message d'erreur */
+  font-size: 14px;
+	background-color: #17a755;
+	color: white;
+    border-radius: 5px;
+    text-align: center; /* Centrer horizontalement */
+    height: 50px; /* Hauteur fixe */
+    margin-top: 10px;
+}
+  .custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 900px) {
+    .form-row {
+      justify-content: center;
+    }
+    .custom-input {
+      min-width: 100%;
+    }
+    .card{
+      height: auto;
+      margin-top: -270px;
+    }
+  }
+  @media (max-width: 1300px) {
+    .form-row {
+      justify-content: center;
+    }
+    .custom-input {
+      min-width: 100%;
+    }
+    .card{
+      height: auto;
+      margin-top: -270px;
+    }
+  }

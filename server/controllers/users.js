@@ -209,12 +209,16 @@ router.post("/import", upload.single('file'), async (req, res) => {
         // Add more fields as needed
       });
 
+      // Hash the password
+      const salt = await bcrypt.genSalt(Number(process.env.SALT));
+      const hashPassword = await bcrypt.hash(item.password, salt);
+
       // Create a new user object
       const newUser = new User({
         firstName: item.firstName,
         lastName: item.lastName,
         email: item.email,
-        password: item.password,
+        password: hashPassword,
         role: item.role,
         accept: item.accept,
         image: item.image,
@@ -234,6 +238,7 @@ router.post("/import", upload.single('file'), async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
 // Update user and assign room
 router.put("/:userId/assign-room/:roomId", async (req, res) => {
   try {

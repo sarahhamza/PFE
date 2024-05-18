@@ -16,7 +16,7 @@ const Single = () => {
   const [availableRooms, setAvailableRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [showRoomCard, setShowRoomCard] = useState(false); // State to control the visibility of the room card
-  const isAssignRoomDisabled = userData && userData.rooms && userData.rooms.length >= 2;
+  const isAssignRoomDisabled = userData && userData.rooms && userData.rooms.length >= 3;
 
 
   useEffect(() => {
@@ -65,7 +65,10 @@ const Single = () => {
       // Assign the room to the user
       const response = await axios.put(`http://localhost:8080/api/users/${userId}/assign-room/${selectedRoom._id}`);
       console.log(response.data.message);
-  
+    // Send a notification to the user
+      await axios.post(`http://localhost:8080/api/notifications/push/${userId}`, {
+        message: "You have a new room to clean"
+      });
       // Optionally, you can fetch the available rooms again after assignment
       fetchAvailableRooms();
     } catch (error) {

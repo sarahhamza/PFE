@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const { Room } = require("../models/room");
 
 
 router.post("/", async (req, res) => {
@@ -18,7 +19,7 @@ router.post("/", async (req, res) => {
 
         // Vérification du champ accept
         if (user.accept === 0)
-            return res.status(401).send({ message: "Veuillez attendre l'acceptation" });
+            return res.status(401).send({ message: "Account not accepted yet" });
 
         const validPassword = await bcrypt.compare(
             req.body.password,
@@ -62,6 +63,9 @@ router.get("/user", async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+        if (user.accept!== 1) {
+            return res.status(403).json({ message: "Account not accepted yet" });
+        }
         res.status(200).json(user);
 
     } catch (error) {
@@ -72,4 +76,24 @@ router.get("/user", async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
+router.get("/user-rooms", async (req, res) => {
+    try {
+      const token = req.header('Authorization').replace('Bearer ', '');
+      if (!token) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      const decoded = jwt.verify(token, process.env.JWTPRIVATEKEY);
+      const userId = decoded._id;
+  
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: "Invalid user ID" });
+      }
+  
+      const rooms = await Room.find({ User: userId });
+      res.status(200).json(rooms);
+    } catch (error) {
+      console.error("Error fetching user rooms:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
 module.exports = router;

@@ -1,0 +1,112 @@
+.cascading-right {
+    margin-right: -50px;
+    width: 600px;
+  }
+.image-background {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    z-index: -1;
+    margin-left: 700px;
+  }
+  .form-container {
+     // Ajustez selon vos besoins
+    width: 80vh;
+    margin-left: 200px;
+    height: auto !important;
+    margin-top: -30px;
+
+  }
+  img{
+    border-radius: 30px;
+  }
+.right {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+.white_btn{
+	border: none;
+	outline: none;
+	padding: 12px 0;
+	background-color: white;
+	border-radius: 20px;
+	width: 180px;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+}
+.custom-input {
+    background-color: white; /* Adjust background color */
+    border: 1px solid #ccc; /* Set a thin border */
+    border-radius: 5px; /* Adjust corner radius */
+    height: 40px;
+    width: 350px;
+  }
+  .custom-button {
+    background-color: #3552e3; /* Adjust background color */
+    color: #fff; /* Adjust text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add rounded corners */
+    padding: 10px 20px; /* Adjust padding */
+    cursor: pointer;
+  }
+  .error_msg {
+    width: 370px;
+    padding: 15px;
+    margin: auto; /* Marge automatique pour centrer horizontalement */
+    margin-top: calc(50vh - 37.5px); /* Calcule la moitié de la hauteur de la vue et soustrait la moitié de la hauteur du message d'erreur */
+    font-size: 14px;
+    background-color: #f34646;
+    color: white;
+    border-radius: 5px;
+    text-align: center; /* Centrer horizontalement */
+    height: 50px; /* Hauteur fixe */
+    margin-top: 10px;
+}
+.success_msg {
+	width: 370px;
+	padding: 15px;
+	margin: 5px 0;
+	font-size: 14px;
+	background-color: #17a755;
+	color: white;
+	border-radius: 5px;
+	text-align: center;
+}
+
+
+  @media (max-width: 900px) {
+    .cascading-right {
+      margin-left: -130px;
+      width: 100px;
+    }
+  }
+    @media (max-width: 900px) {
+      .form-container {
+        
+        margin-left: -50px;
+        margin-top: -50px;
+        justify-content: center;
+
+    }
+    .image-background {
+      margin-top: 600px ;
+      margin-left: 20px !important;
+      width: 250px !important;
+    }
+ 
+    
+    // .form-container {
+    //   width: 10px;
+    // }
+    }

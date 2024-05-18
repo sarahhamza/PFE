@@ -145,7 +145,7 @@ const Signup = () => {
                             <option value="controlleur">Controlleur</option>
                             <option value="femme de menage">Femme de menage</option>
                         </select>
-                        {error && <div className={styles.error_msg}>{error}</div>}
+                        {error && <div className={styles.error_msgE}>{error}</div>}
                         {successMessage && <div className={styles.success_msg}>{successMessage}</div>}
 
                         <button type="submit" className={styles.green_btn}>

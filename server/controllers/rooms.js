@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const { Room, validate } = require("../models/room");
-const bcrypt = require("bcrypt");
 const multer = require('multer');
 const path = require('path');
 const xlsx = require("xlsx");
@@ -169,5 +168,6 @@ router.post('/:id/images/upload', upload.single('image'), async (req, res) => {
       res.status(500).send({ message: 'Error updating room' });
   }
 });
+
 
 module.exports = router;

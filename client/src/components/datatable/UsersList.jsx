@@ -174,7 +174,7 @@ export default function UserList() {
          add new user <HiUserAdd />
         </Link>
       </div>
-        <div className="card">
+        <div className="card1">
                 {acceptMessage && <div className="acceptMessage">{acceptMessage}</div>}
                 {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
             <DataTable value={users} paginator rows={5} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}

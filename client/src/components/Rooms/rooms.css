@@ -1,0 +1,68 @@
+.room-list-container {
+    padding: 20px;
+  }
+  
+  .headerRoom {
+    background-color: #3f51b5;
+    color: white;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 20px;
+  }
+  
+  .room-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .room-list-table th, .room-list-table td {
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .room-list-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .room-list-table tbody tr {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .room-list-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .status.clean {
+    background-color: #4caf50; /* Green for Clean */
+  }
+  
+  .status.messy {
+    background-color: #f44336; /* Red for Messy */
+  }
+  
+  .status.in-progress {
+    background-color: #ff9800; /* Orange for In Progress */
+  }
+  
+  .button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3f51b5;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #303f9f;
+  }
+  
