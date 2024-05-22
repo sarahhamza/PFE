@@ -10,7 +10,7 @@ import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primeicons/primeicons.css';
-import "./housemaidList.scss";
+import "./controllerList.scss";
 import "./flags.scss";
 
 export default function HousemaidList() {
@@ -41,7 +41,7 @@ export default function HousemaidList() {
       }
       const userData = await response.json();
       // Filtrer les utilisateurs avec accept === 1
-      const acceptedUsers = userData.filter(user => user.accept === 1 && user.role === "femme de menage");
+      const acceptedUsers = userData.filter(user => user.accept === 1 && user.role === "controlleur");
       setUsers(acceptedUsers);
       //setUsers(userData);
     } catch (error) {
@@ -139,7 +139,7 @@ export default function HousemaidList() {
       </div>
       {editMessage && <div className="editMessage">{editMessage}</div>}
 
-      <div className="card1">
+      <div className="card">
         <DataTable value={users} paginator rows={3} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
           selection={selectedUser} onSelectionChange={(e) => setSelectedUser(e.value)} selectionMode="single" dataKey="_id"
           stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '40rem' }}>

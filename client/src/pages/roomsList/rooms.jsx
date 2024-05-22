@@ -50,29 +50,19 @@ export default function RowEditingDemo() {
                 formData.append('image', file);
     
                 // Envoyer l'image au serveur pour traitement
-                const response = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/images/upload`, {
+                const response = await fetch('http://localhost:5000/api/cleanliness', {
                     method: 'POST',
                     body: formData
                 });
     
                 if (!response.ok) {
-                    throw new Error('Échec de limportation de limage');
+                    throw new Error('Échec de l\'importation de l\'image');
                 }
-                console.log('Response status:', response.status);
-                // Récupérer le nom du fichier de l'image
-                const imageName = await response.text();
     
-                // Mettre à jour les données de la chambre avec le nom de l'image
-                const updatedRooms = rooms.map(room => {
-                    if (room._id === rowData._id) {
-                        return { ...room, image: imageName };
-                    }
-                    return room;
-                });
-                setRooms(updatedRooms);
-                console.log('Updated rooms:', updatedRooms);
-                seteditMessage("Image importée avec succès");
-                setTimeout(() => seteditMessage(''), 2000);
+                const data = await response.json();
+            const cleanlinessPercentage = data.cleanliness_percentage;
+                        console.log( cleanlinessPercentage + "%");
+    
             } catch (error) {
                 console.error("Erreur lors de l'importation de l'image:", error);
                 // Gérer l'erreur
@@ -80,6 +70,7 @@ export default function RowEditingDemo() {
         };
         fileInput.click();
     };
+    
     
     
     

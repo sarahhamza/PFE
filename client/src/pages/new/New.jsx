@@ -3,7 +3,6 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
-//import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const New = () => {
@@ -12,7 +11,10 @@ const New = () => {
     lastName: "",
     email: "",
     password: "",
-    role: ""
+    role: "",
+    phone: "", // New field
+    address: "", // New field
+    country: "" // New field
   });
 
   const [error, setError] = useState("");
@@ -36,15 +38,13 @@ const New = () => {
       const url = "http://localhost:8080/api/users";
       const formData = new FormData();
 
-      // Append all form data
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value);
       });
 
-      // Append the image file
-    if (image) {
-      formData.append("image", image, image.name); // Add the third parameter with the file name
-    }
+      if (image) {
+        formData.append("image", image, image.name);
+      }
 
       const { data: res } = await axios.post(url, formData, {
         headers: {
@@ -55,11 +55,7 @@ const New = () => {
       setSuccessMessage("User added successfully");
       console.log(res.message);
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
+      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
         setError(error.response.data.message);
       }
     }
@@ -76,25 +72,17 @@ const New = () => {
         <div className="bottom">
           <div className="left">
             <img
-              src={
-                image
-                  ? URL.createObjectURL(image)
-                  : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-              }
+              src={image ? URL.createObjectURL(image) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
               alt=""
             />
           </div>
           <div className="right">
             <form onSubmit={handleSubmit}>
-            <div className="formInput">
+              <div className="formInput">
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
                 </label>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={handleFileChange}
-                />
+                <input type="file" id="file" onChange={handleFileChange} />
               </div>
 
               <div className="formInput">
@@ -116,7 +104,7 @@ const New = () => {
                   type="text"
                   id="lastName"
                   name="lastName"
-                  placeholder="John Doe"
+                  placeholder="Doe"
                   onChange={handleChange}
                   value={data.lastName}
                   required
@@ -142,6 +130,7 @@ const New = () => {
                   type="password"
                   id="password"
                   name="password"
+                  placeholder="password"
                   onChange={handleChange}
                   value={data.password}
                   required
@@ -150,27 +139,56 @@ const New = () => {
 
               <div className="formInput">
                 <label htmlFor="role">Role</label>
-                <select
-                  id="role"
-                  name="role"
-                  onChange={handleChange}
-                  value={data.role}
-                  required
-                >
-                  <option value="">Select Role</option>
-
+                <select id="role" name="role" onChange={handleChange} value={data.role} required>
+                  <option value="">Select role</option>
                   <option value="controlleur">Controlleur</option>
                   <option value="femme de menage">Femme de menage</option>
                 </select>
               </div>
+
+              <div className="formInput">
+                <label htmlFor="phone">Phone</label>
+                <input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  placeholder="123-456-7890"
+                  onChange={handleChange}
+                  value={data.phone}
+                />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="address">Address</label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  placeholder="123 Main St"
+                  onChange={handleChange}
+                  value={data.address}
+                />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="country">Country</label>
+                <input
+                  type="text"
+                  id="country"
+                  name="country"
+                  placeholder="USA"
+                  onChange={handleChange}
+                  value={data.country}
+                />
+              </div>
+              
+              <button type="submit">Send</button>
               {successMessage && (
                 <div className="success_msg">{successMessage}</div>
               )}
               {error && <div className="error_msg">{error}</div>}
-
-
-              <button type="submit">Send</button>
             </form>
+           
           </div>
         </div>
       </div>

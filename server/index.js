@@ -26,6 +26,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/notifications", notifRoutes);
 
+
+
+
+
 // Serve static files from the 'uploads' folder
 app.use('/uploads', express.static('uploads'));
 
