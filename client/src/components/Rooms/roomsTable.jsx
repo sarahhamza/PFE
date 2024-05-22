@@ -7,6 +7,8 @@ const RoomList = () => {
   const [rooms, setRooms] = useState([]);
   const [user, setUser] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const socketRef = useRef(null);
 
   useEffect(() => {
@@ -37,11 +39,17 @@ const RoomList = () => {
             socketRef.current.on('notification', (notification) => {
               console.log('Notification received:', notification);
               if (notification && notification.message) {
-                setNotifications(prev => [...prev, notification]);
-                console.log('Notification message:', notification.message);
+                setNotificationMessage(notification.message);
+                setIsNotificationVisible(true);
               } else {
                 console.log('No message in the notification');
               }
+            });
+
+            // Listen for roomAssigned event
+            socketRef.current.on('roomAssigned', (data) => {
+              console.log('Room assigned event received:', data);
+              fetchRooms(); // Fetch updated room list
             });
 
             socketRef.current.on('disconnect', () => {
@@ -83,7 +91,8 @@ const RoomList = () => {
 
   const handleEdit = (id) => {
     console.log(`Edit room with ID: ${id}`);
-  }
+  };
+
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -96,10 +105,16 @@ const RoomList = () => {
       default:
         return '';
     }
-  }
+  };
 
   return (
     <div className="room-list-container">
+{isNotificationVisible && (
+        <div className="notification-popup">
+          {notificationMessage}
+        </div>
+      )}
+
       <div className="headerRoom">
         <h1>Room List</h1>
       </div>

@@ -137,9 +137,10 @@ export default function HousemaidList() {
 
         />
       </div>
+
       {editMessage && <div className="editMessage">{editMessage}</div>}
 
-      <div className="card">
+      <div className="card2">
         <DataTable value={users} paginator rows={3} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
           selection={selectedUser} onSelectionChange={(e) => setSelectedUser(e.value)} selectionMode="single" dataKey="_id"
           stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '40rem' }}>

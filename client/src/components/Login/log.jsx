@@ -42,8 +42,15 @@ function Login() {
                     Authorization: `Bearer ${res.data}`
                 }
             });
-                
+              // Redirect based on user role
+            if (userData.data.role === "admin") {
               navigate('/home');
+          } else if (userData.data.role === "femme de menage") {
+              navigate('/roomstable');
+          } else {
+              // Handle other roles or scenarios
+              console.log("Unknown user role:", userData.data.role);
+          }
                   setUser(userData.data); // You can set user data in state if needed
         // Log before redirection
                   console.log("Redirecting to /home...");

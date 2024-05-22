@@ -18,6 +18,7 @@ import ListHousemaid from './pages/list/ListHousemaid';
 import Log from './components/Login/log';
 import SignUp from './components/Singup/signup';
 import RoomsTable from './pages/HMRoomsList/HmRoomsList'
+import ListController from './pages/list/ListController';
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -42,7 +43,8 @@ function App() {
           <Route path="/ListHousemaid" element={isAuthenticated ? <ListHousemaid /> : <Navigate to="/login" replace />} />
           <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path="/rooms" element={isAuthenticated ? <ListRoom /> : <Navigate to="/login" replace />} />
-          <Route path="/roomstable" element={<RoomsTable />} />
+          <Route path="/roomstable" element={isAuthenticated ? <RoomsTable /> : <Navigate to="/login" replace />} />
+          <Route path="/ListController" element={isAuthenticated ? <ListController /> : <Navigate to="/login" replace />} />
           <Route path="/products" element={<BasicDemo />} />
           <Route path="/users/new" element={isAuthenticated ?<New inputs={userInputs} title="Add New User" />: <Navigate to="/login" replace />} />
           <Route path="/rooms/new" element={isAuthenticated ? <NewRoom title="Add New Room" />: <Navigate to="/login" replace />} />

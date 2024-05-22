@@ -3,6 +3,7 @@ const { Room, validate } = require("../models/room");
 const multer = require('multer');
 const path = require('path');
 const xlsx = require("xlsx");
+const { getIo } = require("../controllers/socket");  // Import the getIo function
 
 // Set storage engine
 const storage = multer.diskStorage({

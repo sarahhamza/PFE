@@ -7,7 +7,7 @@ import List from "../../components/table/Table";
 import RoomTable from "../../components/table/RoomTable";
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-
+import { io } from 'socket.io-client';
 
 
 const Single = () => {
@@ -69,7 +69,7 @@ const Single = () => {
       await axios.post(`http://localhost:8080/api/notifications/push/${userId}`, {
         message: "You have a new room to clean"
       });
-      // Optionally, you can fetch the available rooms again after assignment
+      
       fetchAvailableRooms();
     } catch (error) {
       console.error('Error assigning room:', error);

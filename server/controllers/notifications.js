@@ -19,8 +19,8 @@ const pushNotification = async (userId, message) => {
     });
     await notification.save();
 
-    console.log(`Sending notification to user ${userId}: ${message}`);
-    console.log(`Received notification: ${JSON.stringify(notification)}`);
+    //onsole.log(`Sending notification to user ${userId}: ${message}`);
+    //console.log(`Received notification: ${JSON.stringify(notification)}`);
     const io = getIo();  // Get the shared Socket.IO instance
     io.to(userId).emit('notification', notification);
 

@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const app = express();
 app.use('/uploads', express.static('uploads'));
+const { getIo } = require("../controllers/socket");  // Import the getIo function
 
 
 
@@ -276,6 +277,9 @@ router.put("/:userId/assign-room/:roomId", async (req, res) => {
     const room = await Room.findById(roomId);
     room.User = userId;
     await room.save();
+    // Emit the roomAssigned event
+    const io = getIo();
+    io.to(userId).emit('roomAssigned', { roomId: room._id });
 
     res.status(200).send({ message: "Room assigned to user successfully" });
   } catch (error) {
