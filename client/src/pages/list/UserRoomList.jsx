@@ -3,20 +3,21 @@ import Sidebar from "../../components/sidebar/side"
 import Navbar from "../../components/navbar/Navbar"
 //import Datatable from "../../components/datatable/Datatable"
 import { PrimeReactProvider } from "primereact/api"
-import HousemaidList from "../../components/datatable/HousemaidList"
+import RoomsTable from "../../components/Rooms/roomsTable"
 
-const ListHousemaid = () => {
+const UserListRooms = () => {
+
   return (
     <div className="list">
       <Sidebar/>
       <section className="contents">
         <Navbar/>
         <PrimeReactProvider>
-        <HousemaidList/>
+        <RoomsTable/>
         </PrimeReactProvider>
         </section>
     </div>
   )
 }
 
-export default ListHousemaid
+export default UserListRooms ;

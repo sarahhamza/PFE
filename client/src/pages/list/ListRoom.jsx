@@ -1,5 +1,5 @@
 import "./list.scss"
-import Sidebar from "../../components/sidebar/Sidebar"
+import Sidebar from "../../components/sidebar/side"
 import Navbar from "../../components/navbar/Navbar"
 import Rooms from "../roomsList/rooms"
 import { PrimeReactProvider } from "primereact/api"
@@ -8,14 +8,13 @@ const ListRoom = () => {
   return (
     <div className="list">
       <Sidebar/>
-      <div className="listContainer">
+      <section className="contents">
         <Navbar/>
         <PrimeReactProvider>
         <Rooms/>
         </PrimeReactProvider>
-      </div>
+        </section>
     </div>
   )
 }
-
 export default ListRoom;

@@ -1,14 +1,13 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React from 'react';
 import {
   MDBBtn,
   MDBContainer,
   MDBCard,
   MDBCardBody,
-  MDBInput,
-  MDBIcon,
   MDBRow,
   MDBCol,
-  MDBCheckbox
+
 }
 from 'mdb-react-ui-kit';
 import "./log.scss"
@@ -16,7 +15,7 @@ import hospital from "../../images/hospital.jpg";
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./log.scss";
+
 
 
 function Login() {
@@ -44,7 +43,7 @@ function Login() {
             });
               // Redirect based on user role
             if (userData.data.role === "admin") {
-              navigate('/home');
+              navigate('/newhome');
           } else if (userData.data.role === "femme de menage") {
               navigate('/roomstable');
           } else {
@@ -55,7 +54,6 @@ function Login() {
         // Log before redirection
                   console.log("Redirecting to /home...");
                     // Redirect to home page
-                    
         } catch (error) {
             if (
                 error.response &&
@@ -76,7 +74,7 @@ function Login() {
             </MDBCol>
     
             <MDBCol col='6' className='form-container' >
-              <MDBCard className='my-7 cascading-right' style={{background: 'hsla(0, 0%, 100%, 0.55)',  backdropFilter: 'blur(30px)' , width:'580px', height:'550px' }}>
+              <MDBCard className='my-7 cascading-right' style={{background: 'hsla(0, 0%, 100%, 0.55)',  backdropFilter: 'blur(30px)' , width:'580px', height:'480px' }}>
                 <MDBCardBody className='p-7 shadow-5 text-center'>
     
                   <h2 className="fw-bold mb-5">Sign in now</h2>
@@ -105,8 +103,8 @@ function Login() {
     
                     <p>or sign up with:</p>
     
-                    <Link to="/signup">
-                       <p>Sign Up</p>
+                    <Link to="/signup" style={{ textDecoration: "none" , marginBottom:"-10px" }}>
+                       <p >Sign Up</p>
                     </Link>
     
                   </div>

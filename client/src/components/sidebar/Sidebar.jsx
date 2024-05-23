@@ -1,7 +1,6 @@
-import "./sidebar.scss";
+import "./side.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import StoreIcon from "@mui/icons-material/Store";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
@@ -25,7 +24,7 @@ const Sidebar = () => {
       };
 
     return (
-        <div className="sidebar">
+        <div className="sidebar2">
             <div className="top">
                 <Link to="/" style={{ textDecoration: "none" }}>
                     <span className="logo">CleanCare</span>

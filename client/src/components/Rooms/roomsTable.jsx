@@ -2,11 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './rooms.css';
 import { io } from 'socket.io-client';
-
+import { FaVolumeUp } from 'react-icons/fa';
 const RoomList = () => {
   const [rooms, setRooms] = useState([]);
   const [user, setUser] = useState(null);
-  const [notifications, setNotifications] = useState([]);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const socketRef = useRef(null);
@@ -41,6 +40,10 @@ const RoomList = () => {
               if (notification && notification.message) {
                 setNotificationMessage(notification.message);
                 setIsNotificationVisible(true);
+                // Clear any existing timeouts to avoid overlapping
+          clearTimeout(socketRef.current.notificationTimeout);
+          // Set a new timeout for this notification
+          socketRef.current.notificationTimeout = hideNotification ();
               } else {
                 console.log('No message in the notification');
               }
@@ -80,6 +83,7 @@ const RoomList = () => {
 
     fetchData();
     fetchRooms();
+    hideNotification();
 
     return () => {
       if (socketRef.current) {
@@ -94,6 +98,13 @@ const RoomList = () => {
   };
 
 
+  // Function to handle text-to-speech
+  const handleVoiceReader = () => {
+    const message = "Hello, on the right you have rooms to clean, on the left you have rooms to reclean. When you finish cleaning, please put an image.";
+    const speech = new SpeechSynthesisUtterance(message);
+    speech.lang = 'en-US';
+    window.speechSynthesis.speak(speech);
+  };
   const getStatusClass = (status) => {
     switch (status) {
       case 'Clean':
@@ -106,7 +117,19 @@ const RoomList = () => {
         return '';
     }
   };
+ // Function to handle hiding the notification after 30 seconds
+ const hideNotification = () => {
+  const timerId = setTimeout(() => {
+    setIsNotificationVisible(false);
+  }, 15000); // Hide the notification after 30 seconds
 
+  // Cleanup function to clear the timeout if the component unmounts
+  return () => clearTimeout(timerId);
+};
+
+useEffect(() => {
+  hideNotification();
+}, []);
   return (
     <div className="room-list-container">
 {isNotificationVisible && (
@@ -114,9 +137,11 @@ const RoomList = () => {
           {notificationMessage}
         </div>
       )}
-
       <div className="headerRoom">
         <h1>Room List</h1>
+        <button className="voice-button" onClick={handleVoiceReader}>
+          <FaVolumeUp size={24} />
+        </button>
       </div>
       <table className="room-list-table">
         <thead>
@@ -148,15 +173,6 @@ const RoomList = () => {
           ))}
         </tbody>
       </table>
-
-      <div className="notifications">
-        <h2>Notifications</h2>
-        <ul>
-          {notifications.map((notification, index) => (
-            <li key={index}>{notification.message}</li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 };
