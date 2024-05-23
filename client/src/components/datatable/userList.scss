@@ -12,15 +12,30 @@ body {
     -moz-osx-font-smoothing: grayscale;
     
 }
+.custom-header {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+}
+.inputsearch{
+  height: 2.2rem;
+  width: 20rem;
+  margin-left: 10px;
+}
+.iconsearch{
+  margin-left: 250px !important;
+  margin-top: -7px !important;
 
+}
 .card1 {
     background: var(--surface-card);
     padding: 1rem;
     border-radius: 10px;
     margin-bottom: 1rem;
     margin-left: 10px;
+    height: 450px !important;
 }
-.top {
+.top1 {
   -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
   box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
   padding: 20px;
@@ -68,4 +83,35 @@ body {
   }
   .actionButton {
     margin-left: 10px; /* Ajustez la valeur de la marge selon vos préférences */
+}
+.card2 .p-datatable-wrapper {
+  height: 320px; /* Default height for large screens */
+}
+.card2 .p-datatable .p-datatable-tbody > tr {
+  height: 67px; /* Adjust this value as needed */
+}
+@media screen and (max-width: 968px) {
+
+  .top1 {
+  width: calc(100% - 20px);
+  left: 185px;
+}
+.card2{
+  width: calc(100% - 20px);
+  left: 185px;
+
+}
+.card2 .p-datatable .p-datatable-tbody > tr {
+  height: 60px; /* Adjust this value as needed */
+}
+.card2 .p-datatable-wrapper {
+  height: 300px; /* Example height for screens smaller than 1200px */
+}
+}
+@media screen and (max-width: 368px) {
+
+.top1 {
+width: calc(100% - 70px);
+left: 185px;
+}
 }

@@ -20,6 +20,7 @@ body {
     margin-bottom: 1rem;
     margin-right: 20px;
     margin-left: 20px;
+    height: 400px;
 }
 .status-tag {
     font-weight: bold;
@@ -48,7 +49,7 @@ body {
     margin: 20px;
     display: flex;
     background-color: white;
-  width: 1270px;
+  width: 1200px;
     h1 {
       color: lightgray;
       font-size: 20px;
@@ -65,17 +66,32 @@ body {
       text-decoration: none;
       color: white;
       font-size: 16px;
-      background-color:  rgb(98, 0, 255) ;
+      background-color:  #3C91E6; ;
       width: 180px;
       height: 50px;
       font-weight: 600;
-      border: 1px solid rgb(98, 0, 255);
+      border: 1px solid #3C91E6;;
       padding: 5px;
       border-radius: 5px;
-      margin-left: 900px;
+      margin-left: 850px;
       margin-top: 25px;
       cursor: pointer;
     }
+
+    .btndelete{
+      background-color:  #3C91E6; 
+      height: 100px !important;
+
+    }
+  .new{
+    margin-top: -20px;
+    margin-left: 40px;
+  }
+  .neww{
+    margin-top: 10px;
+    margin-left: 5px;
+    
+  }
 .editMessage {
         background-color: #4caf50; /* Couleur de fond verte */
         color: #fff; /* Couleur du texte blanche */
@@ -95,10 +111,29 @@ body {
         margin-left: 50px;
       }
 .p-button-help{
-        background-color:  rgb(98, 0, 255) ;
-        margin-left: 10px;
-        margin-right: 20px;
+        background-color: #3C91E6; ;
+        margin-left: 20px;
+        
         margin-top: 25px;
         height: 50px;
-        width: 180px;
+        width: 190px;
       }
+ @media screen and (max-width: 968px) {
+
+        .top1 {
+        width: calc(100% - 20px);
+        left: 185px;
+      }
+      .card1{
+        width: calc(100% - 20px);
+        left: 185px;
+
+      }
+    }
+    @media screen and (max-width: 368px) {
+
+      .top1 {
+      width: calc(100% - 70px);
+      left: 185px;
+    }
+  }

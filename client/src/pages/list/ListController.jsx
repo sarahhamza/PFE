@@ -1,5 +1,5 @@
 import "./list.scss"
-import Sidebar from "../../components/sidebar/Sidebar"
+import Sidebar from "../../components/sidebar/side"
 import Navbar from "../../components/navbar/Navbar"
 //import Datatable from "../../components/datatable/Datatable"
 import { PrimeReactProvider } from "primereact/api"
@@ -9,13 +9,13 @@ const ListController = () => {
   return (
     <div className="list">
       <Sidebar/>
-      <div className="listContainer">
+      <section className="contents">
         <Navbar/>
         <PrimeReactProvider>
         <ControllerList/>
         </PrimeReactProvider>
+        </section>
       </div>
-    </div>
   )
 }
 

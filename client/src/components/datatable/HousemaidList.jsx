@@ -91,12 +91,12 @@ export default function HousemaidList() {
   const renderHeader = () => {
     const value = filters['global'] ? filters['global'].value : '';
     return (
-      <span className="p-input-icon-left">
-        <i className="pi pi-search" />
-        <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e)} placeholder="Global Search" />
-      </span>
+        <span className="p-input-icon-left custom-header">
+            <i className="pi pi-search iconsearch" />
+            <InputText className='inputsearch' type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e)} placeholder="Global Search" />
+        </span>
     );
-  };
+};
   const renderActions = (rowData) => {
     return (
       <div>
@@ -139,8 +139,8 @@ export default function HousemaidList() {
       </div>
       {editMessage && <div className="editMessage">{editMessage}</div>}
 
-      <div className="card1">
-        <DataTable value={users} paginator rows={3} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
+      <div className="card2">
+        <DataTable value={users} paginator rows={4} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
           selection={selectedUser} onSelectionChange={(e) => setSelectedUser(e.value)} selectionMode="single" dataKey="_id"
           stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '40rem' }}>
           <Column header="Image" body={imageBodyTemplate} style={{ width: '10%' }} ></Column>

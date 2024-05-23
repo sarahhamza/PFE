@@ -36,46 +36,30 @@ const Navbar = () => {
     }, []);
   const { dispatch } = useContext(DarkModeContext);
   return (
-    <div className="navbar">
-      <div className="wrapper">
-        <div className="search">
-          <input type="text" placeholder="Search..." />
+   // {/* Navbar */}
+    <nav>
+    <i className="bx bx-menu"></i>
+    <a href="#" className="nav-link">Categories</a>
+    <form action="#">
+      <div className="form-input">
+        <input type="search" placeholder="Search..." />
+        <button type="submit" className="search-btn">
           <SearchOutlinedIcon />
-        </div>
-        <div className="items">
-          <div className="item">
-            <LanguageOutlinedIcon className="icon" />
-            English
-          </div>
-          <div className="item">
-            <DarkModeOutlinedIcon
-              className="icon"
-              onClick={() => dispatch({ type: "TOGGLE" })}
-            />
-          </div>
-          <div className="item">
-            <FullscreenExitOutlinedIcon className="icon" />
-          </div>
-          <div className="item">
-            <NotificationsNoneOutlinedIcon className="icon" />
-            <div className="counter">1</div>
-          </div>
-          <div className="item">
-            <ChatBubbleOutlineOutlinedIcon className="icon" />
-            <div className="counter">2</div>
-          </div>
-          <div className="item">
-            <ListOutlinedIcon className="icon" />
-          </div>
-          {user && (
-                <div className="user-info">
-                 <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} style={{ width: '30px', height:'30px' }} />
-                </div>
-            )}
-
-        </div>
-        </div>
+        </button>
       </div>
+    </form>
+    <input type="checkbox" id="switch-mode" hidden />
+    <label htmlFor="switch-mode" className="switch-mode" onClick={() => dispatch({ type: 'TOGGLE' })}></label>
+    <a href="#" className="notification">
+      <NotificationsNoneOutlinedIcon className="icon" />
+      <span className="num">8</span>
+    </a>
+    {user && (
+      <a href="#" className="profile">
+        <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
+      </a>
+    )}
+  </nav>
   );
 };
 
