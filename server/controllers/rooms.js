@@ -3,9 +3,8 @@ const { Room, validate } = require("../models/room");
 const multer = require('multer');
 const path = require('path');
 const xlsx = require("xlsx");
-const { getIo } = require("../controllers/socket");  // Import the getIo function
+const { getIo } = require("../controllers/socket");
 
-// Set storage engine
 const storage = multer.diskStorage({
   destination: 'uploads/',
   filename: (req, file, cb) => {
@@ -19,18 +18,15 @@ const upload = multer({ storage: storage });
 
 router.post("/", upload.single('image'), async (req, res) => {
   try {
-    console.log('Request received:', req.body);
-
     const { error } = validate(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     const room = new Room({
       nbrRoom: req.body.nbrRoom,
       Surface: req.body.Surface,
       Categorie: req.body.Categorie,
       State: req.body.State,
-      User: req.body.User, // Use the user ID from the request body
+      User: req.body.User || null,
       Property: req.body.Property,
       image: req.file ? req.file.filename : null,
     });
@@ -42,6 +38,7 @@ router.post("/", upload.single('image'), async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
 
 router.get("/", async (req, res) => {
   try {

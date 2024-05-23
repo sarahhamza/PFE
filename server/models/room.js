@@ -6,11 +6,11 @@ const roomSchema = new mongoose.Schema({
     Surface: { type: Number, required: true },
     Categorie: { type: String, required: true },
     State: { type: String, required: true },
-    User: { type: mongoose.Schema.Types.ObjectId, ref: 'User' ,default: null  }, // Change the type to ObjectId
+    User: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
     Property: { type: String, required: true },
     image: { type: String },
-    archived: { type: Boolean, default: false } 
-  });
+    archived: { type: Boolean, default: false }
+});
 
 const Room = mongoose.model("room", roomSchema);
 
@@ -20,7 +20,7 @@ const validate = (data) => {
         Surface: Joi.number().required().label("Surface"),
         Categorie: Joi.string().required().label("Category"),
         State: Joi.string().required().label("State"),
-        User: Joi.string().label("User"), // Assuming User represents the cleaning staff
+        User: Joi.string().allow(null, '').label("User"),
         Property: Joi.string().required().label("Property"),
         image: Joi.string().label("Image").allow(null, ''),
     });
