@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './rooms.css';
 import { io } from 'socket.io-client';
-import { AiOutlineCamera } from 'react-icons/ai';
 import { FaVolumeUp } from 'react-icons/fa';
 const RoomList = () => {
   const [rooms, setRooms] = useState([]);
@@ -65,40 +64,40 @@ const RoomList = () => {
         console.error("Error fetching user data:", error);
       }
     };
-const handleImageImport = async (rowData) => {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.onchange = async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-    
-            try {
-                const formData = new FormData();
-                formData.append('image', file);
-    
-                // Envoyer l'image au serveur pour traitement
-                const response = await fetch('http://localhost:5000/api/cleanliness', {
-                    method: 'POST',
-                    body: formData
-                });
-    
-                if (!response.ok) {
-                    throw new Error('Échec de l\'importation de l\'image');
-                }
-    
-                const data = await response.json();
-            const cleanlinessPercentage = data.cleanliness_percentage;
-                        console.log( cleanlinessPercentage + "%");
-    
-            } catch (error) {
-                console.error("Erreur lors de l'importation de l'image:", error);
-                // Gérer l'erreur
-            }
-        };
-        fileInput.click();
-    };
-    
+    const handleImageImport = async (rowData) => {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.onchange = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+  
+          try {
+              const formData = new FormData();
+              formData.append('image', file);
+  
+              // Envoyer l'image au serveur pour traitement
+              const response = await fetch('http://localhost:5000/api/cleanliness', {
+                  method: 'POST',
+                  body: formData
+              });
+  
+              if (!response.ok) {
+                  throw new Error('Échec de l\'importation de l\'image');
+              }
+  
+              const data = await response.json();
+          const cleanlinessPercentage = data.cleanliness_percentage;
+                      console.log( cleanlinessPercentage + "%");
+  
+          } catch (error) {
+              console.error("Erreur lors de l'importation de l'image:", error);
+              // Gérer l'erreur
+          }
+      };
+      fileInput.click();
+  };
+  
     const fetchRooms = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -131,39 +130,6 @@ const handleImageImport = async (rowData) => {
     console.log(`Edit room with ID: ${id}`);
   };
 
-  const handleImageImport = async (rowData) => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        try {
-            const formData = new FormData();
-            formData.append('image', file);
-
-            // Envoyer l'image au serveur pour traitement
-            const response = await fetch('http://localhost:5000/api/cleanliness', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('Échec de l\'importation de l\'image');
-            }
-
-            const data = await response.json();
-        const cleanlinessPercentage = data.cleanliness_percentage;
-                    console.log( cleanlinessPercentage + "%");
-
-        } catch (error) {
-            console.error("Erreur lors de l'importation de l'image:", error);
-            // Gérer l'erreur
-        }
-    };
-    fileInput.click();
-};
 
   // Function to handle text-to-speech
   const handleVoiceReader = () => {
@@ -234,8 +200,7 @@ useEffect(() => {
               </td>
               <td>{room.User ? new Date(room.employedDate).toLocaleDateString() : 'N/A'}</td>
               <td>
-              <button className='button' icon={<AiOutlineCamera />} onClick={() => handleImageImport(room)}>import</button>
-
+                <button className='button' icon={<AiOutlineCamera />} onClick={() => handleImageImport(rowData)}></button>
               </td>
             </tr>
           ))}

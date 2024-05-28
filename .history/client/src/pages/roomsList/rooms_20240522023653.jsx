@@ -1,3 +1,5 @@
+// RowEditingDemo.js
+
 import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -16,6 +18,7 @@ export default function RowEditingDemo() {
     const [rooms, setRooms] = useState([]);
     const [editMessage, seteditMessage] = useState("");
     const [deleteMessage, setdeletetMessage] = useState("");
+    const [notification, setNotification] = useState(null);
     const [statuses] = useState(['Clean', 'In Progress', 'Messy']);
     const [users, setUsers] = useState([]);
 
@@ -37,10 +40,40 @@ export default function RowEditingDemo() {
         }
     };
     
-   
+    const handleImageImport = async (rowData) => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
     
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
     
+                // Envoyer l'image au serveur pour traitement
+                const response = await fetch('http://localhost:5000/api/cleanliness', {
+                    method: 'POST',
+                    body: formData
+                });
     
+                if (!response.ok) {
+                    throw new Error('Échec de l\'importation de l\'image');
+                }
+    
+                const data = await response.json();
+                const cleanlinessPercentage = data.cleanliness_percentage;
+                setNotification(`Room is ${data.status} with ${cleanlinessPercentage}% cleanliness.`);
+                setTimeout(() => setNotification(null), 5000); // Hide notification after 5 seconds
+    
+            } catch (error) {
+                console.error("Erreur lors de l'importation de l'image:", error);
+                // Gérer l'erreur
+            }
+        };
+        fileInput.click();
+    };
     
     const fetchUsers = async () => {
         try {
@@ -59,7 +92,7 @@ export default function RowEditingDemo() {
         return (
             <Dropdown
                 value={options.value}
-                options={users.map(user => ({ label: user.email, value: user._id }))} // Change value to user.email
+                options={users.map(user => ({ label: user.email, value: user._id }))}
                 onChange={(e) => options.editorCallback(e.value)}
                 placeholder="Select a User"
             />
@@ -67,16 +100,14 @@ export default function RowEditingDemo() {
     };
 
     const EditRoom = async (rowData) => {
-        console.log("rowData:", rowData); // Log the rowData to inspect its structure
-        const { _id, nbrRoom, Surface, Categorie, State, User, Property } = rowData.newData; // Access _id from newData
+        const { _id, nbrRoom, Surface, Categorie, State, User, Property } = rowData.newData;
 
-        // Ensure that _id is valid
         if (!_id) {
             console.error("Error updating room: Room ID is undefined");
             return;
         }
 
-        const updatedData = { nbrRoom, Surface, Categorie, State, User, Property }; // Create a new object without circular references
+        const updatedData = { nbrRoom, Surface, Categorie, State, User, Property };
 
         try {
             const response = await fetch(`http://localhost:8080/api/rooms/${_id}/edit`, {
@@ -84,7 +115,7 @@ export default function RowEditingDemo() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(updatedData) // Pass the new object for stringification
+                body: JSON.stringify(updatedData)
             });
 
             if (!response.ok) {
@@ -96,12 +127,11 @@ export default function RowEditingDemo() {
             fetchRooms();
             seteditMessage("Room updated successfully");
             setTimeout(() => seteditMessage(''), 2000);
-            // Handle success or update UI as needed
         } catch (error) {
             console.error("Error updating room:", error);
-            // Handle error or show error message
         }
     };
+
     const archiveRoom = async (rowData) => {
         try {
             const response = await fetch(`http://localhost:8080/api/rooms/${rowData._id}`, {
@@ -109,17 +139,16 @@ export default function RowEditingDemo() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ archived: true }) // Send data to update the room's status
+                body: JSON.stringify({ archived: true })
             });
     
             if (!response.ok) {
                 throw new Error(`Failed to archive room with ID ${rowData._id}`);
             }
     
-            // Update the room's status in the local state
             setRooms(prevRooms => prevRooms.map(room => {
                 if (room._id === rowData._id) {
-                    return { ...room, archived: true }; // Set archived to true
+                    return { ...room, archived: true };
                 }
                 return room;
             }));
@@ -136,17 +165,15 @@ export default function RowEditingDemo() {
         switch (value) {
             case 'Clean':
                 return 'success';
-
             case 'In Progress':
                 return 'warning';
-
             case 'Messy':
                 return 'danger';
-
             default:
                 return null;
         }
     };
+
     const textEditor = (options) => {
         return <InputText value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
     };
@@ -165,95 +192,62 @@ export default function RowEditingDemo() {
             />
         );
     };
+
     const statusBodyTemplate = (rowData) => {
         const severity = getSeverity(rowData.State);
-        return <Tag className={`status-tag p-tag-${severity}`} value={rowData.State} />;
+        return <Tag className={`status-tag p-tag-${severity}`} value={rowData.State}></Tag>;
     };
-    const categoryEditor = (options) => {
+
+    const renderHeader = () => {
         return (
-            <Dropdown
-                value={options.value}
-                options={['Category1', 'Category2', 'Category3']}
-                onChange={(e) => options.editorCallback(e.value)}
-                placeholder="Select Category"
-            />
+            <div className="table-header">
+                <h2>Rooms</h2>
+                <div className="icons">
+                    <Link to='/Dashboard/AddRoom'>
+                        <BsHouseAdd className="add-icon" />
+                    </Link>
+                </div>
+            </div>
         );
     };
-    const allowEdit = (rowData) => {
-        // Add your condition here based on rowData if editing is allowed
-        return true; // Example: always allow editing
-    };
-    const handleImport = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
 
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            // Send file to the server for processing
-            const response = await fetch('http://localhost:8080/api/rooms/import', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to import data');
-            }
-
-            // Refresh room data after importing
-            fetchRooms();
-            seteditMessage("Data imported successfully");
-            setTimeout(() => seteditMessage(''), 2000);
-        } catch (error) {
-            console.error("Error importing data:", error);
-            // Handle error
-        }
-    };
+    const header = renderHeader();
 
     return (
-        <div>
-        <div className="top1">
-            <h1>List Of Rooms</h1>
-            <Link to="/rooms/new" className="link1">
-              <BsHouseAdd className='neww'/>  <p className='new'>   New </p>
-            </Link>
-            <input
-                type="file"
-                id="fileInput"
-                style={{ display: 'none' }} // Hide the input visually
-                onChange={handleImport}
-            />
-            <Button
-                type="button"
-                icon="pi pi-upload"
-                label="Export"
-                className="p-button-help"
-                onClick={() => document.getElementById('fileInput').click()}
-                data-pr-tooltip="Export Excel Data"
-
-            />    
-            </div>
-            {editMessage && <div className="editMessage">{editMessage}</div>}
-            {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
-            <div className="card1 p-fluid">
-                <DataTable value={rooms} paginator rows={4} editMode="row" dataKey="id" onRowEditComplete={EditRoom} tableStyle={{ maxWidth: '85rem', height:'300px'}}>
-                    <Column field="nbrRoom" header="Number of Rooms" editor={(options) => numberEditor(options)} style={{ width: '20%', lineHeight: '3rem' }}></Column>
-                    <Column field="Surface" header="Surface" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
-                    <Column field="Categorie" header="Category" editor={(options) => categoryEditor(options)} style={{ width: '20%' }}></Column>
-                    <Column field="State" header="State" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
-                    <Column field="User" header="User" body={(rowData) => {
-                        const user = users.find(user => user._id === rowData.User);
-                        return user ? user.email : '';
-                    }} editor={(options) => userEditor(options)} style={{ width: '20%' }}></Column>
-                    <Column field="Property" header="Property" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-                    <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-                    
-                    <Column style={{ width: '10%' }} body={(rowData) => (
-                        <Button  className="btndelete" icon={<BsXLg className="btndelete" />} onClick={() => archiveRoom(rowData)} />
-                    )} />
-                </DataTable>
-            </div>
+        <div className="room-container">
+            <h1>Room List</h1>
+            <DataTable
+                value={rooms}
+                editMode="row"
+                header={header}
+                className="editable-table"
+                responsiveLayout="scroll"
+                rowClassName={(data) => data.archived ? 'archived-row' : ''}
+                onRowEditComplete={EditRoom}
+            >
+                <Column field="nbrRoom" header="Room Number" editor={(options) => textEditor(options)} />
+                <Column field="Surface" header="Surface" editor={(options) => numberEditor(options)} />
+                <Column field="Categorie" header="Category" editor={(options) => textEditor(options)} />
+                <Column field="State" header="State" body={statusBodyTemplate} editor={(options) => statusEditor(options)} />
+                <Column field="User" header="User" editor={(options) => userEditor(options)} />
+                <Column
+                    body={(rowData) => (
+                        <Button icon="pi pi-trash" className="p-button-danger p-mr-2" onClick={() => archiveRoom(rowData)} />
+                    )}
+                />
+                <Column
+                    body={(rowData) => (
+                        <Button
+                            icon={<AiOutlineCamera />}
+                            className="p-button-secondary"
+                            onClick={() => handleImageImport(rowData)}
+                        />
+                    )}
+                />
+            </DataTable>
+            {editMessage && <div className="edit-message">{editMessage}</div>}
+            {deleteMessage && <div className="delete-message">{deleteMessage}</div>}
+            {notification && <div className="notification">{notification}</div>}
         </div>
     );
 }

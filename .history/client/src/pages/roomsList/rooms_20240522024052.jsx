@@ -37,7 +37,39 @@ export default function RowEditingDemo() {
         }
     };
     
-   
+    const handleImageImport = async (rowData) => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+    
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+    
+                // Envoyer l'image au serveur pour traitement
+                const response = await fetch('http://localhost:5000/api/cleanliness', {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Échec de l\'importation de l\'image');
+                }
+    
+                const data = await response.json();
+            const cleanlinessPercentage = data.cleanliness_percentage;
+                        console.log( cleanlinessPercentage + "%");
+    
+            } catch (error) {
+                console.error("Erreur lors de l'importation de l'image:", error);
+                // Gérer l'erreur
+            }
+        };
+        fileInput.click();
+    };
     
     
     
@@ -216,7 +248,7 @@ export default function RowEditingDemo() {
         <div className="top1">
             <h1>List Of Rooms</h1>
             <Link to="/rooms/new" className="link1">
-              <BsHouseAdd className='neww'/>  <p className='new'>   New </p>
+                New <BsHouseAdd />
             </Link>
             <input
                 type="file"
@@ -232,13 +264,12 @@ export default function RowEditingDemo() {
                 onClick={() => document.getElementById('fileInput').click()}
                 data-pr-tooltip="Export Excel Data"
 
-            />    
-            </div>
+            />          </div>
             {editMessage && <div className="editMessage">{editMessage}</div>}
             {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
             <div className="card1 p-fluid">
-                <DataTable value={rooms} paginator rows={4} editMode="row" dataKey="id" onRowEditComplete={EditRoom} tableStyle={{ maxWidth: '85rem', height:'300px'}}>
-                    <Column field="nbrRoom" header="Number of Rooms" editor={(options) => numberEditor(options)} style={{ width: '20%', lineHeight: '3rem' }}></Column>
+                <DataTable value={rooms} paginator rows={4} editMode="row" dataKey="id" onRowEditComplete={EditRoom} tableStyle={{ maxWidth: '85rem' }}>
+                    <Column field="nbrRoom" header="Number of Rooms" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
                     <Column field="Surface" header="Surface" editor={(options) => numberEditor(options)} style={{ width: '20%' }}></Column>
                     <Column field="Categorie" header="Category" editor={(options) => categoryEditor(options)} style={{ width: '20%' }}></Column>
                     <Column field="State" header="State" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
@@ -248,9 +279,11 @@ export default function RowEditingDemo() {
                     }} editor={(options) => userEditor(options)} style={{ width: '20%' }}></Column>
                     <Column field="Property" header="Property" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
                     <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-                    
                     <Column style={{ width: '10%' }} body={(rowData) => (
-                        <Button  className="btndelete" icon={<BsXLg className="btndelete" />} onClick={() => archiveRoom(rowData)} />
+                        <Button icon={<AiOutlineCamera />} onClick={() => handleImageImport(rowData)} />
+                    )} />
+                    <Column style={{ width: '10%' }} body={(rowData) => (
+                        <Button icon={<BsXLg />} onClick={() => archiveRoom(rowData)} />
                     )} />
                 </DataTable>
             </div>

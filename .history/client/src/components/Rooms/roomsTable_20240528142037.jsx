@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './rooms.css';
 import { io } from 'socket.io-client';
-import { AiOutlineCamera } from 'react-icons/ai';
 import { FaVolumeUp } from 'react-icons/fa';
 const RoomList = () => {
   const [rooms, setRooms] = useState([]);
@@ -234,8 +233,7 @@ useEffect(() => {
               </td>
               <td>{room.User ? new Date(room.employedDate).toLocaleDateString() : 'N/A'}</td>
               <td>
-              <button className='button' icon={<AiOutlineCamera />} onClick={() => handleImageImport(room)}>import</button>
-
+                <button className='button' icon={<AiOutlineCamera />} onClick={() => handleImageImport(rowData)}></button>
               </td>
             </tr>
           ))}

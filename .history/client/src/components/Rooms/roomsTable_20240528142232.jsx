@@ -234,7 +234,7 @@ useEffect(() => {
               </td>
               <td>{room.User ? new Date(room.employedDate).toLocaleDateString() : 'N/A'}</td>
               <td>
-              <button className='button' icon={<AiOutlineCamera />} onClick={() => handleImageImport(room)}>import</button>
+              <button className='button' icon={<AiOutlineCamera />} onClick={() => handleImageImport(room)}></button>
 
               </td>
             </tr>
