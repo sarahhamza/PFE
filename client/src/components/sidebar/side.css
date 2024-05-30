@@ -105,7 +105,7 @@
 	justify-content: center;
 }
 /* SIDEBAR */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
 	.sidebar {
 		width: 200px;
 	}

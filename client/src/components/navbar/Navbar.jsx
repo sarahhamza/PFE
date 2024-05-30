@@ -1,19 +1,13 @@
+import React, { useState, useEffect, useContext } from 'react';
 import "./navbar.scss";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { DarkModeContext } from "../../context/darkModeContext";
-import { useContext } from "react";
-import { useState, useEffect } from "react";
 import axios from "axios";
-
-
+import ProfileCard from './profileCard'; // Import ProfileCard component
 const Navbar = () => {
-  const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
+    const [showProfileCard, setShowProfileCard] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,33 +28,39 @@ const Navbar = () => {
 
         fetchData();
     }, []);
-  const { dispatch } = useContext(DarkModeContext);
-  return (
-   // {/* Navbar */}
-    <nav>
-    <i className="bx bx-menu"></i>
-    <a href="#" className="nav-link">Categories</a>
-    <form action="#">
-      <div className="form-input">
-        <input type="search" placeholder="Search..." />
-        <button type="submit" className="search-btn">
-          <SearchOutlinedIcon />
-        </button>
-      </div>
-    </form>
-    <input type="checkbox" id="switch-mode" hidden />
-    <label htmlFor="switch-mode" className="switch-mode" onClick={() => dispatch({ type: 'TOGGLE' })}></label>
-    <a href="#" className="notification">
-      <NotificationsNoneOutlinedIcon className="icon" />
-      <span className="num">8</span>
-    </a>
-    {user && (
-      <a href="#" className="profile">
-        <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
-      </a>
-    )}
-  </nav>
-  );
+
+    const { dispatch } = useContext(DarkModeContext);
+
+    const toggleProfileCard = () => {
+        setShowProfileCard(prev => !prev);
+    };
+
+    return (
+        <nav>
+            <i className="bx bx-menu"></i>
+            <a href="#" className="nav-link">Categories</a>
+            <form action="#">
+                <div className="form-input">
+                    <input type="search" placeholder="Search..." />
+                    <button type="submit" className="search-btn">
+                        <SearchOutlinedIcon />
+                    </button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden />
+            <label htmlFor="switch-mode" className="switch-mode" onClick={() => dispatch({ type: 'TOGGLE' })}></label>
+            <a href="#" className="notification">
+                <NotificationsNoneOutlinedIcon className="icon" />
+                <span className="num">8</span>
+            </a>
+            {user && (
+                <div className="profile" onClick={toggleProfileCard}>
+                    <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
+                    {showProfileCard && <ProfileCard user={user} />}
+                </div>
+            )}
+        </nav>
+    );
 };
 
 export default Navbar;

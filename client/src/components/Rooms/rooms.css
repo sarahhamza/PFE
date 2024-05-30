@@ -4,7 +4,7 @@
   }
   
   .headerRoom {
-    background-color: #3f51b5;
+    background-color: #3C91E6;
     color: white;
     padding: 10px;
     border-radius: 8px 8px 0 0;
@@ -58,13 +58,13 @@
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
-    background-color: #3f51b5;
+    background-color: #3C91E6;
     color: white;
     cursor: pointer;
   }
   
   .button:hover {
-    background-color: #303f9f;
+    background-color: #3C91E6;
   }
   .notification-popup {
     position: fixed;
@@ -79,13 +79,14 @@
     justify-content: center !important;
     z-index: 9999; /* Ensure it appears on top of other elements */
   }
- .voice-reader-button{
+ .voice-button{
   padding: 5px 10px;
     border: none;
     border-radius: 5px;
-    background-color: #3f51b5;
+    background-color: #3f51b500;
     color: white;
     cursor: pointer;
+    margin-left: 1000px;
 
  }
   @media (max-width: 900px) {

@@ -65,40 +65,7 @@ const RoomList = () => {
         console.error("Error fetching user data:", error);
       }
     };
-const handleImageImport = async (rowData) => {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.onchange = async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-    
-            try {
-                const formData = new FormData();
-                formData.append('image', file);
-    
-                // Envoyer l'image au serveur pour traitement
-                const response = await fetch('http://localhost:5000/api/cleanliness', {
-                    method: 'POST',
-                    body: formData
-                });
-    
-                if (!response.ok) {
-                    throw new Error('Échec de l\'importation de l\'image');
-                }
-    
-                const data = await response.json();
-            const cleanlinessPercentage = data.cleanliness_percentage;
-                        console.log( cleanlinessPercentage + "%");
-    
-            } catch (error) {
-                console.error("Erreur lors de l'importation de l'image:", error);
-                // Gérer l'erreur
-            }
-        };
-        fileInput.click();
-    };
-    
+
     const fetchRooms = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -127,9 +94,6 @@ const handleImageImport = async (rowData) => {
     };
   }, []);
 
-  const handleEdit = (id) => {
-    console.log(`Edit room with ID: ${id}`);
-  };
 
   const handleImageImport = async (rowData) => {
     const fileInput = document.createElement('input');
@@ -142,20 +106,45 @@ const handleImageImport = async (rowData) => {
         try {
             const formData = new FormData();
             formData.append('image', file);
-
-            // Envoyer l'image au serveur pour traitement
-            const response = await fetch('http://localhost:5000/api/cleanliness', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('Échec de l\'importation de l\'image');
+            // Vérifiez que rowData.id est défini
+            if (!rowData || !rowData._id) {
+              throw new Error('Room ID is missing.');
             }
 
-            const data = await response.json();
-        const cleanlinessPercentage = data.cleanliness_percentage;
-                    console.log( cleanlinessPercentage + "%");
+            const roomId = rowData._id;
+            // Appel pour traiter l'image et obtenir le pourcentage de propreté
+            try {
+                const response = await fetch('http://localhost:5000/api/cleanliness', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Échec de l\'importation de l\'image');
+                }
+
+                const data = await response.json();
+                const cleanlinessPercentage = data.cleanliness_percentage;
+                console.log(cleanlinessPercentage + "%");
+            } catch (error) {
+                console.error("Erreur lors du traitement de l'image:", error);
+                // Gérer l'erreur ou continuer selon le besoin
+            }
+
+            // Appel pour enregistrer l'image dans la table rooms
+            const imageFormData = new FormData();
+            imageFormData.append('image', file);
+
+            const saveImageResponse = await fetch(`http://localhost:8080/api/rooms/${roomId}/image`, {
+                method: 'PUT',
+                body: imageFormData
+            });
+
+            if (!saveImageResponse.ok) {
+                throw new Error('Échec de l\'enregistrement de l\'image dans la table rooms');
+            }
+
+            console.log('Image enregistrée avec succès dans la table rooms');
 
         } catch (error) {
             console.error("Erreur lors de l'importation de l'image:", error);
@@ -164,6 +153,8 @@ const handleImageImport = async (rowData) => {
     };
     fileInput.click();
 };
+
+
 
   // Function to handle text-to-speech
   const handleVoiceReader = () => {
@@ -174,7 +165,7 @@ const handleImageImport = async (rowData) => {
   };
   const getStatusClass = (status) => {
     switch (status) {
-      case 'Clean':
+      case 'Cleaned':
         return 'clean';
       case 'Messy':
         return 'messy';
@@ -197,6 +188,29 @@ const handleImageImport = async (rowData) => {
 useEffect(() => {
   hideNotification();
 }, []);
+
+const handleRowClick = async (roomId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const response = await axios.put(`http://localhost:8080/api/rooms/${roomId}/state`, { State: 'In Progress' }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 200) {
+        setRooms(prevRooms =>
+          prevRooms.map(room =>
+            room._id === roomId ? { ...room, State: 'In Progress' } : room
+          )
+        );
+      }
+    }
+  } catch (error) {
+    console.error("Error updating room state:", error);
+  }
+};
   return (
     <div className="room-list-container">
 {isNotificationVisible && (
@@ -214,27 +228,21 @@ useEffect(() => {
         <thead>
           <tr>
             <th>Room Number</th>
-            <th>Surface</th>
-            <th>Category</th>
             <th>Status</th>
-            <th>Employed</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {rooms.map((room) => (
-            <tr key={room._id}>
+            <tr key={room._id} onClick={() => handleRowClick(room._id)}>
               <td>{room.nbrRoom}</td>
-              <td>{room.Surface} m²</td>
-              <td>{room.Categorie}</td>
               <td>
                 <span className={`status ${getStatusClass(room.State)}`}>
                   {room.State}
                 </span>
               </td>
-              <td>{room.User ? new Date(room.employedDate).toLocaleDateString() : 'N/A'}</td>
               <td>
-              <button className='button' icon={<AiOutlineCamera />} onClick={() => handleImageImport(room)}>import</button>
+              <button className='button' icon={<AiOutlineCamera />} onClick={(e) => { e.stopPropagation(); handleImageImport(room); }}>Import</button>
 
               </td>
             </tr>

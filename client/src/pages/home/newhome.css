@@ -59,7 +59,7 @@ body.dark {
 	left: 60px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
 
     .contents {
 		width: calc(100% - 180px);

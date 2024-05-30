@@ -5,7 +5,18 @@ const Joi = require("joi");
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { Room } = require("../models/room");
+const nodemailer = require('nodemailer');
+require("dotenv").config();
 
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'sarahhm31@gmail.com',
+      pass: 'sjqr puky jshy uxvz'
+    }
+  });
+  
 
 router.post("/", async (req, res) => {
     try {
@@ -94,6 +105,98 @@ router.get("/user-rooms", async (req, res) => {
     } catch (error) {
       console.error("Error fetching user rooms:", error);
       res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
+
+router.post("/forgot-password", async (req, res) => {
+    const { email } = req.body;
+    try {
+      const oldUser = await User.findOne({ email });
+      //console.log(oldUser);
+      if (!oldUser) {
+        return res.json({ status: "User Not Exists!!" });
+      }
+      const secret = process.env.JWTPRIVATEKEY + oldUser.password;
+      const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
+        expiresIn: "10m",
+      });
+      
+      const link = `http://localhost:8080/api/auth/reset-password/${oldUser._id}/${token}`;
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: 'sarahhm31@gmail.com',
+            pass: 'sjqr puky jshy uxvz'
+          }
+      });
+  
+      var mailOptions = {
+        from: "sarahm31@gmail.com",
+        to: "thedebugarena@gmail.com",
+        subject: "Password Reset",
+        text: link,
+      };
+  
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
+      console.log(link);
+    }  catch (error) {
+        console.error("Error generating forgot password token:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
+router.get("/reset-password/:id/:token", async (req, res) => {
+    const { id, token } = req.params;
+    console.log(req.params);
+    const oldUser = await User.findOne({ _id: id });
+    if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+    }
+    const secret = process.env.JWTPRIVATEKEY + oldUser.password;
+    try {
+      const verify = jwt.verify(token, secret);
+      res.render("index", { email: verify.email, status: "Not Verified" });
+      //res.send("Verified")
+    } catch (error) {
+      console.log(error);
+      res.send("Not Verified");
+    }
+  });
+
+router.post("/reset-password/:id/:token", async (req, res) => {
+    const { id, token } = req.params;
+    const { password } = req.body;
+  
+    const oldUser = await User.findOne({ _id: id });
+    if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+    }
+    const secret =  process.env.JWTPRIVATEKEY + oldUser.password;
+    try {
+      const verify = jwt.verify(token, secret);
+      const encryptedPassword = await bcrypt.hash(password, 10);
+      await User.updateOne(
+        {
+          _id: id,
+        },
+        {
+          $set: {
+            password: encryptedPassword,
+          },
+        }
+      );
+  
+      res.render("index", { email: verify.email, status: "verified" });
+    } catch (error) {
+      console.log(error);
+      res.json({ status: "Something Went Wrong" });
     }
   });
 module.exports = router;
