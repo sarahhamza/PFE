@@ -63,13 +63,11 @@ const New = () => {
 
   return (
     <div className="new">
-      <Sidebar />
       <div className="newContainer">
-        <Navbar />
-        <div className="top">
+        <div className="top2">
           <h1>Add New User </h1>
         </div>
-        <div className="bottom">
+        <div className="bottom2">
           <div className="left">
             <img
               src={image ? URL.createObjectURL(image) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
@@ -182,7 +180,7 @@ const New = () => {
                 />
               </div>
               
-              <button type="submit">Send</button>
+              <button type="submit" >Send</button>
               {successMessage && (
                 <div className="success_msg">{successMessage}</div>
               )}

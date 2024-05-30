@@ -101,13 +101,11 @@ const Update = () => {
 
   return (
     <div className="new">
-      <Sidebar />
       <div className="newContainer">
-        <Navbar />
-        <div className="top">
+        <div className="top2">
           <h1>Update User</h1>
         </div>
-        <div className="bottom">
+        <div className="bottom2">
           <div className="left">
             <img
               src={imageUrl || "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}

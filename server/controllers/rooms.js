@@ -141,31 +141,61 @@ router.get("/available", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
-router.post('/:id/images/upload', upload.single('image'), async (req, res) => {
+
+
+router.put('/:roomId/image', upload.single('image'), async (req, res) => {
+  const { roomId } = req.params;
+
+  // Vérifier si l'ID de la salle est un ObjectId valide
+  if (!roomId.match(/^[0-9a-fA-F]{24}$/)) {
+    return res.status(400).send({ message: 'Invalid room ID' });
+  }
+
   try {
-      // Check if a file was uploaded
-      if (!req.file) {
-          throw new Error('No file uploaded');
-      }
+    // Vérifier si une image a été uploadée
+    if (!req.file) {
+      return res.status(400).send({ message: 'No image uploaded' });
+    }
 
-      // Retrieve the room ID from the URL parameters
-      const roomId = req.params.id;
+    // Trouver la salle par ID et mettre à jour le champ image
+    const room = await Room.findById(roomId);
 
-      // Attempt to find and update the room document
-      const result = await Room.findByIdAndUpdate(roomId, { image: req.file.filename }, { new: true });
+    if (!room) {
+      return res.status(404).send({ message: 'Room not found' });
+    }
 
-      // Check if the update was successful
-      if (!result) {
-          throw new Error('Room not found');
-      }
+    // Mettre à jour le chemin de l'image dans la salle
+    room.image = req.file.filename;
 
-      // Send the updated room document back to the client
-      res.send(result);
+    // Sauvegarder la salle mise à jour
+    await room.save();
+
+    res.status(200).send({ message: 'Image updated successfully', room });
   } catch (error) {
-      console.error('Error updating room:', error);
-      res.status(500).send({ message: 'Error updating room' });
+    console.error('Error updating room image:', error);
+    res.status(500).send({ message: 'Internal Server Error' });
   }
 });
 
+router.put("/:roomId/state", async (req, res) => {
+  const { roomId } = req.params;
+  const { State } = req.body;
 
+  try {
+    // Check if the room exists
+    const room = await Room.findById(roomId);
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+
+    // Update the state of the room
+    room.State = State;
+    await room.save();
+
+    res.status(200).json({ message: "Room state updated successfully", room });
+  } catch (error) {
+    console.error("Error updating room state:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 module.exports = router;

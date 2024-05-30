@@ -81,13 +81,11 @@ const NewRoom = () => {
 
     return (
         <div className="new">
-            <Sidebar />
             <div className="newContainer">
-                <Navbar />
-                <div className="top">
+                <div className="top2">
                     <h1>Add New Room</h1>
                 </div>
-                <div className="bottom">
+                <div className="bottom2">
                     <div className="left">
                         <img
                             src={

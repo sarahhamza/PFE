@@ -19,6 +19,8 @@ const io = initSocket(server);  // Initialize Socket.IO server
 // Middlewares
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(express.urlencoded({ extended: false }));
+app.set("view engine","ejs");
 
 // Routes
 app.use("/api/users", userRoutes);

@@ -6,14 +6,14 @@ import Home from './pages/home/Home';
 import Login from './components/Login';
 import Signup from './components/Singup';
 import List from './pages/list/List';
-import Single from './pages/single/Single';
-import New from './pages/new/New';
-import NewRoom from './pages/newRoom/newRoom';
+import Single from './pages/single/SingleDetails';
+import New from './pages/new/NewList';
+import NewRoom from './pages/newRoom/newRoomList';
 import { userInputs } from './formSource';
 import './style/dark.scss';
 import BasicDemo from './components/datatable/UsersList';
 import ListRoom from './pages/list/ListRoom';
-import Update from './pages/updateUser/Update';
+import Update from './pages/updateUser/UpdateList';
 import ListHousemaid from './pages/list/ListHousemaid';
 import Log from './components/Login/log';
 import SignUp from './components/Singup/signup';
@@ -23,6 +23,7 @@ import NewHome from './pages/home/NewHome';
 import UserListRooms from './pages/list/UserRoomList';
 import ListControllerRooms from './pages/list/ListControllerRooms';
 //import AdminDashboard from './components/Dashboard/AdminDashboard';
+import ResetPassword from './pages/ResetPassword/ReserPassword';
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -54,6 +55,8 @@ function App() {
           <Route path="/users/new" element={isAuthenticated ?<New inputs={userInputs} title="Add New User" />: <Navigate to="/login" replace />} />
           <Route path="/rooms/new" element={isAuthenticated ? <NewRoom title="Add New Room" />: <Navigate to="/login" replace />} />
           <Route path="/user/:userId" element={<Single />} />
+          <Route path="/resetPassword" element={<ResetPassword/>} />
+
           <Route path="/users/update/:userId" element={isAuthenticated ? <Update inputs={userInputs} title="Update User" /> : <Navigate to="/login" replace />} />
           <Route path="/ControllerRooms" element={isAuthenticated ? <ListControllerRooms /> : <Navigate to="/login" replace />} />
         </Routes>
