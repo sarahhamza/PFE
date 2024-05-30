@@ -169,7 +169,7 @@ export default function ControllerRooms() {
                     <Column body={cameraBodyTemplate} style={{ width: '10%', textAlign: 'center' }}></Column>
                 </DataTable>
             </div>
-            <Dialog visible={showDialog} onHide={hideDialog} header="Room Image" style={{ width: '60vw', height: '80vh' }}>
+            <Dialog visible={showDialog} onHide={hideDialog} header="Room Image" style={{ width: '80vw', height: '80vh' }}>
                 {selectedImage ? (
                     <img src={selectedImage} alt="Room" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 ) : (

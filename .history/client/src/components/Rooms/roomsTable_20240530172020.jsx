@@ -142,54 +142,30 @@ const handleImageImport = async (rowData) => {
 
             const formData = new FormData();
             formData.append('image', file);
-            formData.append('room_number', rowData.nbrRoom);  // Ajout du numéro de la salle
-
-            console.log('FormData:', formData); // Log the FormData before sending
-
-            // Vérifiez que rowData.id est défini
-            if (!rowData || !rowData._id) {
-                throw new Error('Room ID is missing.');
-            }
 
             const roomId = rowData._id;
+            // Appel pour traiter l'image et obtenir le pourcentage de propreté
+            try {
+                const response = await fetch('http://localhost:5000/api/cleanliness', {
+                    method: 'POST',
+                    body: formData
+                });
 
-            // Envoyer l'image au serveur pour traitement
-            const response = await fetch('http://localhost:5000/api/cleanliness', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('Échec de l\'importation de l\'image');
-            }
+                if (!response.ok) {
+                    throw new Error('Échec de l\'importation de l\'image');
+                }
 
             const data = await response.json();
-            const cleanlinessPercentage = data.cleanliness_percentage;
-            console.log(`Room number ${rowData.nbrRoom} is ${cleanlinessPercentage}% clean`);
-
-            // Appel pour enregistrer l'image dans la table rooms
-            const imageFormData = new FormData();
-            imageFormData.append('image', file);
-
-            const saveImageResponse = await fetch(`http://localhost:8080/api/rooms/${roomId}/image`, {
-                method: 'PUT',
-                body: imageFormData
-            });
-
-            if (!saveImageResponse.ok) {
-                throw new Error('Échec de l\'enregistrement de l\'image dans la table rooms');
-            }
-
-            console.log('Image enregistrée avec succès dans la table rooms');
+        const cleanlinessPercentage = data.cleanliness_percentage;
+                    console.log( cleanlinessPercentage + "%");
 
         } catch (error) {
             console.error("Erreur lors de l'importation de l'image:", error);
-            // Gérer l'erreur ou continuer selon le besoin
+            // Gérer l'erreur
         }
     };
     fileInput.click();
 };
-
 
 
 
