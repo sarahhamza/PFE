@@ -26,15 +26,8 @@ const Navbar = () => {
           });
           setUser(response.data);
 
-          // Fetch notifications if user is a femme de menage
-          if (response.data.role === "femme de menage") {
-            const notificationsResponse = await axios.get(`http://localhost:8080/api/notifications/${response.data._id}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            setNotifications(notificationsResponse.data);
-          } else if (response.data.role === "controlleur") {
+          // Fetch notifications if user is a controlleur
+          if (response.data.role === "controlleur") {
             const notificationsResponse = await axios.get("http://localhost:5000/api/notifications", {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -71,7 +64,7 @@ const Navbar = () => {
       {user && (
         <div className="notification">
           <NotificationsNoneOutlinedIcon className="icon" />
-          {notifications.length > 0 && (
+          {user.role === "controlleur" && notifications.length > 0 && (
             <div className="notifications-dropdown">
               <ul>
                 {notifications.map((notification, index) => (
@@ -80,7 +73,7 @@ const Navbar = () => {
               </ul>
             </div>
           )}
-          <span className="num">{notifications.length}</span>
+          {user.role === "controlleur" && <span className="num">{notifications.length}</span>}
         </div>
       )}
 

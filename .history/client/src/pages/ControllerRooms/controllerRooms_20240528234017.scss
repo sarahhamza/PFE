@@ -1,0 +1,139 @@
+html {
+    font-size: 14px;
+}
+
+body {
+    font-family: var(--font-family);
+    font-weight: normal;
+    background: var(--surface-ground);
+    color: var(--text-color);
+    padding: 1rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: auto;
+}
+
+.card1 {
+    background: var(--surface-card);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 400px;
+}
+.status-tag {
+    font-weight: bold;
+    padding: 0.4rem 0.7rem;
+    border-radius: 0.4rem;
+}
+
+.p-tag-success {
+    background-color: #4caf50; /* Green for 'Clean' */
+}
+
+.p-tag-warning {
+    background-color: #ff9800; /* Orange for 'In Progress' */
+}
+
+.p-tag-danger {
+    background-color: #f44336; /* Red for 'Messy' */
+}
+.btn{
+    background-color: white;
+}
+.top1 {
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    padding: 20px;
+    margin: 20px;
+    display: flex;
+    background-color: white;
+  width: 1200px;
+    h1 {
+      color: lightgray;
+      font-size: 20px;
+    }
+  
+    .left {
+      flex: 1;
+      text-align: center;
+  
+  
+    }
+  }
+.link1{
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      background-color:  #3C91E6; ;
+      width: 180px;
+      height: 50px;
+      font-weight: 600;
+      border: 1px solid #3C91E6;;
+      padding: 5px;
+      border-radius: 5px;
+      margin-left: 850px;
+      margin-top: 25px;
+      cursor: pointer;
+    }
+
+    .btndelete{
+      background-color:  #3C91E6; 
+      height: 100px !important;
+
+    }
+  .new{
+    margin-top: -20px;
+    margin-left: 40px;
+  }
+  .neww{
+    margin-top: 10px;
+    margin-left: 5px;
+    
+  }
+.editMessage {
+        background-color: #4caf50; /* Couleur de fond verte */
+        color: #fff; /* Couleur du texte blanche */
+        padding: 10px; /* Rembourrage */
+        margin-bottom: 10px; /* Marge en bas */
+        border-radius: 5px; /* Bord arrondi */
+        margin-right: 30px;
+        margin-left: 50px;
+      }
+.deleteMessage {
+        background-color: #af874c; /* Couleur de fond verte */
+        color: #fff; /* Couleur du texte blanche */
+        padding: 10px; /* Rembourrage */
+        margin-bottom: 10px; /* Marge en bas */
+        border-radius: 5px; /* Bord arrondi */
+        margin-right: 30px;
+        margin-left: 50px;
+      }
+.p-button-help{
+        background-color: #3C91E6; ;
+        margin-left: 20px;
+        
+        margin-top: 25px;
+        height: 50px;
+        width: 190px;
+      }
+ @media screen and (max-width: 968px) {
+
+        .top1 {
+        width: calc(100% - 20px);
+        left: 185px;
+      }
+      .card1{
+        width: calc(100% - 20px);
+        left: 185px;
+
+      }
+    }
+    @media screen and (max-width: 368px) {
+
+      .top1 {
+      width: calc(100% - 70px);
+      left: 185px;
+    }
+  }

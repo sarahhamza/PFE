@@ -1,4 +1,4 @@
-import "./navbar.scss";
+import "./navbarController.scss";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -13,42 +13,36 @@ import axios from "axios";
 const Navbar = () => {
   const [user, setUser] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
           const response = await axios.get("http://localhost:8080/api/auth/user", {
             headers: {
-              Authorization: `Bearer ${token}`,
-            },
+              Authorization: `Bearer ${token}`
+            }
           });
           setUser(response.data);
-
-          // Fetch notifications if user is a femme de menage
-          if (response.data.role === "femme de menage") {
-            const notificationsResponse = await axios.get(`http://localhost:8080/api/notifications/${response.data._id}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            setNotifications(notificationsResponse.data);
-          } else if (response.data.role === "controlleur") {
-            const notificationsResponse = await axios.get("http://localhost:5000/api/notifications", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            setNotifications(notificationsResponse.data);
-          }
         }
       } catch (error) {
-        console.error("Error fetching user data or notifications:", error);
+        console.error("Error fetching user data:", error);
       }
     };
 
-    fetchData();
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/notifications");
+        setNotifications(response.data);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchUser();
+    fetchNotifications();
   }, []);
 
   const { dispatch } = useContext(DarkModeContext);
@@ -66,24 +60,24 @@ const Navbar = () => {
         </div>
       </form>
       <input type="checkbox" id="switch-mode" hidden />
-      <label htmlFor="switch-mode" className="switch-mode" onClick={() => dispatch({ type: "TOGGLE" })}></label>
-
-      {user && (
-        <div className="notification">
-          <NotificationsNoneOutlinedIcon className="icon" />
-          {notifications.length > 0 && (
-            <div className="notifications-dropdown">
+      <label htmlFor="switch-mode" className="switch-mode" onClick={() => dispatch({ type: 'TOGGLE' })}></label>
+      <div className="notification" onClick={() => setShowNotifications(!showNotifications)}>
+        <NotificationsNoneOutlinedIcon className="icon" />
+        <span className="num">{notifications.length}</span>
+        {showNotifications && (
+          <div className="notifications-dropdown">
+            {notifications.length === 0 ? (
+              <p>No notifications</p>
+            ) : (
               <ul>
                 {notifications.map((notification, index) => (
                   <li key={index}>{notification.message}</li>
                 ))}
               </ul>
-            </div>
-          )}
-          <span className="num">{notifications.length}</span>
-        </div>
-      )}
-
+            )}
+          </div>
+        )}
+      </div>
       {user && (
         <a href="#" className="profile">
           <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} className="profile-img" />

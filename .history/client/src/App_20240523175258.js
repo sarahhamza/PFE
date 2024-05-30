@@ -21,7 +21,6 @@ import SignUp from './components/Singup/signup';
 import ListController from './pages/list/ListController';
 import NewHome from './pages/home/NewHome';
 import UserListRooms from './pages/list/UserRoomList';
-import ListControllerRooms from './pages/list/ListControllerRooms';
 //import AdminDashboard from './components/Dashboard/AdminDashboard';
 
 function App() {
@@ -55,7 +54,6 @@ function App() {
           <Route path="/rooms/new" element={isAuthenticated ? <NewRoom title="Add New Room" />: <Navigate to="/login" replace />} />
           <Route path="/user/:userId" element={<Single />} />
           <Route path="/users/update/:userId" element={isAuthenticated ? <Update inputs={userInputs} title="Update User" /> : <Navigate to="/login" replace />} />
-          <Route path="/ControllerRooms" element={isAuthenticated ? <ListControllerRooms /> : <Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -26,8 +26,8 @@ const Navbar = () => {
           });
           setUser(response.data);
 
-          // Fetch notifications if user is a femme de menage
-          if (response.data.role === "femme de menage") {
+          // Fetch notifications if user is a femme de ménage
+          if (response.data.role === "femme de ménage") {
             const notificationsResponse = await axios.get(`http://localhost:8080/api/notifications/${response.data._id}`, {
               headers: {
                 Authorization: `Bearer ${token}`,

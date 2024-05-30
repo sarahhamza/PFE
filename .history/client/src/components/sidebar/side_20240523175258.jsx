@@ -57,15 +57,7 @@ const Sidebar = () => {
       <li>
         <a href="#">
           <i className='bx bxs-group'></i>
-          <span className="text">Controllers</span>
-        </a>
-      </li>
-      </Link>
-      <Link to="/ControllerRooms" style={{ textDecoration: "none" }}>
-      <li >
-        <a href="#">
-          <i className='bx bxs-doughnut-chart'></i>
-          <span className="text">ControllerRooms</span>
+          <span className="text">Controlers</span>
         </a>
       </li>
       </Link>

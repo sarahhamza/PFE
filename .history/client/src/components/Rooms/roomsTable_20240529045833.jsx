@@ -65,7 +65,39 @@ const RoomList = () => {
         console.error("Error fetching user data:", error);
       }
     };
-    
+    const handleImageImport = async (rowData) => {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.onchange = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+  
+          try {
+            console.log(`Room number ${rowData.nbrRoom}`)
+              const formData = new FormData();
+              formData.append('image', file);
+              formData.append('room_number', rowData.nbrRoom);  // Ajout du numéro de la salle
+              // Envoyer l'image au serveur pour traitement
+              const response = await fetch('http://localhost:5000/api/cleanliness', {
+                  method: 'POST',
+                  body: formData
+              });
+  
+              if (!response.ok) {
+                  throw new Error('Échec de l\'importation de l\'image');
+              }
+  
+              const data = await response.json();
+              const cleanlinessPercentage = data.cleanliness_percentage;
+              console.log(`Room number ${rowData.nbrRoom} is ${cleanlinessPercentage}% clean`);
+          } catch (error) {
+              console.error("Erreur lors de l'importation de l'image:", error);
+              // Gérer l'erreur
+          }
+      };
+      fileInput.click();
+  };
   
     
     const fetchRooms = async () => {
@@ -109,14 +141,8 @@ const RoomList = () => {
         if (!file) return;
 
         try {
-            console.log('Selected file:', file); // Log the selected file
-            console.log('Room number:', rowData.nbrRoom); // Log the room number
-
             const formData = new FormData();
             formData.append('image', file);
-            formData.append('room_number', rowData.nbrRoom);  // Ajout du numéro de la salle
-
-            console.log('FormData:', formData); // Log the FormData before sending
 
             // Envoyer l'image au serveur pour traitement
             const response = await fetch('http://localhost:5000/api/cleanliness', {
@@ -129,8 +155,9 @@ const RoomList = () => {
             }
 
             const data = await response.json();
-            const cleanlinessPercentage = data.cleanliness_percentage;
-            console.log(`Room number ${rowData.nbrRoom} is ${cleanlinessPercentage}% clean`);
+        const cleanlinessPercentage = data.cleanliness_percentage;
+                    console.log( cleanlinessPercentage + "%");
+
         } catch (error) {
             console.error("Erreur lors de l'importation de l'image:", error);
             // Gérer l'erreur
