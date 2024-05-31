@@ -20,9 +20,12 @@ import SignUp from './components/Singup/signup';
 //import RoomsTable from './pages/HMRoomsList/HmRoomsList'
 import ListController from './pages/list/ListController';
 import NewHome from './pages/home/NewHome';
+import NewHome2 from './pages/ControlerDashboard/NewHomeC';
+
 import UserListRooms from './pages/list/UserRoomList';
 //import AdminDashboard from './components/Dashboard/AdminDashboard';
 import ResetPassword from './pages/ResetPassword/ReserPassword';
+import UserProfile from './pages/userprofil/userprofil';
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -43,6 +46,8 @@ function App() {
           <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" replace />} />
           <Route path="/login" element={<Log />} />
           <Route path="/newHome" element={<NewHome/>} />
+          <Route path="/newHomeC" element={<NewHome2/>} />
+          <Route path="/profil" element={<UserProfile/>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/users" element={isAuthenticated ? <List /> : <Navigate to="/login" replace />} />
           <Route path="/ListHousemaid" element={isAuthenticated ? <ListHousemaid /> : <Navigate to="/login" replace />} />

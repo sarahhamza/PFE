@@ -10,7 +10,7 @@ const roomSchema = new mongoose.Schema({
     Property: { type: String, required: true },
     image: { type: String },
     archived: { type: Boolean, default: false }
-});
+}, { timestamps: true });
 
 const Room = mongoose.model("room", roomSchema);
 

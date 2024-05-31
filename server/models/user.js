@@ -16,7 +16,8 @@ const userSchema = new mongoose.Schema({
     phone: { type: String }, // New attribute
     address: { type: String }, // New attribute
     country: { type: String } // New attribute
-});
+ 
+} , { timestamps: true });
 
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {

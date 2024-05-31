@@ -21,8 +21,9 @@ const ProfileCard = ({ user }) => {
                 </div>
             </div>
             <div className="profile-card-body">
-                <a href="#">My Profile</a>
-                
+            <Link to="/profil" className="profile-card-link">
+                My Profile
+                </Link>                
                 <Link to="/resetPassword" className="profile-card-link">
                 Reset Password
                 </Link>

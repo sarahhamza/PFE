@@ -46,7 +46,9 @@ function Login() {
               navigate('/newhome');
           } else if (userData.data.role === "femme de menage") {
               navigate('/roomstable');
-          } else {
+          }  else if (userData.data.role === "controlleur") {
+            navigate('/newhomeC');
+          }  else {
               // Handle other roles or scenarios
               console.log("Unknown user role:", userData.data.role);
           }

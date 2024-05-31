@@ -3,23 +3,23 @@ import axios from 'axios';
 
 import './MainContent.css';
 
-const MainContent = () => {
-  const [stats, setStats] = useState({ rooms: 0, housemaids: 0, controllers: 0 });
-  const [recentUsers, setRecentUsers] = useState([]);
+const MainContentC = () => {
+  const [stats, setStats] = useState({ rooms: 0, clean: 0, messy: 0 });
+  const [recentRooms, setRecentRooms] = useState([]);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/users/stats');
+        const response = await axios.get('http://localhost:8080/api/rooms/stats');
         setStats(response.data);
       } catch (error) {
         console.error("Error fetching stats", error);
       }
     };
 
-    fetch('http://localhost:8080/api/users/recent-users')
+    fetch('http://localhost:8080/api/rooms/recent-rooms')
       .then(response => response.json())
-      .then(data => setRecentUsers(data))
+      .then(data => setRecentRooms(data))
       .catch(error => console.error('Error fetching recent users:', error));
     fetchStats();
   }, []);
@@ -49,21 +49,21 @@ const MainContent = () => {
           <i className='bx bxs-calendar-check'></i>
           <span className="text">
             <h3>{stats.rooms}</h3>
-            <p>Rooms</p>
+            <p>Total Rooms</p>
           </span>
         </li>
         <li>
           <i className='bx bxs-group'></i>
           <span className="text">
-            <h3>{stats.controllers}</h3>
-            <p>Controllers</p>
+            <h3>{stats.clean}</h3>
+            <p>Clean Rooms</p>
           </span>
         </li>
         <li>
           <i className='bx bxs-dollar-circle'></i>
           <span className="text">
-            <h3>{stats.housemaids}</h3>
-            <p>Housemaids</p>
+            <h3>{stats.messy}</h3>
+            <p>Messy Rooms</p>
           </span>
         </li>
       </ul>
@@ -71,27 +71,27 @@ const MainContent = () => {
       <div className="table-data">
         <div className="order">
           <div className="head">
-            <h3>Recent Users</h3>
+            <h3>Recent Roomss</h3>
             <i className='bx bx-search'></i>
             <i className='bx bx-filter'></i>
           </div>
           <table>
             <thead>
               <tr>
-                <th>User</th>
+                <th>Room</th>
                 <th>Date Joined</th>
-                <th>Role</th>
+                <th>State</th>
               </tr>
             </thead>
             <tbody>
-            {recentUsers.map(user => (
-                <tr key={user._id}>
+            {recentRooms.map(room => (
+                <tr key={room._id}>
                   <td>
-                  <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
-                    <p>{user.firstName} {user.lastName}</p>
+                  {/* <img src={`http://localhost:8080/uploads/${room.image}`} alt={room.firstName} className="profile-img" /> */}
+                    <p>{room.nbrRoom}</p>
                   </td>
-                  <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-                  <td>{user.role}</td>
+                  <td>{new Date(room.createdAt).toLocaleDateString()}</td>
+                  <td>{room.Property}</td>
                 </tr>
               ))}
             </tbody>
@@ -131,4 +131,4 @@ const MainContent = () => {
   );
 };
 
-export default MainContent;
+export default MainContentC;

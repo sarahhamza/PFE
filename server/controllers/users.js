@@ -93,6 +93,34 @@ router.get("/", async (req, res) => {
   }
 });
 
+//stat
+router.get("/stats", async (req, res) => {
+  try {
+    const roomCount = await Room.countDocuments();
+    const housemaidCount = await User.countDocuments({ role: 'femme de menage' });
+    const controllerCount = await User.countDocuments({ role: 'controlleur' });
+
+    res.status(200).send({
+      rooms: roomCount,
+      housemaids: housemaidCount,
+      controllers: controllerCount
+    });
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+// Route pour les 4 derniers utilisateurs ajoutés
+router.get("/recent-users", async (req, res) => {
+  try {
+    const recentUsers = await User.find({}).sort({ createdAt: -1 }).limit(4);
+    res.status(200).send(recentUsers);
+  } catch (error) {
+    console.error('Error fetching recent users:', error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
 //put user
 router.put("/:userId/accept", async (req, res) => {
   try {
@@ -287,7 +315,6 @@ router.put("/:userId/assign-room/:roomId", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
-
 
 
 

@@ -10,9 +10,11 @@ body {
     padding: 1rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    padding: 20px;
     
 }
 .custom-header {
+  padding: 20px;
   height: 4rem;
   display: flex;
   align-items: center;
@@ -21,6 +23,7 @@ body {
   height: 2.2rem;
   width: 20rem;
   margin-left: 10px;
+  padding: 17px;
 }
 .iconsearch{
   margin-left: 250px !important;
@@ -83,9 +86,11 @@ body {
   }
   .actionButton {
     margin-left: 10px; /* Ajustez la valeur de la marge selon vos préférences */
+
 }
 .card2 .p-datatable-wrapper {
   height: 320px; /* Default height for large screens */
+  padding: 20px;
 }
 .card2 .p-datatable .p-datatable-tbody > tr {
   height: 67px; /* Adjust this value as needed */
