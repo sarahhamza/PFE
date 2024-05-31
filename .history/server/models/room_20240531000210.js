@@ -5,9 +5,17 @@ const roomSchema = new mongoose.Schema({
     nbrRoom: { type: Number, required: true },
     Surface: { type: Number, required: true },
     Categorie: { type: String, required: true },
-    State: { type: String, enum: ['Not cleaned', 'In progress', 'Cleaned'], default: 'Not cleaned' },
+    State: { 
+        type: String, 
+        enum: ['Not cleaned', 'In progress', 'Cleaned'], 
+        default: 'Not cleaned' 
+    },
     User: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
-    Property: { type: String, default: null },
+    Property: { 
+        type: String, 
+        enum: ['Clean', 'Messy'], 
+        default: 'Messy' 
+    },
     image: { type: String },
     archived: { type: Boolean, default: false },
     type: { type: String, enum: ['ToClean', 'ToReclean'], default: 'ToClean' }
@@ -22,7 +30,7 @@ const validate = (data) => {
         Categorie: Joi.string().required().label("Category"),
         State: Joi.string().valid('Not cleaned', 'In progress', 'Cleaned').label("State"),
         User: Joi.string().allow(null, '').label("User"),
-        Property: Joi.string().allow(null, '').label("Property"),
+        Property: Joi.string().valid('Clean', 'Messy').label("Property"),
         image: Joi.string().label("Image").allow(null, ''),
         type: Joi.string().valid('ToClean', 'ToReclean').label("Type")
     });

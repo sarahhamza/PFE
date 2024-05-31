@@ -108,16 +108,18 @@ router.put('/:roomId/image', upload.single('image'), async (req, res) => {
 
     // Mettre à jour le chemin de l'image dans la salle
     room.image = req.file.filename;
+    room.State = 'Cleaned';  // Mettre à jour l'état à "Cleaned"
 
     // Sauvegarder la salle mise à jour
     await room.save();
 
-    res.status(200).send({ message: 'Image updated successfully', room });
+    res.status(200).send({ message: 'Image and state updated successfully', room });
   } catch (error) {
     console.error('Error updating room image:', error);
     res.status(500).send({ message: 'Internal Server Error' });
   }
 });
+
 
 router.put("/:roomId/state", async (req, res) => {
   const { roomId } = req.params;
@@ -156,25 +158,6 @@ router.get("/distribution", async (req, res) => {
   } catch (error) {
     console.error('Error fetching room states distribution:', error);
     res.status(500).send({ message: "Internal Server Error" });
-  }
-});
-router.put("/:roomId/state", async (req, res) => {
-  const { roomId } = req.params;
-  const { State } = req.body;
-
-  try {
-    const room = await Room.findById(roomId);
-    if (!room) {
-      return res.status(404).json({ message: "Room not found" });
-    }
-
-    room.State = State;
-    await room.save();
-
-    res.status(200).json({ message: "Room state updated successfully", room });
-  } catch (error) {
-    console.error("Error updating room state:", error);
-    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 

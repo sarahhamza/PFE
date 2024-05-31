@@ -136,28 +136,21 @@ const RoomList = () => {
   
         console.log('Image enregistrée avec succès dans la table rooms');
   
-        // Mettre à jour l'état de la salle à "Cleaned"
-        const updateStateResponse = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/state`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ State: 'Cleaned' })
-        });
+        // Update the room state to "Cleaned"
+        const updateStateResponse = await axios.put(`http://localhost:8080/api/rooms/${rowData._id}/state`, { State: 'Cleaned' });
   
-        if (!updateStateResponse.ok) {
-          throw new Error('Échec de la mise à jour de l\'état de la salle');
+        if (updateStateResponse.status === 200) {
+          console.log(`Room number ${rowData.nbrRoom} state updated to Cleaned`);
+  
+          // Update the state locally to reflect the changes
+          setRooms(prevRooms =>
+            prevRooms.map(room =>
+              room._id === rowData._id ? { ...room, State: 'Cleaned' } : room
+            )
+          );
+        } else {
+          throw new Error('Échec de la mise à jour de l\'état de la chambre');
         }
-  
-        console.log('État de la salle mis à jour avec succès');
-  
-        // Mettre à jour l'état localement dans le composant
-        setRooms(prevRooms =>
-          prevRooms.map(room =>
-            room._id === rowData._id ? { ...room, State: 'Cleaned' } : room
-          )
-        );
       } catch (error) {
         console.error("Erreur lors de l'importation de l'image:", error);
       }

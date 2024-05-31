@@ -158,25 +158,6 @@ router.get("/distribution", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
-router.put("/:roomId/state", async (req, res) => {
-  const { roomId } = req.params;
-  const { State } = req.body;
-
-  try {
-    const room = await Room.findById(roomId);
-    if (!room) {
-      return res.status(404).json({ message: "Room not found" });
-    }
-
-    room.State = State;
-    await room.save();
-
-    res.status(200).json({ message: "Room state updated successfully", room });
-  } catch (error) {
-    console.error("Error updating room state:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
 
 
 module.exports = router;

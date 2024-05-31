@@ -9,7 +9,9 @@ const NewRoom = () => {
         nbrRoom: "",
         Surface: "",
         Categorie: "",
-        User: ""
+        State: "",
+        User: "",
+        Property: ""
     });
 
     const [error, setError] = useState("");
@@ -144,7 +146,18 @@ const NewRoom = () => {
                                 />
                             </div>
 
-                            
+                            <div className="formInput">
+                                <label htmlFor="State">State</label>
+                                <input
+                                    type="text"
+                                    id="State"
+                                    name="State"
+                                    placeholder="State"
+                                    onChange={handleChange}
+                                    value={data.State}
+                                    required
+                                />
+                            </div>
                             <div className="formInput">
                                 <label htmlFor="User">User</label>
                                 <select
@@ -152,12 +165,26 @@ const NewRoom = () => {
                                     name="User"
                                     onChange={handleChange}
                                     value={data.User}
+                                    required
                                 >
                                     <option value="">Select User</option>
                                     {users.map((user) => (
                                         <option key={user._id} value={user._id}>{user.email}</option>
                                     ))}
                                 </select>
+                            </div>
+
+                            <div className="formInput">
+                                <label htmlFor="Property">Property</label>
+                                <input
+                                    type="text"
+                                    id="Property"
+                                    name="Property"
+                                    placeholder="Property"
+                                    onChange={handleChange}
+                                    value={data.Property}
+                                    required
+                                />
                             </div>
 
                             {successMessage && (

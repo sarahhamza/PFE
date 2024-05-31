@@ -64,7 +64,7 @@ const RoomList = () => {
       }
     };
 
-     const fetchRooms = async () => {
+    const fetchRooms = async () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
@@ -75,7 +75,7 @@ const RoomList = () => {
           });
 
           const filteredRooms = response.data.filter(room => 
-            room.State === "Not cleaned" || room.State === "In progress"
+            room.type === "ToClean" 
           );
 
           setRooms(filteredRooms);
@@ -103,68 +103,44 @@ const RoomList = () => {
     fileInput.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-  
+
       try {
         const formData = new FormData();
         formData.append('image', file);
         formData.append('room_number', rowData.nbrRoom);
-  
+
         const response = await fetch('http://localhost:5000/api/cleanliness', {
           method: 'POST',
           body: formData
         });
-  
+
         if (!response.ok) {
           throw new Error('Échec de l\'importation de l\'image');
         }
-  
+
         const data = await response.json();
         const cleanlinessPercentage = data.cleanliness_percentage;
         console.log(`Room number ${rowData.nbrRoom} is ${cleanlinessPercentage}% clean`);
-  
+
         const imageFormData = new FormData();
         imageFormData.append('image', file);
-  
+
         const saveImageResponse = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/image`, {
           method: 'PUT',
           body: imageFormData
         });
-  
+
         if (!saveImageResponse.ok) {
           throw new Error('Échec de l\'enregistrement de l\'image dans la table rooms');
         }
-  
+
         console.log('Image enregistrée avec succès dans la table rooms');
-  
-        // Mettre à jour l'état de la salle à "Cleaned"
-        const updateStateResponse = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/state`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ State: 'Cleaned' })
-        });
-  
-        if (!updateStateResponse.ok) {
-          throw new Error('Échec de la mise à jour de l\'état de la salle');
-        }
-  
-        console.log('État de la salle mis à jour avec succès');
-  
-        // Mettre à jour l'état localement dans le composant
-        setRooms(prevRooms =>
-          prevRooms.map(room =>
-            room._id === rowData._id ? { ...room, State: 'Cleaned' } : room
-          )
-        );
       } catch (error) {
         console.error("Erreur lors de l'importation de l'image:", error);
       }
     };
     fileInput.click();
   };
-  
 
   const handleVoiceReader = () => {
     const message = "Hello, on the right you have rooms to clean, on the left you have rooms to reclean. When you finish cleaning, please put an image.";
@@ -236,7 +212,7 @@ const RoomList = () => {
               <td>{room.nbrRoom}</td>
               <td>
                 <span className={`status ${getStatusClass(room.State)}`}>
-                  {room.State}
+                  {room.state}
                 </span>
               </td>
               <td>

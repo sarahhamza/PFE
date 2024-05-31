@@ -1,35 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  RadialLinearScale,
-  Filler
-} from 'chart.js';
 import './MainContent.css';
-
-// Register the required components
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  RadialLinearScale,
-  Filler
-);
 
 const MainContent = () => {
   const [distribution, setDistribution] = useState({
@@ -41,7 +12,7 @@ const MainContent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/rooms/distribution');
+        const response = await fetch('/api/rooms/distribution');
         const data = await response.json();
         setDistribution(data);
       } catch (error) {
@@ -165,10 +136,40 @@ const MainContent = () => {
             </tbody>
           </table>
         </div>
-        <div className="chart-container">
-          <h3>Room States Distribution</h3>
-          <Doughnut data={data} />
+        <div className="todo">
+          <div className="head">
+            <h3>Todos</h3>
+            <i className='bx bx-plus' ></i>
+            <i className='bx bx-filter' ></i>
+          </div>
+          <ul className="todo-list">
+            <li className="completed">
+              <p>Todo List</p>
+              <i className='bx bx-dots-vertical-rounded' ></i>
+            </li>
+            <li className="completed">
+              <p>Todo List</p>
+              <i className='bx bx-dots-vertical-rounded' ></i>
+            </li>
+            <li className="not-completed">
+              <p>Todo List</p>
+              <i className='bx bx-dots-vertical-rounded' ></i>
+            </li>
+            <li className="completed">
+              <p>Todo List</p>
+              <i className='bx bx-dots-vertical-rounded' ></i>
+            </li>
+            <li className="not-completed">
+              <p>Todo List</p>
+              <i className='bx bx-dots-vertical-rounded' ></i>
+            </li>
+          </ul>
         </div>
+      </div>
+
+      <div className="chart-container">
+        <h3>Room States Distribution</h3>
+        <Doughnut data={data} />
       </div>
     </main>
   );

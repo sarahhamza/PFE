@@ -16,28 +16,27 @@ const upload = multer({ storage: storage });
 
 router.post("/", upload.single('image'), async (req, res) => {
   try {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send({ message: error.details[0].message });
+      const { error } = validate(req.body);
+      if (error) return res.status(400).send({ message: error.details[0].message });
 
-    const room = new Room({
-      nbrRoom: req.body.nbrRoom,
-      Surface: req.body.Surface,
-      Categorie: req.body.Categorie,
-      State: req.body.State || 'Not cleaned',
-      User: req.body.User || null,
-      Property: req.body.Property || null,
-      image: req.file ? req.file.filename : null,
-      type: req.body.type || 'ToClean'
-    });
+      const room = new Room({
+          nbrRoom: req.body.nbrRoom,
+          Surface: req.body.Surface,
+          Categorie: req.body.Categorie,
+          State: req.body.State || 'Not cleaned',
+          User: req.body.User || null,
+          Property: req.body.Property || 'Messy',
+          image: req.file ? req.file.filename : null,
+          type: req.body.type || 'ToClean'
+      });
 
-    await room.save();
-    res.status(201).send({ message: "Room created successfully" });
+      await room.save();
+      res.status(201).send({ message: "Room created successfully" });
   } catch (error) {
-    console.error('Error saving room to database:', error);
-    res.status(500).send({ message: "Internal Server Error" });
+      console.error('Error saving room to database:', error);
+      res.status(500).send({ message: "Internal Server Error" });
   }
 });
-
 
 router.get("/", async (req, res) => {
   try {
@@ -140,43 +139,5 @@ router.put("/:roomId/state", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-router.get("/distribution", async (req, res) => {
-  try {
-    const roomStates = await Room.aggregate([
-      { $match: { archived: { $ne: true } } },
-      { $group: { _id: "$State", count: { $sum: 1 } } }
-    ]);
-
-    const distribution = roomStates.reduce((acc, state) => {
-      acc[state._id] = state.count;
-      return acc;
-    }, { "Not cleaned": 0, "In progress": 0, "Cleaned": 0 });
-
-    res.status(200).send(distribution);
-  } catch (error) {
-    console.error('Error fetching room states distribution:', error);
-    res.status(500).send({ message: "Internal Server Error" });
-  }
-});
-router.put("/:roomId/state", async (req, res) => {
-  const { roomId } = req.params;
-  const { State } = req.body;
-
-  try {
-    const room = await Room.findById(roomId);
-    if (!room) {
-      return res.status(404).json({ message: "Room not found" });
-    }
-
-    room.State = State;
-    await room.save();
-
-    res.status(200).json({ message: "Room state updated successfully", room });
-  } catch (error) {
-    console.error("Error updating room state:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
 
 module.exports = router;

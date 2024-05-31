@@ -80,11 +80,11 @@ export default function ControllerRooms() {
 
     const getSeverity = (value) => {
         switch (value) {
-            case 'Cleaned':
+            case 'Clean':
                 return 'success';
-            case 'In progress':
+            case 'In Progress':
                 return 'warning';
-            case 'Not cleaned':
+            case 'Messy':
                 return 'danger';
             default:
                 return null;

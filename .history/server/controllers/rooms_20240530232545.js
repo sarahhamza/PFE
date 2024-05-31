@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { Room, validate } = require("../models/room");
 const multer = require('multer');
 const path = require('path');
+const xlsx = require("xlsx");
+const { getIo } = require("../controllers/socket");
 
 const storage = multer.diskStorage({
   destination: 'uploads/',
@@ -23,11 +25,10 @@ router.post("/", upload.single('image'), async (req, res) => {
       nbrRoom: req.body.nbrRoom,
       Surface: req.body.Surface,
       Categorie: req.body.Categorie,
-      State: req.body.State || 'Not cleaned',
+      State: req.body.State,
       User: req.body.User || null,
-      Property: req.body.Property || null,
+      Property: req.body.Property,
       image: req.file ? req.file.filename : null,
-      type: req.body.type || 'ToClean'
     });
 
     await room.save();
@@ -48,6 +49,7 @@ router.get("/", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
 
 router.put("/:roomId/edit", async (req, res) => {
   try {
@@ -74,7 +76,42 @@ router.delete("/:roomId", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+router.post("/", upload.single('image'), async (req, res) => {
+  try {
+      const { error } = validate(req.body);
+      if (error) return res.status(400).send({ message: error.details[0].message });
 
+      const room = new Room({
+          nbrRoom: req.body.nbrRoom,
+          Surface: req.body.Surface,
+          Categorie: req.body.Categorie,
+          State: req.body.State,
+          User: req.body.User || null,
+          Property: req.body.Property,
+          image: req.file ? req.file.filename : null,
+          type: req.body.type || 'ToClean' // Add this line
+      });
+
+      await room.save();
+      res.status(201).send({ message: "Room created successfully" });
+  } catch (error) {
+      console.error('Error saving room to database:', error);
+      res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+router.put("/:roomId/edit", async (req, res) => {
+  try {
+      const room = await Room.findByIdAndUpdate(req.params.roomId, req.body, { new: true });
+      if (!room) {
+          return res.status(404).send({ message: "Room not found" });
+      }
+      res.status(200).send({ message: "Room updated successfully" });
+  } catch (error) {
+      console.error('Error updating room:', error);
+      res.status(500).send({ message: "Internal Server Error" });
+  }
+});
 router.get("/available", async (req, res) => {
   try {
     const availableRooms = await Room.find({ User: null });
@@ -84,6 +121,7 @@ router.get("/available", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
 
 router.put('/:roomId/image', upload.single('image'), async (req, res) => {
   const { roomId } = req.params;
@@ -140,43 +178,4 @@ router.put("/:roomId/state", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-router.get("/distribution", async (req, res) => {
-  try {
-    const roomStates = await Room.aggregate([
-      { $match: { archived: { $ne: true } } },
-      { $group: { _id: "$State", count: { $sum: 1 } } }
-    ]);
-
-    const distribution = roomStates.reduce((acc, state) => {
-      acc[state._id] = state.count;
-      return acc;
-    }, { "Not cleaned": 0, "In progress": 0, "Cleaned": 0 });
-
-    res.status(200).send(distribution);
-  } catch (error) {
-    console.error('Error fetching room states distribution:', error);
-    res.status(500).send({ message: "Internal Server Error" });
-  }
-});
-router.put("/:roomId/state", async (req, res) => {
-  const { roomId } = req.params;
-  const { State } = req.body;
-
-  try {
-    const room = await Room.findById(roomId);
-    if (!room) {
-      return res.status(404).json({ message: "Room not found" });
-    }
-
-    room.State = State;
-    await room.save();
-
-    res.status(200).json({ message: "Room state updated successfully", room });
-  } catch (error) {
-    console.error("Error updating room state:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
-
 module.exports = router;

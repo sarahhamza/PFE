@@ -27,11 +27,11 @@ export default function ControllerRooms() {
         const socket = io('http://localhost:5000');  // Assurez-vous que le port correspond à celui de votre backend
         socket.on('cleanliness_result', (data) => {
             console.log('Received cleanliness_result:', data);  // Debugging print
-            if (data.result) {
-                setCleanlinessMessage(data.result);
+            if (data.percentage !== null) {
+                setCleanlinessMessage(`Cleanliness detected: ${data.percentage}%`);
                 setTimeout(() => setCleanlinessMessage(''), 5000);
             } else {
-                console.error("Error: cleanliness result is null");
+                console.error("Error: cleanliness percentage is null");
             }
         });
 
@@ -80,11 +80,11 @@ export default function ControllerRooms() {
 
     const getSeverity = (value) => {
         switch (value) {
-            case 'Cleaned':
+            case 'Clean':
                 return 'success';
-            case 'In progress':
+            case 'In Progress':
                 return 'warning';
-            case 'Not cleaned':
+            case 'Messy':
                 return 'danger';
             default:
                 return null;

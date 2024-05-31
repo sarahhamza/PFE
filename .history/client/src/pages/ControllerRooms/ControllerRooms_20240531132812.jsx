@@ -12,8 +12,6 @@ import io from 'socket.io-client';
 
 export default function ControllerRooms() {
     const [rooms, setRooms] = useState([]);
-    const [editMessage, seteditMessage] = useState("");
-    const [deleteMessage, setdeletetMessage] = useState("");
     const [cleanlinessMessage, setCleanlinessMessage] = useState("");
     const [statuses] = useState(['Clean', 'In Progress', 'Messy']);
     const [users, setUsers] = useState([]);
@@ -34,6 +32,7 @@ export default function ControllerRooms() {
                 console.error("Error: cleanliness result is null");
             }
         });
+        
 
         return () => {
             socket.disconnect();
@@ -80,11 +79,11 @@ export default function ControllerRooms() {
 
     const getSeverity = (value) => {
         switch (value) {
-            case 'Cleaned':
+            case 'Clean':
                 return 'success';
-            case 'In progress':
+            case 'In Progress':
                 return 'warning';
-            case 'Not cleaned':
+            case 'Messy':
                 return 'danger';
             default:
                 return null;
