@@ -33,6 +33,7 @@
     "sass": "^1.49.9",
     "socket.io-client": "^4.7.5",
     "tailwindcss": "^3.4.3",
+    "devextreme-react": "23.2-stable",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

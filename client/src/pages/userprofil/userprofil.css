@@ -1,0 +1,141 @@
+.user-profile {
+  width: 98%;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.profile-info h2 {
+  margin: 0;
+}
+
+.profile-id {
+  display: block;
+  color: #777;
+}
+
+.change-password-btn {
+  display: block;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.change-password-btn:hover {
+  background-color: #0056b3;
+}
+
+.profile-details {
+  margin-top: 20px;
+}
+
+.profile-section {
+  margin-bottom: 20px;
+}
+
+.profile-section h3 {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.profile-fields {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.field-group {
+  flex: 0 0 50%; /* Each field-group takes half of the container width */
+  margin-bottom: 10px;
+}
+
+.field-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.field-group input {
+  width: calc(100% - 10px); /* Adjust input width to fit within field-group */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #dddddd22;
+}
+
+.profile-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.cancel-btn,
+.save-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.cancel-btn:hover,
+.save-btn:hover {
+  background-color: #0056b3;
+}
+
+.cancel-btn:disabled,
+.save-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.button-container {
+  display: flex;
+  align-items: flex-start; /* Align items to the start of the flex container */
+  justify-content: flex-end; /* Align items to the end of the flex container */
+  margin-bottom: 10px; /* Add some space between buttons and other content */
+  margin-left: 600px;
+}
+
+.button-container button {
+  margin-left: 10px; /* Add space between buttons */
+}
+@media screen and (max-width: 760px) {
+
+  .button-container {
+    margin-left: 20px;
+  }
+}
+@media screen and (max-width: 1208px) {
+
+  .button-container {
+    margin-left: 60px;
+  }
+}
+
+

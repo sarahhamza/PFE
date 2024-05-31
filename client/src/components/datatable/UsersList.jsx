@@ -148,7 +148,7 @@ export default function UserList() {
             <div className="card2">
                 {acceptMessage && <div className="acceptMessage">{acceptMessage}</div>}
                 {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
-                <DataTable value={users} paginator rows={5} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
+                <DataTable value={users} paginator rows={4} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
                     selection={selectedUser} onSelectionChange={(e) => setSelectedUser(e.value)} selectionMode="single" dataKey="_id"
                     stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '40rem'}}>
                     <Column header="Image" body={imageBodyTemplate} style={{ width: '10%' }} ></Column>

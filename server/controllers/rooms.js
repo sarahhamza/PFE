@@ -48,6 +48,33 @@ router.get("/", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+//stat
+router.get("/stats", async (req, res) => {
+  try {
+    const roomCount = await Room.countDocuments();
+    const cleanCount = await Room.countDocuments({ Property: 'Clean' });
+    const messyCount = await Room.countDocuments({ Property: 'Messy' });
+
+    res.status(200).send({
+      rooms: roomCount,
+      clean: cleanCount,
+      messy: messyCount
+    });
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+// Route pour les 4 derniers utilisateurs ajoutés
+router.get("/recent-rooms", async (req, res) => {
+  try {
+    const recentRooms = await Room.find({}).sort({ createdAt: -1 }).limit(4);
+    res.status(200).send(recentRooms);
+  } catch (error) {
+    console.error('Error fetching recent users:', error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
 
 router.put("/:roomId/edit", async (req, res) => {
   try {

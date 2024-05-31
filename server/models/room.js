@@ -11,7 +11,7 @@ const roomSchema = new mongoose.Schema({
     image: { type: String },
     archived: { type: Boolean, default: false },
     type: { type: String, enum: ['ToClean', 'ToReclean'], default: 'ToClean' }
-});
+}, { timestamps: true });
 
 const Room = mongoose.model("Room", roomSchema);
 
