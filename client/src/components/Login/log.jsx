@@ -103,12 +103,10 @@ function Login() {
                   </form>
                   <div className="text-center">
     
-                    <p>or sign up with:</p>
-    
-                    <Link to="/signup" style={{ textDecoration: "none" , marginBottom:"-10px" }}>
-                       <p >Sign Up</p>
+                    <p  style={{ marginBottom:"10px" }}>or sign up here:</p>
+                    <Link to="/signup" style={{ textDecoration: "none", color:"grey" , marginBottom:"10px" }}>
+                       <p style={{ textDecoration: "none" , marginBottom:"10px" }} >Sign Up</p>
                     </Link>
-    
                   </div>
     
                 </MDBCardBody>

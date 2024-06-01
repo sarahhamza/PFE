@@ -57,7 +57,6 @@ const Navbar = () => {
     return (
         <nav>
             <i className="bx bx-menu"></i>
-            <a href="#" className="nav-link">Categories</a>
             <form action="#">
                 <div className="form-input">
                     <input type="search" placeholder="Search..." />
@@ -76,7 +75,7 @@ const Navbar = () => {
                         <div className="notifications-dropdown">
                             <ul>
                                 {notifications.map((notification, index) => (
-                                    <li key={index}>{notification.message}</li>
+                                    <li key={index}>{notification.message }</li>
                                 ))}
                             </ul>
                         </div>

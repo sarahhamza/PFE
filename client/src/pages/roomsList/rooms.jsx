@@ -134,15 +134,12 @@ export default function RowEditingDemo() {
 
     const getSeverity = (value) => {
         switch (value) {
-            case 'Clean':
+            case 'Cleaned':
                 return 'success';
-
-            case 'In Progress':
+            case 'In progress':
                 return 'warning';
-
-            case 'Messy':
+            case 'Not cleaned':
                 return 'danger';
-
             default:
                 return null;
         }
@@ -250,7 +247,7 @@ export default function RowEditingDemo() {
                     <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
                     
                     <Column style={{ width: '10%' }} body={(rowData) => (
-                        <Button  className="btndelete" icon={<BsXLg className="btndelete" />} onClick={() => archiveRoom(rowData)} />
+                        <Button  className="btndelete1" icon={<BsXLg className="btndelete1" />} onClick={() => archiveRoom(rowData)} />
                     )} />
                 </DataTable>
             </div>

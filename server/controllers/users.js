@@ -70,7 +70,13 @@ router.post("/", upload.single('image'), async (req, res) => {
       rooms: req.body.rooms, // Add the rooms field
       phone: req.body.phone, // New field
       address: req.body.address, // New field
-      country: req.body.country // New field
+      country: req.body.country, // New field
+      gender : req.body.gender,
+      postalcode: req.body.postalcode,
+      cin: req.body.cin,
+      birthdate: req.body.birthdate
+
+
     });
 
     await newUser.save();
@@ -189,16 +195,21 @@ router.get("/:userId", async (req, res) => {
   }
 });
 
-router.put("/:userId", upload.single('image'), async (req, res) => {
+router.put('/:userId', upload.single('image'), async (req, res) => {
   try {
     const { userId } = req.params;
-    const userData = req.body;
+    let userData = req.body;
 
     if (req.file) {
       userData.image = req.file.filename;
     }
 
-    console.log("Updating user with data:", userData);
+    // Ensure rooms field is handled correctly
+    if (Array.isArray(userData.rooms)) {
+      userData.rooms = userData.rooms.filter(room => room); // Remove empty values
+    } else if (typeof userData.rooms === 'string' && !userData.rooms) {
+      delete userData.rooms; // Remove if it's an empty string
+    }
 
     const updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
 
@@ -250,7 +261,10 @@ router.post("/import", upload.single('file'), async (req, res) => {
         phone: item.phone, // Add phone field
         address: item.address, // Add address field
         country: item.country, // Add country field
-        // Add more fields as needed
+        gender : item.gender,
+        postalcode: item.postalcode,
+        cin: item.cin,
+        birthdate: item.birthdate,
       });
 
       // Hash the password
@@ -268,7 +282,11 @@ router.post("/import", upload.single('file'), async (req, res) => {
         image: item.image,
         phone: item.phone, // Add phone field
         address: item.address, // Add address field
-        country: item.country, // Add country field
+        country: item.country,
+        gender : item.gender,
+        postalcode: item.postalcode,
+        cin: item.cin,
+        birthdate: item.birthdate
       });
 
       // Save the user to the database

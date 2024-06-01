@@ -129,8 +129,8 @@ export default function UserList() {
     const renderActions = (rowData) => {
         return (
             <div>
-                <button onClick={() => handleAccept(rowData._id)} className="p-button p-button-success p-button-rounded p-mr-2"><BiSolidUserCheck /></button>
-                <button onClick={() => handleArchiveUser(rowData)} className="p-button p-button-danger p-button-rounded actionButton"><FaUserXmark /></button>
+                <button onClick={() => handleAccept(rowData._id)} className=" actionButton1 "><BiSolidUserCheck className='centericon1'/></button>
+                <button onClick={() => handleArchiveUser(rowData)} className="  actionButton"><FaUserXmark className='centericon2'/></button>
             </div>
         );
     };

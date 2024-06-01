@@ -51,29 +51,49 @@ const UserProfile = () => {
   };
 
   const handleSaveClick = async () => {
-    // Implement save functionality here
-    setIsSaveEnabled(false);
-    setIsModified(false);
-    setUser(editedUser);
-
-    // Upload the image file if it's selected
-    if (imageFile) {
-      const formData = new FormData();
-      formData.append('image', imageFile);
-
-      try {
-        const token = localStorage.getItem("token");
-        await axios.post("http://localhost:8080/api/auth/upload", formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-      } catch (error) {
-        console.error("Error uploading image:", error);
+    try {
+      const token = localStorage.getItem("token");
+      const userId = user._id;
+  
+      if (!userId) {
+        throw new Error('User ID is not defined');
       }
+  
+      const cleanedData = { ...editedUser };
+  
+      // Remove empty or null values that should not be sent
+      Object.keys(cleanedData).forEach(key => {
+        if (cleanedData[key] === '' || cleanedData[key] === null) {
+          delete cleanedData[key];
+        }
+      });
+  
+      // Append the image file if selected
+      if (imageFile) {
+        cleanedData.image = imageFile;
+      }
+  
+      const formData = new FormData();
+      for (const key in cleanedData) {
+        formData.append(key, cleanedData[key]);
+      }
+  
+      await axios.put(`http://localhost:8080/api/users/${userId}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+  
+      setIsSaveEnabled(false);
+      setIsModified(false);
+      setUser(editedUser);
+      alert("profile modified successfully")
+    } catch (error) {
+      console.error("Error saving user data:", error);
     }
   };
+  
 
   const handleCancelClick = () => {
     // Reset editedUser state to user state
@@ -92,9 +112,10 @@ const UserProfile = () => {
           <div className="user-profile">
             <div className="profile-header">
               <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
+              
               <div className="profile-info">
                 <h2>{user.firstName} {user.lastName}</h2>
-                <span className="profile-id">ID: {user._id}</span>
+                <span className="profile-id">ID: {user.cin}</span>
                 <button className="change-password-btn">Change Password</button>
               </div>
               <div className="button-container">
@@ -105,6 +126,10 @@ const UserProfile = () => {
             <div className="profile-details">
               <div className="profile-section">
                 <h3>Basic Info</h3>
+                <div className="field-group">
+                    <label>Profile Image:</label>
+                    <input type="file" accept="image/*" onChange={handleImageChange} />
+                  </div>
                 <div className="profile-fields">
                   <div className="field-group">
                     <label>First Name:</label>
@@ -115,25 +140,14 @@ const UserProfile = () => {
                     <input type="text" name="lastName" value={editedUser.lastName} onChange={handleInputChange} />
                   </div>
                   <div className="field-group">
-                    <label>Department:</label>
-                    <input type="text" name="department" value={editedUser.department} onChange={handleInputChange} />
-                  </div>
-                  <div className="field-group">
-                    <label>Position:</label>
-                    <input type="text" name="position" value={editedUser.position} onChange={handleInputChange} />
-                  </div>
-                  <div className="field-group">
-                    <label>Hired Date:</label>
-                    <input type="text" name="hiredDate" value={editedUser.hiredDate} onChange={handleInputChange} />
+                    <label>Gender:</label>
+                    <input type="text" name="department" value={editedUser.gender} onChange={handleInputChange} />
                   </div>
                   <div className="field-group">
                     <label>Birth Date:</label>
-                    <input type="text" name="birthDate" value={editedUser.birthDate} onChange={handleInputChange} />
+                    <input type="text" name="birthdate" value={editedUser.birthdate} onChange={handleInputChange} />
                   </div>
-                  <div className="field-group">
-                    <label>Profile Image:</label>
-                    <input type="file" accept="image/*" onChange={handleImageChange} />
-                  </div>
+                 
                 </div>
               </div>
             </div>
@@ -146,12 +160,12 @@ const UserProfile = () => {
                     <input type="text" name="address" value={editedUser.address} onChange={handleInputChange} />
                   </div>
                   <div className="field-group">
-                    <label>City:</label>
-                    <input type="text" name="city" value={editedUser.city} onChange={handleInputChange} />
-                  </div>
-                  <div className="field-group">
                     <label>Country:</label>
                     <input type="text" name="country" value={editedUser.country} onChange={handleInputChange} />
+                  </div>
+                  <div className="field-group">
+                    <label>Postal code:</label>
+                    <input type="text" name="postalcode" value={editedUser.postalcode} onChange={handleInputChange} />
                   </div>
                 </div>
               </div>

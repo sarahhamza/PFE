@@ -15,7 +15,11 @@ const userSchema = new mongoose.Schema({
     archived: { type: Boolean, default: false },
     phone: { type: String }, // New attribute
     address: { type: String }, // New attribute
-    country: { type: String } // New attribute
+    country: { type: String }, // New attribute
+    gender :{type: String, enum: ['Female', 'Male'], required: true},
+    postalcode:{type: Number},
+    cin:{type: Number},
+    birthdate:{type:Date},
  
 } , { timestamps: true });
 
@@ -39,7 +43,12 @@ const validate = (data) => {
         image: Joi.string().label("Image").allow(null, ''),
         phone: Joi.string().label("Phone").allow(null, ''), // New validation
         address: Joi.string().label("Address").allow(null, ''), // New validation
-        country: Joi.string().label("Country").allow(null, '') // New validation
+        country: Joi.string().label("Country").allow(null, '') ,// New validation
+        gender: Joi.string().label("Gender").allow(null, '') ,// New validation
+        cin: Joi.number().label("CIN").allow(null, ''),
+        postalcode: Joi.number().label("Postal Code").allow(null, ''),
+        birthdate: Joi.string().label("Birth Date").allow(null, '')
+
     });
     return schema.validate(data);
 };

@@ -6,7 +6,8 @@ import { AiOutlineCamera } from 'react-icons/ai';
 import { FaVolumeUp } from 'react-icons/fa';
 
 const RoomList = () => {
-  const [rooms, setRooms] = useState([]);
+  const [toCleanRooms, setToCleanRooms] = useState([]);
+  const [toRecleanRooms, setToRecleanRooms] = useState([]);
   const [user, setUser] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
@@ -64,7 +65,7 @@ const RoomList = () => {
       }
     };
 
-     const fetchRooms = async () => {
+    const fetchRooms = async () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
@@ -74,11 +75,15 @@ const RoomList = () => {
             }
           });
 
-          const filteredRooms = response.data.filter(room => 
-            room.State === "Not cleaned" || room.State === "In progress"
+          const toClean = response.data.filter(room =>
+            (room.State === "Not cleaned" || room.State === "In progress") && room.type === "ToClean"
+          );
+          const toReclean = response.data.filter(room =>
+            (room.State === "Not cleaned" || room.State === "In progress") && room.type === "ToReclean"
           );
 
-          setRooms(filteredRooms);
+          setToCleanRooms(toClean);
+          setToRecleanRooms(toReclean);
         }
       } catch (error) {
         console.error("Error fetching room data:", error);
@@ -103,40 +108,39 @@ const RoomList = () => {
     fileInput.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-  
+
       try {
         const formData = new FormData();
         formData.append('image', file);
         formData.append('room_number', rowData.nbrRoom);
-  
+
         const response = await fetch('http://localhost:5000/api/cleanliness', {
           method: 'POST',
           body: formData
         });
-  
+
         if (!response.ok) {
           throw new Error('Échec de l\'importation de l\'image');
         }
-  
+
         const data = await response.json();
         const cleanlinessPercentage = data.cleanliness_percentage;
         console.log(`Room number ${rowData.nbrRoom} is ${cleanlinessPercentage}% clean`);
-  
+
         const imageFormData = new FormData();
         imageFormData.append('image', file);
-  
+
         const saveImageResponse = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/image`, {
           method: 'PUT',
           body: imageFormData
         });
-  
+
         if (!saveImageResponse.ok) {
           throw new Error('Échec de l\'enregistrement de l\'image dans la table rooms');
         }
-  
+
         console.log('Image enregistrée avec succès dans la table rooms');
-  
-        // Mettre à jour l'état de la salle à "Cleaned"
+
         const updateStateResponse = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/state`, {
           method: 'PUT',
           headers: {
@@ -145,15 +149,19 @@ const RoomList = () => {
           },
           body: JSON.stringify({ State: 'Cleaned' })
         });
-  
+
         if (!updateStateResponse.ok) {
           throw new Error('Échec de la mise à jour de l\'état de la salle');
         }
-  
+
         console.log('État de la salle mis à jour avec succès');
-  
-        // Mettre à jour l'état localement dans le composant
-        setRooms(prevRooms =>
+
+        setToCleanRooms(prevRooms =>
+          prevRooms.map(room =>
+            room._id === rowData._id ? { ...room, State: 'Cleaned' } : room
+          )
+        );
+        setToRecleanRooms(prevRooms =>
           prevRooms.map(room =>
             room._id === rowData._id ? { ...room, State: 'Cleaned' } : room
           )
@@ -164,10 +172,9 @@ const RoomList = () => {
     };
     fileInput.click();
   };
-  
 
   const handleVoiceReader = () => {
-    const message = "Hello, on the right you have rooms to clean, on the left you have rooms to reclean. When you finish cleaning, please put an image.";
+    const message = "Hello, on the left you have rooms to clean, on the right you have rooms to reclean. When you finish cleaning, please put an image.";
     const speech = new SpeechSynthesisUtterance(message);
     speech.lang = 'en-US';
     window.speechSynthesis.speak(speech);
@@ -197,9 +204,14 @@ const RoomList = () => {
         });
 
         if (response.status === 200) {
-          setRooms(prevRooms =>
+          setToCleanRooms(prevRooms =>
             prevRooms.map(room =>
-              room._id === roomId ? { ...room, state: 'In progress' } : room
+              room._id === roomId ? { ...room, State: 'In progress' } : room
+            )
+          );
+          setToRecleanRooms(prevRooms =>
+            prevRooms.map(room =>
+              room._id === roomId ? { ...room, State: 'In progress' } : room
             )
           );
         }
@@ -222,30 +234,42 @@ const RoomList = () => {
           <FaVolumeUp size={24} />
         </button>
       </div>
-      <table className="room-list-table">
-        <thead>
-          <tr>
-            <th>Room Number</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rooms.map((room) => (
-            <tr key={room._id} onClick={() => handleRowClick(room._id)}>
-              <td>{room.nbrRoom}</td>
-              <td>
+      <div className="room-lists">
+        <div className="room-cards-container">
+          <h2>Rooms to Clean</h2>
+          {toCleanRooms.map((room) => (
+            <div key={room._id} className="room-card-clean" onClick={() => handleRowClick(room._id)}>
+              <div className="room-card-header">
+                <h3>Room {room.nbrRoom}</h3>
                 <span className={`status ${getStatusClass(room.State)}`}>
                   {room.State}
                 </span>
-              </td>
-              <td>
-                <button className='button' icon={<AiOutlineCamera />} onClick={(e) => { e.stopPropagation(); handleImageImport(room); }}>Import</button>
-              </td>
-            </tr>
+              </div>
+              <button className='button' onClick={(e) => { e.stopPropagation(); handleImageImport(room); }}>
+                <AiOutlineCamera size={24} />
+                Import
+              </button>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+        <div className="room-cards-container">
+          <h2>Rooms to Reclean</h2>
+          {toRecleanRooms.map((room) => (
+            <div key={room._id} className="room-card-reclean" onClick={() => handleRowClick(room._id)}>
+              <div className="room-card-header">
+                <h3>Room {room.nbrRoom}</h3>
+                <span className={`status ${getStatusClass(room.State)}`}>
+                  {room.State}
+                </span>
+              </div>
+              <button className='button' onClick={(e) => { e.stopPropagation(); handleImageImport(room); }}>
+                <AiOutlineCamera size={24} />
+                Import
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

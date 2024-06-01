@@ -133,7 +133,7 @@ router.post("/forgot-password", async (req, res) => {
   
       var mailOptions = {
         from: "sarahm31@gmail.com",
-        to: "thedebugarena@gmail.com",
+        to: oldUser.email,
         subject: "Password Reset",
         text: link,
       };

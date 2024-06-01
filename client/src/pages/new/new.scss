@@ -2,18 +2,19 @@
   width: 100%;
   display: flex;
   margin-left: 20px !important;
+  margin-bottom: 30px !important;
 
   .newContainer {
     flex: 6;
 .top2{
-  height: 100px;
+  height: 70px;
   -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
   box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
   padding: 20px;
   margin: 20px;
   display: flex;
   background-color: white;
-  margin-top: 60px !important;
+  margin-top: 40px !important;
   h1 {
     color: lightgray;
     font-size: 20px;
@@ -27,7 +28,7 @@
       margin: 20px;
       display: flex;
       background-color: white;
-      margin-top: 60px !important;
+      margin-top: 30px !important;
 
       h1 {
         color: lightgray;

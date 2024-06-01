@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
 import axios from "axios";
+import styles from "../../components/Singup/styles.module.css";
 
 const New = () => {
   const [data, setData] = useState({
@@ -14,7 +15,10 @@ const New = () => {
     role: "",
     phone: "", // New field
     address: "", // New field
-    country: "" // New field
+    country: "", // New field
+    gender: "",
+    cin: "",
+    birthdate: ""
   });
 
   const [error, setError] = useState("");
@@ -73,16 +77,28 @@ const New = () => {
               src={image ? URL.createObjectURL(image) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
               alt=""
             />
+
           </div>
+
           <div className="right">
             <form onSubmit={handleSubmit}>
               <div className="formInput">
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
                 </label>
-                <input type="file" id="file" onChange={handleFileChange} />
               </div>
-
+              <div className="formInput">
+                <label htmlFor="CIN">CIN</label>
+                <input
+                  type="text"
+                  id="cin"
+                  name="cin"
+                  placeholder="11447566"
+                  onChange={handleChange}
+                  value={data.cin}
+                  required
+                />
+              </div>
               <div className="formInput">
                 <label htmlFor="firstName">First Name</label>
                 <input
@@ -179,14 +195,34 @@ const New = () => {
                   value={data.country}
                 />
               </div>
-              
+              <div className="formInput">
+                <label htmlFor="birthdate">Birthdate</label>
+                <input
+                  type="date"
+                  id="birthdate"
+                  name="birthdate"
+                  onChange={handleChange}
+                  value={data.birthdate}
+                />
+              </div>
+              <input type="file" id="file" style={{ display: 'none' }} onChange={handleFileChange} />
+                <div className="formInput">
+                  <label htmlFor="gender">Gender</label>
+                  <select id="gender" name="gender" onChange={handleChange} value={data.gender} required>
+                    <option value="Select Gender">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+
+
               <button type="submit" >Send</button>
               {successMessage && (
                 <div className="success_msg">{successMessage}</div>
               )}
               {error && <div className="error_msg">{error}</div>}
             </form>
-           
+
           </div>
         </div>
       </div>

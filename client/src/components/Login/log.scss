@@ -53,12 +53,22 @@
     width: 350px;
   }
   .custom-button {
-    background-color: #3C91E6;; /* Adjust background color */
+    /* Adjust background color */
     color: #fff; /* Adjust text color */
     border: none; /* Remove border */
     border-radius: 5px; /* Add rounded corners */
     padding: 10px 20px; /* Adjust padding */
     cursor: pointer;
+    background-color: #3c91e6  !important; 
+  }
+  .custom-button cursor{
+    /* Adjust background color */
+    color: #fff; /* Adjust text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add rounded corners */
+    padding: 10px 20px; /* Adjust padding */
+    cursor: pointer;
+    background-color: #3c91e6  !important; 
   }
   .error_msg {
     width: 370px;

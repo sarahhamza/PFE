@@ -86,8 +86,33 @@ body {
   }
   .actionButton {
     margin-left: 10px; /* Ajustez la valeur de la marge selon vos préférences */
+    height: 40px;
+    width: 30px;
+    background-color: #f7584d;
+    border: 0px;
+    border-radius: 5px;
+    margin-bottom: 5px !important;
+}
+.actionButton1 {
+  margin-left: 10px !important; /* Ajustez la valeur de la marge selon vos préférences */
+  height: 40px !important;
+  width: 30px !important;
+  background-color: #5ad85e;
+  border: 0px;
+  border-radius: 5px;
 
 }
+.centericon1{
+  width: 25px !important;
+  color: white !important;
+  height: 20px;
+}
+.centericon2{
+  width: 30px !important;
+  color: white !important;
+}
+
+
 .card2 .p-datatable-wrapper {
   height: 320px; /* Default height for large screens */
   padding: 20px;

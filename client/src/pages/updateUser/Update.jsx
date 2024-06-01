@@ -20,7 +20,10 @@ const Update = () => {
     role: "",
     phone: "", // New field
     address: "", // New field
-    country: "" // New field
+    country: "" ,// New field
+    gender: "", // New field
+    cin: "", // New field
+    birthdate: "", // New field
   });
 
   const [error, setError] = useState("");
@@ -144,7 +147,7 @@ const Update = () => {
                   type="text"
                   id="lastName"
                   name="lastName"
-                  placeholder="John Doe"
+                  placeholder="Doe"
                   onChange={handleChange}
                   value={data.lastName}
                   required
@@ -166,31 +169,21 @@ const Update = () => {
 
               <div className="formInput">
                 <label htmlFor="password">Password</label>
-                <div className="passwordContainer">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    placeholder="Enter new password"
-                    onChange={handleChange}
-                    value={data.password}
-                  />
-                  <span className="passwordToggle" onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                  </span>
-                </div>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="password"
+                  onChange={handleChange}
+                  value={data.password}
+                  required
+                />
               </div>
 
               <div className="formInput">
                 <label htmlFor="role">Role</label>
-                <select
-                  id="role"
-                  name="role"
-                  onChange={handleChange}
-                  value={data.role}
-                  required
-                >
-                  <option value="">Select Role</option>
+                <select id="role" name="role" onChange={handleChange} value={data.role} required>
+                  <option value="">Select role</option>
                   <option value="controlleur">Controlleur</option>
                   <option value="femme de menage">Femme de menage</option>
                 </select>
@@ -231,12 +224,49 @@ const Update = () => {
                   value={data.country}
                 />
               </div>
+
+              <div className="formInput">
+                <label htmlFor="gender">Gender</label>
+                <select
+                  id="gender"
+                  name="gender"
+                  onChange={handleChange}
+                  value={data.gender}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="cin">CIN</label>
+                <input
+                  type="text"
+                  id="cin"
+                  name="cin"
+                  placeholder="CIN"
+                  onChange={handleChange}
+                  value={data.cin}
+                />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="birthdate">Birthdate</label>
+                <input
+                  type="date"
+                  id="birthdate"
+                  name="birthdate"
+                  onChange={handleChange}
+                  value={data.birthdate}
+                />
+              </div>
+              
+              <button type="submit">Send</button>
               {successMessage && (
                 <div className="success_msg">{successMessage}</div>
               )}
               {error && <div className="error_msg">{error}</div>}
-
-              <button type="submit">Send</button>
             </form>
           </div>
         </div>

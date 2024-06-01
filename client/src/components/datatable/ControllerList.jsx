@@ -103,11 +103,11 @@ export default function HousemaidList() {
         <Link to={{
         pathname: `/users/update/${rowData._id}`,
         state: { imageUrl: `http://localhost:8080/uploads/${rowData.image}` }
-        }} className="p-button p-button-info p-button-rounded p-ml-2">
+        }} className="p-button p-button-info  p-ml-2">
         Update
         </Link>
 
-        <Link to={`/user/${rowData._id}`} className="p-button p-button-success p-button-rounded p-ml-2">
+        <Link to={`/user/${rowData._id}`} className="p-button p-button-success  p-ml-2">
           View
         </Link>
 
@@ -120,7 +120,7 @@ export default function HousemaidList() {
   return (
     <div>
       <div className="top">
-        <h1>Housemaid List</h1>
+        <h1>Controller List</h1>
         <input
           type="file"
           id="fileInput"
@@ -130,8 +130,8 @@ export default function HousemaidList() {
         <Button
           type="button"
           icon="pi pi-upload"
-          label="Export"
-          className="p-button-help p-button-help1"
+          label="Import"
+          className=" p-button-help1"
           onClick={() => document.getElementById('fileInput').click()}
           data-pr-tooltip="Export Excel Data"
 
