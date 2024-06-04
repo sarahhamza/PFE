@@ -3,6 +3,7 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import { useState, useEffect } from "react"; // Import useEffect hook
 import axios from "axios";
+import { BASE_URL }  from '../../config';
 
 const NewRoom = () => {
     const [data, setData] = useState({
@@ -21,7 +22,7 @@ const NewRoom = () => {
         // Fetch users when the component mounts
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/users");
+                const response = await axios.get(`${BASE_URL}/api/users`);
                 setUsers(response.data); // Set the users state with the fetched data
             } catch (error) {
                 console.error("Error fetching users:", error);
@@ -45,7 +46,7 @@ const NewRoom = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const url = "http://localhost:8080/api/rooms";
+            const url = `${BASE_URL}/api/rooms`;
             const formData = new FormData();
 
             // Append all form data

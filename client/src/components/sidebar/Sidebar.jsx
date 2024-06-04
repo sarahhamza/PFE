@@ -20,8 +20,7 @@ const Sidebar = () => {
     const handleLogout = () => {
         localStorage.removeItem("token");
         navigate('/login');
-        
-      };
+    };
 
     return (
         <div className="sidebar2">
@@ -34,7 +33,6 @@ const Sidebar = () => {
             <div className="center">
                 <ul>
                     <p className="title">MAIN</p>
-                    
                     <Link to="/home" style={{ textDecoration: "none" }}>
                         <li>
                         <DashboardIcon  className="icon" />

@@ -5,6 +5,7 @@ import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUpload
 import { useState } from "react";
 import axios from "axios";
 import styles from "../../components/Singup/styles.module.css";
+import { BASE_URL }  from '../../config';
 
 const New = () => {
   const [data, setData] = useState({
@@ -39,7 +40,7 @@ const New = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:8080/api/users";
+      const url = `${BASE_URL}/api/users`;
       const formData = new FormData();
 
       Object.entries(data).forEach(([key, value]) => {

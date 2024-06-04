@@ -10,6 +10,8 @@ import { BsXLg } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { BsHouseAdd } from "react-icons/bs";
 import { AiOutlineCamera } from "react-icons/ai";
+import { BASE_URL }  from '../../config';
+
 import "./Rooms.scss";
 
 export default function RowEditingDemo() {
@@ -26,7 +28,7 @@ export default function RowEditingDemo() {
 
     const fetchRooms = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/rooms");
+            const response = await fetch(`${BASE_URL}/api/rooms`);
             if (!response.ok) {
                 throw new Error("Failed to fetch room data");
             }
@@ -36,15 +38,10 @@ export default function RowEditingDemo() {
             console.error("Error fetching room data:", error);
         }
     };
-    
-   
-    
-    
-    
-    
+
     const fetchUsers = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/users");
+            const response = await fetch(`${BASE_URL}/api/users`);
             if (!response.ok) {
                 throw new Error("Failed to fetch user data");
             }
@@ -79,7 +76,7 @@ export default function RowEditingDemo() {
         const updatedData = { nbrRoom, Surface, Categorie, State, User, Property }; // Create a new object without circular references
 
         try {
-            const response = await fetch(`http://localhost:8080/api/rooms/${_id}/edit`, {
+            const response = await fetch(`${BASE_URL}/api/rooms/${_id}/edit`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -104,7 +101,7 @@ export default function RowEditingDemo() {
     };
     const archiveRoom = async (rowData) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/rooms/${rowData._id}`, {
+            const response = await fetch(`${BASE_URL}/api/rooms/${rowData._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -189,7 +186,7 @@ export default function RowEditingDemo() {
             formData.append('file', file);
 
             // Send file to the server for processing
-            const response = await fetch('http://localhost:8080/api/rooms/import', {
+            const response = await fetch(`${BASE_URL}/api/rooms/import`, {
                 method: 'POST',
                 body: formData
             });

@@ -4,6 +4,7 @@ import './rooms.css';
 import { io } from 'socket.io-client';
 import { AiOutlineCamera } from 'react-icons/ai';
 import { FaVolumeUp } from 'react-icons/fa';
+import { BASE_URL }  from '../../config';
 
 const RoomList = () => {
   const [toCleanRooms, setToCleanRooms] = useState([]);
@@ -18,7 +19,7 @@ const RoomList = () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const userResponse = await axios.get("http://localhost:8080/api/auth/user", {
+          const userResponse = await axios.get(`${BASE_URL}/api/auth/user`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -26,7 +27,7 @@ const RoomList = () => {
           setUser(userResponse.data);
 
           if (!socketRef.current) {
-            socketRef.current = io("http://localhost:8080", {
+            socketRef.current = io(`${BASE_URL}`, {
               withCredentials: true,
               extraHeaders: {
                 "my-custom-header": "abcd",
@@ -69,7 +70,7 @@ const RoomList = () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const response = await axios.get("http://localhost:8080/api/auth/user-rooms", {
+          const response = await axios.get(`${BASE_URL}/api/auth/user-rooms`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -114,7 +115,7 @@ const RoomList = () => {
         formData.append('image', file);
         formData.append('room_number', rowData.nbrRoom);
 
-        const response = await fetch('http://localhost:5000/api/cleanliness', {
+        const response = await fetch('http://192.168.0.141:5000/api/cleanliness', {
           method: 'POST',
           body: formData
         });
@@ -130,7 +131,7 @@ const RoomList = () => {
         const imageFormData = new FormData();
         imageFormData.append('image', file);
 
-        const saveImageResponse = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/image`, {
+        const saveImageResponse = await fetch(`${BASE_URL}/api/rooms/${rowData._id}/image`, {
           method: 'PUT',
           body: imageFormData
         });
@@ -141,7 +142,7 @@ const RoomList = () => {
 
         console.log('Image enregistrée avec succès dans la table rooms');
 
-        const updateStateResponse = await fetch(`http://localhost:8080/api/rooms/${rowData._id}/state`, {
+        const updateStateResponse = await fetch(`${BASE_URL}/api/rooms/${rowData._id}/state`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -197,7 +198,7 @@ const RoomList = () => {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        const response = await axios.put(`http://localhost:8080/api/rooms/${roomId}/state`, { State: 'In progress' }, {
+        const response = await axios.put(`${BASE_URL}/api/rooms/${roomId}/state`, { State: 'In progress' }, {
           headers: {
             Authorization: `Bearer ${token}`
           }

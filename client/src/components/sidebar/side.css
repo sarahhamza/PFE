@@ -1,22 +1,28 @@
 .sidebar {
 	position: fixed;
-	top: 0;
-	left: 0;
-	width: 280px;
-	height: 100%;
-	background: white;
-	z-index: 2000;
-	font-family: var(--lato);
-	transition: .3s ease;
-	overflow-x: hidden;
-	scrollbar-width: none;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 2000;
+    font-family: var(--lato);
+    transition: transform 0.3s ease; /* Ajouter la transition ici */
+    overflow-x: hidden;
+    overflow-y: auto;
+    transform: translateX(0); /* Par défaut, visible */
 }
-.sidebar::--webkit-scrollbar {
+.sidebar.open {
+    transform: translateX(0); /* Revenir à l'état visible */
+}
+
+.sidebar.closed {
+    transform: translateX(-100%); /* Cacher la barre latérale */
+}
+.sidebar::state(webkit-scrollbar) {
 	display: none;
 }
-.sidebar.hide {
-	width: 60px;
-}
+
 .sidebar .brand {
 	font-size: 24px;
 	font-weight: 700;
@@ -103,6 +109,29 @@
 	min-width: calc(60px  - ((4px + 6px) * 2));
 	display: flex;
 	justify-content: center;
+}
+.toggle-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 999;
+	
+}
+
+.sidebar .toggle-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 999;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar .toggle-btn i {
+    font-size: 24px;
+    color: black;
 }
 /* SIDEBAR */
 @media screen and (max-width: 900px) {

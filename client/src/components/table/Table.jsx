@@ -9,6 +9,7 @@ import { Button } from 'primereact/button';
 import { BsXLg } from "react-icons/bs";
 import { useParams } from 'react-router-dom';
 import "./table.scss"
+import { BASE_URL }  from '../../config';
 
 export default function RowEditingDemo() {
   const { userId } = useParams();
@@ -22,10 +23,9 @@ export default function RowEditingDemo() {
         fetchRooms();
         fetchUsers();
     }, []);
-
     const fetchRooms = async () => {
       try {
-          const response = await fetch("http://localhost:8080/api/rooms");
+          const response = await fetch(`${BASE_URL}/api/rooms`);
           if (!response.ok) {
               throw new Error("Failed to fetch room data");
           }
@@ -46,7 +46,7 @@ export default function RowEditingDemo() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/users");
+            const response = await fetch(`${BASE_URL}/api/users`);
             if (!response.ok) {
                 throw new Error("Failed to fetch user data");
             }
@@ -81,7 +81,7 @@ export default function RowEditingDemo() {
         const updatedData = { nbrRoom, Surface, Categorie, State, User, Property }; // Create a new object without circular references
 
         try {
-            const response = await fetch(`http://localhost:8080/api/rooms/${_id}/edit`, {
+            const response = await fetch(`${BASE_URL}/api/rooms/${_id}/edit`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ export default function RowEditingDemo() {
     };
     const archiveRoom = async (rowData) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/rooms/${rowData._id}`, {
+            const response = await fetch(`${BASE_URL}/api/rooms/${rowData._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

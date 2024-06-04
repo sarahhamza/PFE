@@ -18,7 +18,7 @@ const io = initSocket(server);  // Initialize Socket.IO server
 
 // Middlewares
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: "http://192.168.176.165:3000", credentials: true }));
 app.use(express.urlencoded({ extended: false }));
 app.set("view engine","ejs");
 
@@ -42,6 +42,6 @@ app.get("/", (req, res) => {
 
 // Start server
 const port = process.env.PORT || 8080;
-server.listen(port, () => console.log(`Listening on port ${port}...`));
+server.listen(port, '192.168.176.165',() => console.log(`Listening on port ${port}...`));
 
 module.exports = { io };

@@ -1,5 +1,6 @@
 import React , {Component} from 'react';
 import './ResetPass.css';
+import { BASE_URL }  from '../../config';
 
 export default class ForgotPassword extends Component {
 
@@ -14,7 +15,7 @@ constructor(props){
         e.preventDefault()
         const { email } = this.state;
         console.log(email);
-        fetch("http://localhost:8080/api/auth/forgot-password",{
+        fetch(`${BASE_URL}/api/auth/forgot-password`,{
             method: "POST",
             crossDomain: true,
             headers: {

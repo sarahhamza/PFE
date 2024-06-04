@@ -4,6 +4,7 @@ import Navbar from '../../components/navbar/Navbar';
 import MainContentC from './MainContentC';
 import './newhome.css';
 
+
 const NewHomeC = () => {
   return (
     <div className="App">

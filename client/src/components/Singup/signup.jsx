@@ -11,9 +11,10 @@ import {
 import "./signup.css";
 import { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
+import { BASE_URL }  from '../../config';
 
 function SignUp() {
     const [data, setData] = useState({
@@ -38,7 +39,7 @@ function SignUp() {
     const handleSignUp = async (e) => {
         e.preventDefault();
         try {
-            const url = "http://localhost:8080/api/users";
+            const url = `${BASE_URL}/api/users`;
             const formData = new FormData();
     
             // Append all form data
@@ -113,22 +114,20 @@ function SignUp() {
                                 required
                             />
                         </div>
-
-                        
                         <div className="form-row">
-                            <MDBInput className='mb-4 custom-input' type="email"
+                            <MDBInput className='mb-4 custom-input' type="text"
                                 placeholder="   Address"
                                 name="address"
                                 onChange={handleChange}
                                 value={data.address}
                             />
-                            <MDBInput className='mb-4 custom-input' type="password"
+                            <MDBInput className='mb-4 custom-input' type="text"
                                 placeholder="   Country"
                                 name="country"
                                 onChange={handleChange}
                                 value={data.country}
                             />
-                             <MDBInput className='mb-4 custom-input' type="password"
+                             <MDBInput className='mb-4 custom-input' type="text"
                                 placeholder="   Phone number"
                                 name="phone"
                                 onChange={handleChange}

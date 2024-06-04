@@ -13,6 +13,8 @@ import { FaUserXmark } from "react-icons/fa6";
 import { HiUserAdd } from "react-icons/hi";
 import "./userList.scss";
 import "./flags.scss";
+import { BASE_URL }  from '../../config';
+
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
@@ -34,7 +36,7 @@ export default function UserList() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/users");
+            const response = await fetch(`${BASE_URL}/api/users`);
             if (!response.ok) {
                 throw new Error("Failed to fetch user data");
             }
@@ -48,13 +50,13 @@ export default function UserList() {
 
     const imageBodyTemplate = (rowData) => {
         return (
-            <img src={`http://localhost:8080/uploads/${rowData.image}`} alt={rowData.firstName} style={{ width: '30px', height:'30px' }} />
+            <img src={`${BASE_URL}/uploads/${rowData.image}`} alt={rowData.firstName} style={{ width: '30px', height:'30px' }} />
         );
     };
 
     const handleAccept = async (id) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/users/${id}/accept`, {
+            const response = await fetch(`${BASE_URL}/api/users/${id}/accept`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -81,7 +83,7 @@ export default function UserList() {
 
     const handleArchiveUser = async (rowData) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/users/${rowData._id}`, {
+            const response = await fetch(`${BASE_URL}/api/users/${rowData._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

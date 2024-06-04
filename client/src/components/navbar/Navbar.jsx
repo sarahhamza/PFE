@@ -5,6 +5,7 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import { DarkModeContext } from "../../context/darkModeContext";
 import axios from "axios";
 import ProfileCard from './profileCard'; // Import ProfileCard component
+import { BASE_URL }  from '../../config';
 
 const Navbar = () => {
     const [user, setUser] = useState(null);
@@ -16,7 +17,7 @@ const Navbar = () => {
             try {
                 const token = localStorage.getItem("token");
                 if (token) {
-                    const response = await axios.get("http://localhost:8080/api/auth/user", {
+                    const response = await axios.get(`${BASE_URL}/api/auth/user`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
@@ -25,7 +26,7 @@ const Navbar = () => {
 
                     // Fetch notifications based on user role
                     if (response.data.role === "femme de menage") {
-                        const notificationsResponse = await axios.get(`http://localhost:8080/api/notifications/${response.data._id}`, {
+                        const notificationsResponse = await axios.get(`${BASE_URL}/api/notifications/${response.data._id}`, {
                             headers: {
                                 Authorization: `Bearer ${token}`
                             }
@@ -86,7 +87,7 @@ const Navbar = () => {
 
             {user && (
                 <div className="profile" onClick={toggleProfileCard}>
-                    <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
+                    <img src={`${BASE_URL}/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
                     {showProfileCard && <ProfileCard user={user} />}
                 </div>
             )}

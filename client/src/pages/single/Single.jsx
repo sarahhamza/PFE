@@ -8,6 +8,7 @@ import RoomTable from "../../components/table/RoomTable";
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+import { BASE_URL }  from '../../config';
 
 
 const Single = () => {
@@ -22,7 +23,7 @@ const Single = () => {
   useEffect(() => {
     const fetchHousemaidData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/users/${userId}`);
+        const response = await fetch(`${BASE_URL}/api/users/${userId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
@@ -39,7 +40,7 @@ const Single = () => {
 
   const fetchAvailableRooms = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/rooms/available');
+      const response = await axios.get(`${BASE_URL}/api/rooms/available`);
       setAvailableRooms(response.data);
     } catch (error) {
       console.error('Error fetching available rooms:', error);
@@ -63,10 +64,10 @@ const Single = () => {
       setAvailableRooms(updatedRoomData);
   
       // Assign the room to the user
-      const response = await axios.put(`http://localhost:8080/api/users/${userId}/assign-room/${selectedRoom._id}`);
+      const response = await axios.put(`${BASE_URL}/api/users/${userId}/assign-room/${selectedRoom._id}`);
       console.log(response.data.message);
     // Send a notification to the user
-      await axios.post(`http://localhost:8080/api/notifications/push/${userId}`, {
+      await axios.post(`${BASE_URL}/api/notifications/push/${userId}`, {
         message: "You have a new room to clean"
       });
       
@@ -87,7 +88,7 @@ const Single = () => {
             {userData && (
               <div className="item">
                 <img
-                  src={`http://localhost:8080/uploads/${userData.image}`}
+                  src={`${BASE_URL}/uploads/${userData.image}`}
                   alt=""
                   className="itemImg"
                 />
@@ -120,7 +121,7 @@ const Single = () => {
         <div className="bottom">
   <div className="first">
     <button className="btn" onClick={() => setShowRoomCard(true)} disabled={isAssignRoomDisabled}>Affect a Room</button>
-    <h1 className="title">Last Transactions</h1>
+    <h1 className="title">Affected Rooms</h1>
     <List/>
     <button className="btn" onClick={handleRoomAssignment} disabled={isAssignRoomDisabled}>Assign Room</button>
     {/* Optionally, display a message indicating room assignment success */}

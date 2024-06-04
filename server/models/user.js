@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     phone: { type: String }, // New attribute
     address: { type: String }, // New attribute
     country: { type: String }, // New attribute
-    gender :{type: String, enum: ['Female', 'Male'], required: true},
+    gender :{type: String, enum: ['Female', 'Male']},
     postalcode:{type: Number},
     cin:{type: Number},
     birthdate:{type:Date},

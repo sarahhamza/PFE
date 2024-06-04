@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import './MainContent.css';
+import { BASE_URL }  from '../../config';
 
 const MainContentC = () => {
   const [stats, setStats] = useState({ rooms: 0, clean: 0, messy: 0 });
@@ -10,14 +10,14 @@ const MainContentC = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/rooms/stats');
+        const response = await axios.get(`${BASE_URL}/api/rooms/stats`);
         setStats(response.data);
       } catch (error) {
         console.error("Error fetching stats", error);
       }
     };
 
-    fetch('http://localhost:8080/api/rooms/recent-rooms')
+    fetch(`${BASE_URL}/api/rooms/recent-rooms`)
       .then(response => response.json())
       .then(data => setRecentRooms(data))
       .catch(error => console.error('Error fetching recent users:', error));
@@ -87,7 +87,7 @@ const MainContentC = () => {
             {recentRooms.map(room => (
                 <tr key={room._id}>
                   <td>
-                  {/* <img src={`http://localhost:8080/uploads/${room.image}`} alt={room.firstName} className="profile-img" /> */}
+                  {/* <img src={`${BASE_URL}/uploads/${room.image}`} alt={room.firstName} className="profile-img" /> */}
                     <p>{room.nbrRoom}</p>
                   </td>
                   <td>{new Date(room.createdAt).toLocaleDateString()}</td>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, CategoryScale, LinearScale, PointElement, LineElement, BarElement, RadialLinearScale, Filler } from 'chart.js';
 import './MainContent.css';
+import { BASE_URL }  from '../../config';
 
 // Register the required components
 ChartJS.register(
@@ -31,14 +32,14 @@ const MainContent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const statsResponse = await axios.get('http://localhost:8080/api/users/stats');
+        const statsResponse = await axios.get(`${BASE_URL}/api/users/stats`);
         setStats(statsResponse.data);
 
-        const recentUsersResponse = await fetch('http://localhost:8080/api/users/recent-users');
+        const recentUsersResponse = await fetch(`${BASE_URL}/api/users/recent-users`);
         const recentUsersData = await recentUsersResponse.json();
         setRecentUsers(recentUsersData);
 
-        const distributionResponse = await fetch('http://localhost:8080/api/rooms/distribution');
+        const distributionResponse = await fetch(`${BASE_URL}/api/rooms/distribution`);
         const distributionData = await distributionResponse.json();
         setDistribution(distributionData);
       } catch (error) {
@@ -122,7 +123,7 @@ const MainContent = () => {
               {recentUsers.map(user => (
                 <tr key={user._id}>
                   <td>
-                    <img src={`http://localhost:8080/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
+                    <img src={`${BASE_URL}/uploads/${user.image}`} alt={user.firstName} className="profile-img" />
                     <p>{user.firstName} {user.lastName}</p>
                   </td>
                   <td>{new Date(user.createdAt).toLocaleDateString()}</td>

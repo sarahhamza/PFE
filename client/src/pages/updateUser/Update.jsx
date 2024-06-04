@@ -7,6 +7,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import "./Update.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
+import { BASE_URL }  from '../../config';
 
 const Update = () => {
   const { userId } = useParams();
@@ -34,7 +35,7 @@ const Update = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/users/${userId}`);
+        const response = await fetch(`${BASE_URL}/api/users/${userId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
@@ -66,7 +67,7 @@ const Update = () => {
     e.preventDefault();
   
     try {
-      const url = `http://localhost:8080/api/users/${userId}`;
+      const url = `${BASE_URL}/api/users/${userId}`;
       const formData = new FormData();
   
       Object.entries(data).forEach(([key, value]) => {
@@ -176,7 +177,7 @@ const Update = () => {
                   placeholder="password"
                   onChange={handleChange}
                   value={data.password}
-                  required
+                  
                 />
               </div>
 

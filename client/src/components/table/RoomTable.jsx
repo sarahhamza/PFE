@@ -9,7 +9,6 @@ import Paper from "@mui/material/Paper";
 
 const RoomTable = ({ availableRooms, setSelectedRoom }) => {
 
-
   return (
     <div className="roomTable">
       <Table component={Paper} className="table">

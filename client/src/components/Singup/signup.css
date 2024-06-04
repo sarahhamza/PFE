@@ -97,3 +97,15 @@
       margin-top: -270px;
     }
   }
+  @media (max-width: 500px) {
+    .form-row {
+      justify-content: center;
+    }
+    .custom-input {
+      min-width: 100%;
+    }
+    .card{
+      height: auto;
+      margin-top: -270px;
+    }
+  }

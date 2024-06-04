@@ -15,7 +15,7 @@ import hospital from "../../images/hospital.jpg";
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-
+import { BASE_URL } from '../../config';
 
 
 function Login() {
@@ -24,6 +24,7 @@ function Login() {
     const navigate = useNavigate();
 	const [ setUser] = useState(null);
 
+
     const handleChange = ({ target }) => {
         setData({ ...data, [target.name]: target.value });
     };
@@ -31,12 +32,12 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const url = "http://localhost:8080/api/auth";
+            const url = `${BASE_URL}/api/auth`;
             const { data: res } = await axios.post(url, data);
             localStorage.setItem("token", res.data);
-  
+            //setIsAuthenticated(true);
             // Fetch user data and set it in the state
-            const userData = await axios.get("http://localhost:8080/api/auth/user", {
+            const userData = await axios.get(`${BASE_URL}/api/auth/user`, {
                 headers: {
                     Authorization: `Bearer ${res.data}`
                 }
@@ -75,8 +76,8 @@ function Login() {
               <img src={hospital} alt="Background Image"   style={{marginTop: '-80px', background: 'hsla(0, 0%, 100%, 0.8)', backdropFilter: 'blur(30px)' , height: '600px', width:'600px' } } />
             </MDBCol>
     
-            <MDBCol col='6' className='form-container' >
-              <MDBCard className='my-7 cascading-right' style={{background: 'hsla(0, 0%, 100%, 0.55)',  backdropFilter: 'blur(30px)' , width:'580px', height:'480px' }}>
+            <MDBCol col='5' className='form-container' >
+              <MDBCard className='my-7 cascading-right' style={{background: 'hsla(0, 0%, 100%, 0.55)',  backdropFilter: 'blur(30px)' , width:'580px', height:'520px' }}>
                 <MDBCardBody className='p-7 shadow-5 text-center'>
     
                   <h2 className="fw-bold mb-5">Sign in now</h2>
@@ -108,7 +109,8 @@ function Login() {
                        <p style={{ textDecoration: "none" , marginBottom:"10px" }} >Sign Up</p>
                     </Link>
                   </div>
-    
+                  <div style={{ marginBottom:"10px" , marginRight:"200px" }}>
+                  Forgot your password ?</div>
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>

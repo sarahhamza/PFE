@@ -9,6 +9,7 @@ import { AiOutlineCamera } from "react-icons/ai";
 import { Dialog } from 'primereact/dialog';
 import "./controllerRooms.scss";
 import io from 'socket.io-client';
+import { BASE_URL }  from '../../config';
 
 export default function ControllerRooms() {
     const [rooms, setRooms] = useState([]);
@@ -42,7 +43,7 @@ export default function ControllerRooms() {
 
     const fetchRooms = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/rooms");
+            const response = await fetch(`${BASE_URL}/api/rooms`);
             if (!response.ok) {
                 throw new Error("Failed to fetch room data");
             }
@@ -56,7 +57,7 @@ export default function ControllerRooms() {
     
     const fetchUsers = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/users");
+            const response = await fetch(`${BASE_URL}/api/users`);
             if (!response.ok) {
                 throw new Error("Failed to fetch user data");
             }
@@ -131,7 +132,7 @@ export default function ControllerRooms() {
     };
 
     const showImage = (imageUrl) => {
-        const fullImageUrl = `http://localhost:8080/uploads/${imageUrl}`;
+        const fullImageUrl = `${BASE_URL}/uploads/${imageUrl}`;
         console.log('Full Image URL:', fullImageUrl);  // Debugging print
         setSelectedImage(fullImageUrl);
         setShowDialog(true);
