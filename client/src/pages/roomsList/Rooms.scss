@@ -22,6 +22,15 @@ body {
     margin-left: 20px;
     height: 400px;
 }
+.custom-input1 {
+  background-color: white; /* Adjust background color */
+  border: 1px solid #ccc; /* Set a thin border */
+  border-radius: 5px; /* Adjust corner radius */
+  height: 30px;
+  margin-top: 20px !important;
+  margin-left: 9px;
+  width: auto;
+}
 .status-tag {
     font-weight: bold;
     padding: 0.4rem 0.7rem;

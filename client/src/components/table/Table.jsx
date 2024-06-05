@@ -201,8 +201,6 @@ export default function RowEditingDemo() {
                         const user = users.find(user => user._id === rowData.User);
                         return user ? user.email : '';
                     }} editor={(options) => userEditor(options)} style={{ width: '20%' }}></Column>                    <Column field="Property" header="Property" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-                    <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-                    <Column body={(rowData) => <Button onClick={() => archiveRoom(rowData)}  ><BsXLg /> </Button>} style={{ width: '10%' }} />
                 </DataTable>
             </div>
         </div>

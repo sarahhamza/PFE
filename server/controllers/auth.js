@@ -199,4 +199,36 @@ router.post("/reset-password/:id/:token", async (req, res) => {
       res.json({ status: "Something Went Wrong" });
     }
   });
+
+  router.post("/change-password/:id", async (req, res) => {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    try {
+        // Fetch user from the database
+        const user = await User.findById(id);
+
+        // Check if the user exists
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if the provided current password matches the user's password
+        const isPasswordValid = await user.comparePassword(currentPassword);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Incorrect current password" });
+        }
+
+        // Update user's password with the new password
+        user.password = newPassword;
+        await user.save();
+
+        // Send a success response
+        return res.status(200).json({ message: "Password updated successfully" });
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error("Error updating password:", error);
+        return res.status(500).json({ message: "Failed to update password" });
+    }
+});
 module.exports = router;

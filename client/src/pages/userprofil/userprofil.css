@@ -131,6 +131,68 @@
     margin-left: 20px;
   }
 }
+/* userprofil.css */
+.password-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 50px;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-modal {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 4px;
+  max-width: 400px;
+  margin-left: 150px;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.password-modal h2 {
+  margin-top: 0;
+}
+
+.password-modal .field-group {
+  margin-bottom: 1rem;
+}
+
+.password-modal .field-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.password-modal .field-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.password-modal .submit-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.password-modal .cancel-btn {
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: 1rem;
+}
+
 @media screen and (max-width: 1208px) {
 
   .button-container {

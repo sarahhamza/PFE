@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { BASE_URL }  from '../../config';
+import { Link } from "react-router-dom";
 
 
 const Single = () => {
@@ -83,8 +84,11 @@ const Single = () => {
       <div className="singleContainer">
         <div className="top">
           <div className="left">
-            <div className="editButton">Edit</div>
-            <h1 className="title">Information</h1>
+          <Link to={`/users/update/${userData?._id}`} state={{ imageUrl: `${BASE_URL}/uploads/${userData?.image}` }}>
+              <button className="p-button5">
+                <p className='paragraph'>Update</p>
+              </button>    </Link> 
+                  <h1 className="title">Information</h1>
             {userData && (
               <div className="item">
                 <img

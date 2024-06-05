@@ -1,28 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import './MainContent.css';
-import { BASE_URL }  from '../../config';
+//import { BASE_URL } from '../../config';
+import { useStatsHook } from '../../Hooks/StatHook';
 
 const MainContentC = () => {
-  const [stats, setStats] = useState({ rooms: 0, clean: 0, messy: 0 });
-  const [recentRooms, setRecentRooms] = useState([]);
+  const { stats, recentRooms } = useStatsHook();
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/api/rooms/stats`);
-        setStats(response.data);
-      } catch (error) {
-        console.error("Error fetching stats", error);
-      }
-    };
-
-    fetch(`${BASE_URL}/api/rooms/recent-rooms`)
-      .then(response => response.json())
-      .then(data => setRecentRooms(data))
-      .catch(error => console.error('Error fetching recent users:', error));
-    fetchStats();
-  }, []);
   return (
     <main className='body'>
       <div className="head-title">

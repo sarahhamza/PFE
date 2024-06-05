@@ -15,62 +15,18 @@ import {  useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { BASE_URL }  from '../../config';
+import { useSignup } from '../../Hooks/AuthHook';
 
 function SignUp() {
-    const [data, setData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        role: ""
-    });
-    const [error, setError] = useState("");
-    const navigate = useNavigate();
-    const [image, setFile] = useState(null); 
-    const [successMessage, setSuccessMessage] = useState("");
-
-    const handleChange = ({ currentTarget: input }) => {
-        setData({ ...data, [input.name]: input.value });
-    };
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-    };
-
-    const handleSignUp = async (e) => {
-        e.preventDefault();
-        try {
-            const url = `${BASE_URL}/api/users`;
-            const formData = new FormData();
-    
-            // Append all form data
-            Object.entries(data).forEach(([key, value]) => {
-                formData.append(key, value);
-            });
-    
-            // Append the image file
-            if (image) {
-                formData.append("image", image, image.name); // Add the third parameter with the file name
-            }
-    
-            const { data: res } = await axios.post(url, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            navigate("/login")
-    
-            setSuccessMessage("User added successfully");
-            console.log(res.message);
-        } catch (error) {
-            if (
-                error.response &&
-                error.response.status >= 400 &&
-                error.response.status <= 500
-            ) {
-                setError(error.response.data.message);
-            }
-        }
-    };
+    const {
+        data,
+        image,
+        error,
+        successMessage,
+        handleChange,
+        handleFileChange,
+        handleSignUp,
+    } = useSignup();
 
     return (
         <MDBContainer fluid className={styles.MDBContainer} >

@@ -17,7 +17,7 @@ import "./Rooms.scss";
 export default function RowEditingDemo() {
     const [rooms, setRooms] = useState([]);
     const [editMessage, seteditMessage] = useState("");
-    const [deleteMessage, setdeletetMessage] = useState("");
+    const [deleteMessage, setDeleteMessage] = useState("");
     const [statuses] = useState(['Clean', 'In Progress', 'Messy']);
     const [users, setUsers] = useState([]);
 
@@ -59,6 +59,7 @@ export default function RowEditingDemo() {
                 options={users.map(user => ({ label: user.email, value: user._id }))} // Change value to user.email
                 onChange={(e) => options.editorCallback(e.value)}
                 placeholder="Select a User"
+                className='mb-4 custom-input1'
             />
         );
     };
@@ -100,35 +101,46 @@ export default function RowEditingDemo() {
         }
     };
     const archiveRoom = async (rowData) => {
+        console.log("rowData:", rowData); // Log the rowData to inspect its structure
+        const { _id } = rowData; // Access _id from rowData
+    
+        // Ensure that _id is valid
+        if (!_id) {
+            console.error("Error archiving room: Room ID is undefined");
+            return;
+        }
+    
+        const updatedData = { archived: true }; // Set archived to true
+    
         try {
-            const response = await fetch(`${BASE_URL}/api/rooms/${rowData._id}`, {
+            const response = await fetch(`${BASE_URL}/api/rooms/${_id}/archive`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ archived: true }) // Send data to update the room's status
+                body: JSON.stringify(updatedData) // Pass the new object for stringification
             });
     
             if (!response.ok) {
-                throw new Error(`Failed to archive room with ID ${rowData._id}`);
+                throw new Error(`Failed to archive room with ID ${_id}`);
             }
     
             // Update the room's status in the local state
             setRooms(prevRooms => prevRooms.map(room => {
-                if (room._id === rowData._id) {
+                if (room._id === _id) {
                     return { ...room, archived: true }; // Set archived to true
                 }
                 return room;
             }));
-            fetchRooms()
-            setdeletetMessage("Room archived successfully");
-            setTimeout(() => setdeletetMessage(''), 2000);
+    
+            fetchRooms();
+            setDeleteMessage("Room archived successfully");
+            setTimeout(() => setDeleteMessage(''), 2000);
     
         } catch (error) {
             console.error("Error archiving room:", error);
         }
     };
-
     const getSeverity = (value) => {
         switch (value) {
             case 'Cleaned':
@@ -142,11 +154,11 @@ export default function RowEditingDemo() {
         }
     };
     const textEditor = (options) => {
-        return <InputText value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+        return <InputText value={options.value} onChange={(e) => options.editorCallback(e.target.value)}  style={{ width: '100%' }} className='mb-4 custom-input1' />;
     };
 
     const numberEditor = (options) => {
-        return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} />;
+        return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} className='mb-4 custom-input1'/>;
     };
 
     const statusEditor = (options) => {
@@ -156,6 +168,7 @@ export default function RowEditingDemo() {
                 options={statuses.map(status => ({ label: status, value: status }))}
                 onChange={(e) => options.editorCallback(e.value)}
                 placeholder="Select a Status"
+                className='mb-4 custom-input1'
             />
         );
     };
@@ -170,6 +183,7 @@ export default function RowEditingDemo() {
                 options={['Category1', 'Category2', 'Category3']}
                 onChange={(e) => options.editorCallback(e.value)}
                 placeholder="Select Category"
+                className='mb-4 custom-input1'
             />
         );
     };

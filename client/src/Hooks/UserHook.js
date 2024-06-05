@@ -1,6 +1,107 @@
 import { useState, useEffect } from 'react';
 import { BASE_URL } from '../config';
 
+//users
+
+export function useFetchUsers() {
+    const [users, setUsers] = useState([]);
+
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/users`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch user data");
+            }
+            const userData = await response.json();
+            const acceptedUsers = userData.filter(user => user.accept === 0);
+            setUsers(acceptedUsers);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    return [users, setUsers, fetchUsers];
+}
+
+export function useHandleAcceptUser() {
+    const [acceptMessage, setAcceptMessage] = useState("");
+
+    const handleAcceptUser = async (id, users, setUsers) => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/users/${id}/accept`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ accept: 1 })
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update user accept status");
+            }
+
+            const updatedUsers = users.filter(user => user._id !== id);
+            setUsers(updatedUsers);
+            setAcceptMessage("User accepted successfully. Congratulations email sent!");
+            setTimeout(() => setAcceptMessage(''), 2000);
+        } catch (error) {
+            console.error("Error updating user accept status:", error);
+        }
+    };
+
+    return [acceptMessage, handleAcceptUser];
+}
+
+export function useHandleArchiveUser() {
+    const [deleteMessage, setDeleteMessage] = useState("");
+
+    const handleArchiveUser = async (rowData, users, setUsers) => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/users/${rowData._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ archived: true })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to archive user with ID ${rowData._id}`);
+            }
+
+            const updatedUsers = users.filter(user => user._id !== rowData._id);
+            setUsers(updatedUsers);
+            setDeleteMessage("User archived successfully");
+            setTimeout(() => setDeleteMessage(''), 2000);
+        } catch (error) {
+            console.error("Error archiving User:", error);
+        }
+    };
+
+    return [deleteMessage, handleArchiveUser];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Housemaids
 export function useFetchHousemaids() {
     const [users, setUsers] = useState([]);
 

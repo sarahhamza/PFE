@@ -19,8 +19,8 @@ export default function HousemaidList() {
   const [users, fetchUsers] = useFetchHousemaids();
   const [editMessage, seteditMessage] = useState("");
   const [acceptMessage] = useAcceptHousemaid();
-  const [deleteMessage] = useArchiveHousemaid();
   const [importMessage, handleImport] = useImportHousemaids(fetchUsers);
+  const [deleteMessage, handleArchiveHousemaid] = useArchiveHousemaid(fetchUsers);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -55,16 +55,23 @@ export default function HousemaidList() {
     );
   };
 
+  const handleDelete = async (userId) => {
+    if (!userId) {
+      console.error("Attempted to delete user with undefined ID");
+      return; // Or show an error message to the user
+    }
+    try {
+      await handleArchiveHousemaid(userId);
+    } catch (error) {
+      console.error(`Failed to delete user with ID ${userId}:`, error);
+    }
+  };
+
   const renderActions = (rowData) => {
     return (
       <div>
-        <Link to={{
-          pathname: `/users/update/${rowData._id}`,
-          state: { imageUrl: `${BASE_URL}/uploads/${rowData.image}` }
-        }} className="p-button p-button-info1 p-ml-2">
-          <p className='paragraph'>Update</p>
-        </Link>
-        <Link to={`/user/${rowData._id}`} className="p-button p-button-success p-ml-2">
+        <button onClick={() => handleDelete(rowData._id)} className="p-button p-button-success p-ml-2">Delete</button>
+        <Link to={`/user/${rowData._id}`} className="p-button p-button-info p-ml-2">
           <p className='paragraph'>View</p>
         </Link>
       </div>

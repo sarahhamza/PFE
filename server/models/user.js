@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
+const bcrypt = require('bcrypt');
 const passwordComplexity = require("joi-password-complexity");
 
 const userSchema = new mongoose.Schema({
@@ -28,6 +29,14 @@ userSchema.methods.generateAuthToken = function () {
         expiresIn: "7d",
     });
     return token;
+};
+// Define a method to compare passwords
+userSchema.methods.comparePassword = async function(candidatePassword) {
+    try {
+        return await bcrypt.compare(candidatePassword, this.password);
+    } catch (error) {
+        throw new Error(error);
+    }
 };
 
 const User = mongoose.model("user", userSchema);

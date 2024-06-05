@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// src/components/UserList.jsx
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
@@ -13,13 +14,14 @@ import { FaUserXmark } from "react-icons/fa6";
 import { HiUserAdd } from "react-icons/hi";
 import "./userList.scss";
 import "./flags.scss";
-import { BASE_URL }  from '../../config';
-
+import { useFetchUsers, useHandleAcceptUser, useHandleArchiveUser } from '../../Hooks/UserHook';
+import { BASE_URL } from '../../config';
 
 export default function UserList() {
-    const [users, setUsers] = useState([]);
-    const [acceptMessage, setAcceptMessage] = useState("");
-    const [deleteMessage, setdeletetMessage] = useState("");
+    const [users, setUsers, fetchUsers] = useFetchUsers();
+    const [acceptMessage, handleAcceptUser] = useHandleAcceptUser();
+    const [deleteMessage, handleArchiveUser] = useHandleArchiveUser();
+
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         firstName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
@@ -30,85 +32,10 @@ export default function UserList() {
 
     const [selectedUser, setSelectedUser] = useState(null);
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
-
-    const fetchUsers = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/api/users`);
-            if (!response.ok) {
-                throw new Error("Failed to fetch user data");
-            }
-            const userData = await response.json();
-            const acceptedUsers = userData.filter(user => user.accept === 0 );
-            setUsers(acceptedUsers);
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-        }
-    };
-
     const imageBodyTemplate = (rowData) => {
         return (
-            <img src={`${BASE_URL}/uploads/${rowData.image}`} alt={rowData.firstName} style={{ width: '30px', height:'30px' }} />
+            <img src={`${BASE_URL}/uploads/${rowData.image}`} alt={rowData.firstName} style={{ width: '30px', height: '30px' }} />
         );
-    };
-
-    const handleAccept = async (id) => {
-        try {
-            const response = await fetch(`${BASE_URL}/api/users/${id}/accept`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ accept: 1 })
-            });
-    
-            if (!response.ok) {
-                throw new Error("Failed to update user accept status");
-            }
-    
-            setUsers((prevData) =>
-                prevData.map((user) => (user._id === id ? { ...user, accept: 1 } : user))
-            );
-            const updatedUsers = users.filter(user => user._id !== id);
-            setUsers(updatedUsers);
-            setAcceptMessage("User accepted successfully. Congratulations email sent!");
-            setTimeout(() => setAcceptMessage(''), 2000);
-    
-        } catch (error) {
-            console.error("Error updating user accept status:", error);
-        }
-    };
-
-    const handleArchiveUser = async (rowData) => {
-        try {
-            const response = await fetch(`${BASE_URL}/api/users/${rowData._id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ archived: true })
-            });
-    
-            if (!response.ok) {
-                throw new Error(`Failed to archive user with ID ${rowData._id}`);
-            }
-    
-            setUsers(prevUsers => prevUsers.map(user => {
-                if (user._id === rowData._id) {
-                    return { ...user, archived: true };
-                }
-                return user;
-            }));
-            const updatedUsers = users.filter(user => user._id !==rowData._id);
-            setUsers(updatedUsers);
-            setdeletetMessage("User archived successfully");
-            setTimeout(() => setdeletetMessage(''), 2000);
-    
-        } catch (error) {
-            console.error("Error archiving User:", error);
-        }
     };
 
     const onGlobalFilterChange = (event) => {
@@ -131,8 +58,8 @@ export default function UserList() {
     const renderActions = (rowData) => {
         return (
             <div>
-                <button onClick={() => handleAccept(rowData._id)} className=" actionButton1 "><BiSolidUserCheck className='centericon1'/></button>
-                <button onClick={() => handleArchiveUser(rowData)} className="  actionButton"><FaUserXmark className='centericon2'/></button>
+                <button onClick={() => handleAcceptUser(rowData._id, users, setUsers)} className="actionButton1"><BiSolidUserCheck className='centericon1' /></button>
+                <button onClick={() => handleArchiveUser(rowData, users, setUsers)} className="actionButton"><FaUserXmark className='centericon2' /></button>
             </div>
         );
     };
@@ -152,8 +79,8 @@ export default function UserList() {
                 {deleteMessage && <div className="deleteMessage">{deleteMessage}</div>}
                 <DataTable value={users} paginator rows={4} header={header} filters={filters} onFilter={(e) => setFilters(e.filters)}
                     selection={selectedUser} onSelectionChange={(e) => setSelectedUser(e.value)} selectionMode="single" dataKey="_id"
-                    stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '40rem'}}>
-                    <Column header="Image" body={imageBodyTemplate} style={{ width: '10%' }} ></Column>
+                    stateStorage="session" stateKey="dt-state-demo-local" emptyMessage="No users found." tableStyle={{ minWidth: '40rem' }}>
+                    <Column header="Image" body={imageBodyTemplate} style={{ width: '10%' }}></Column>
                     <Column field="firstName" header="First Name" sortable filter filterPlaceholder="Search" style={{ width: '15%' }}></Column>
                     <Column field="lastName" header="Last Name" sortable filter filterPlaceholder="Search" style={{ width: '15%' }}></Column>
                     <Column field="email" header="Email" sortable filter filterPlaceholder="Search" style={{ width: '15%' }}></Column>

@@ -87,17 +87,18 @@ router.put("/:roomId/edit", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
-
-router.delete("/:roomId", async (req, res) => {
+/// Archive Room
+router.put('/:roomId/archive', async (req, res) => { // Ensure the route matches the request
+  console.log(`Received request to archive room with ID: ${req.params.roomId}`);
   try {
-    const room = await Room.findByIdAndRemove(req.params.roomId);
-    if (!room) {
-      return res.status(404).send({ message: "Room not found" });
-    }
-    res.status(200).send({ message: "Room deleted successfully" });
+      const room = await Room.findByIdAndUpdate(req.params.roomId, { archived: true }, { new: true });
+      if (!room) {
+          return res.status(404).json({ message: 'Room not found' });
+      }
+      res.json(room);
   } catch (error) {
-    console.error('Error deleting room:', error);
-    res.status(500).send({ message: "Internal Server Error" });
+      console.error('Error archiving room:', error);
+      res.status(500).json({ message: error.message });
   }
 });
 

@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal'; // Import react-modal
 import './userprofil.css';
 import "../list/list.scss";
 import Sidebar from "../../components/sidebar/side";
 import Navbar from "../../components/navbar/Navbar";
 import { PrimeReactProvider } from "primereact/api";
 import { BASE_URL } from '../../config';
+import { URL } from '../../config';
+
+
+Modal.setAppElement('#root'); // Required for accessibility
 
 const UserProfile = () => {
   const [user, setUser] = useState({});
@@ -14,6 +19,9 @@ const UserProfile = () => {
   const [isSaveEnabled, setIsSaveEnabled] = useState(false);
   const [imageFile, setImageFile] = useState(null); 
   const [imagePreview, setImagePreview] = useState(null); // State for image preview
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,6 +118,36 @@ const UserProfile = () => {
     setImagePreview(`${BASE_URL}/uploads/${user.image}`); // Reset image preview to original
   };
 
+  const handleChangePasswordClick = () => {
+    setIsPasswordModalOpen(true);
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+
+    try {
+        const response = await axios.post(`${BASE_URL}/api/auth/change-password/${user._id}`, {
+            currentPassword,
+            newPassword
+        });
+
+        if (response.status === 200) {
+            alert("Password changed successfully");
+            setIsPasswordModalOpen(false);
+            setCurrentPassword('');
+            setNewPassword('');
+        }
+    } catch (error) {
+        console.error("Error changing password:", error);
+        alert("Failed to change password. Please check your current password.");
+    }
+};
+  const closeModal = () => {
+    setIsPasswordModalOpen(false);
+    setCurrentPassword('');
+    setNewPassword('');
+  };
+
   return (
     <div className="list">
       <Sidebar />
@@ -122,7 +160,7 @@ const UserProfile = () => {
               <div className="profile-info">
                 <h2>{user.firstName} {user.lastName}</h2>
                 <span className="profile-id">ID: {user.cin}</span>
-                <button className="change-password-btn">Change Password</button>
+                <button className="change-password-btn" onClick={handleChangePasswordClick}>Change Password</button>
               </div>
               <div className="button-container">
                 <button className="save-btn" disabled={!isSaveEnabled} onClick={handleSaveClick}>Save</button>
@@ -193,6 +231,39 @@ const UserProfile = () => {
           </div>
         </PrimeReactProvider>
       </section>
+
+      {/* Password Change Modal */}
+      <Modal
+        isOpen={isPasswordModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Change Password"
+        className="password-modal"
+        overlayClassName="password-modal-overlay"
+      >
+        <h2>Change Password</h2>
+        <form onSubmit={handlePasswordChange}>
+          <div className="field-group">
+            <label>Current Password:</label>
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="field-group">
+            <label>New Password:</label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="submit-btn">Change Password</button>
+          <button type="button" className="cancel-btn" onClick={closeModal}>Cancel</button>
+        </form>
+      </Modal>
     </div>
   );
 };
